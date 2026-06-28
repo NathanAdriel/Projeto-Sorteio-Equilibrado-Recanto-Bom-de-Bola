@@ -137,6 +137,7 @@
             gap: 10px;
             margin-bottom: 10px;
             flex-wrap: wrap;
+            align-items: center;
         }
         .acoes-lista button {
             background: #95a5a6;
@@ -145,6 +146,7 @@
             border-radius: 6px;
             color: #fff;
             cursor: pointer;
+            font-size: 0.9rem;
         }
         .acoes-lista button:hover { background: #7f8c8d; }
         .btn-gerenciar {
@@ -152,6 +154,16 @@
         }
         .btn-gerenciar:hover { background: #6c3483 !important; }
         .btn-gerenciar.ativo { background: #e67e22 !important; }
+
+        .btn-exportar {
+            background: #2980b9 !important;
+        }
+        .btn-exportar:hover { background: #1a5276 !important; }
+
+        .btn-importar {
+            background: #f39c12 !important;
+        }
+        .btn-importar:hover { background: #d68910 !important; }
 
         .info { font-size: 0.95rem; color: #2c3e50; margin: 5px 0 10px 0; }
 
@@ -362,6 +374,11 @@
             font-weight: bold;
             color: #2c3e50;
         }
+
+        /* esconde o input file */
+        #importInput {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -407,6 +424,9 @@
             <button class="btn-gerenciar" id="btnGerenciar" onclick="toggleGerenciamento()">📋 Gerenciar Plantel</button>
             <button onclick="selecionarTodos(true)">✅ Selecionar todos</button>
             <button onclick="selecionarTodos(false)">❌ Desmarcar todos</button>
+            <button class="btn-exportar" onclick="exportarDados()">📤 Exportar Dados</button>
+            <button class="btn-importar" onclick="document.getElementById('importInput').click()">📥 Importar Dados</button>
+            <input type="file" id="importInput" accept=".json" onchange="importarDados(event)">
         </div>
 
         <div class="lista-jogadores" id="listaSorteio">
@@ -480,6 +500,70 @@
         atualizarTodasListas();
     }
 
+    // ===== EXPORTAR DADOS =====
+    function exportarDados() {
+        if (jogadores.length === 0) {
+            alert('Não há dados para exportar.');
+            return;
+        }
+        // Remove o campo 'editando' antes de exportar (não precisa ser salvo)
+        const dadosParaExportar = jogadores.map(({ editando, ...rest }) => rest);
+        const json = JSON.stringify(dadosParaExportar, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'plantel.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // ===== IMPORTAR DADOS =====
+    function importarDados(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const dados = JSON.parse(e.target.result);
+                if (!Array.isArray(dados)) {
+                    alert('Arquivo inválido. Não é um array de jogadores.');
+                    return;
+                }
+                // Validar estrutura básica
+                if (dados.length > 0 && (!dados[0].nome || dados[0].nota === undefined)) {
+                    alert('Arquivo inválido. Estrutura incorreta.');
+                    return;
+                }
+                // Perguntar se deseja substituir ou mesclar
+                if (jogadores.length > 0) {
+                    if (!confirm('O plantel atual será substituído pelo importado. Continuar?')) {
+                        return;
+                    }
+                }
+                // Garantir que cada jogador tenha 'selecionado' e 'editando'
+                jogadores = dados.map(j => ({
+                    ...j,
+                    selecionado: j.selecionado !== undefined ? j.selecionado : true,
+                    editando: false
+                }));
+                salvarJogadores();
+                atualizarTodasListas();
+                // Se o painel de gerenciamento estiver aberto, atualiza a lista
+                if (modoGerenciamento) renderizarPlantel();
+                alert('Dados importados com sucesso!');
+            } catch (err) {
+                alert('Erro ao ler o arquivo: ' + err.message);
+            }
+        };
+        reader.readAsText(file);
+        // Limpar o input para permitir importar o mesmo arquivo novamente
+        event.target.value = '';
+    }
+
     // ===== CRONÔMETRO REGRESSIVO =====
     let cronometro = {
         segundosRestantes: 0,
@@ -507,7 +591,7 @@
     // ===== FUNÇÃO DO APITO (com link do Google Drive + fallback sintetizado) =====
     function tocarApito() {
         // Tenta tocar o arquivo do Google Drive
-        const audio = new Audio('https://obvious-cyan-xck8oz4m.edgeone.dev/AUD-20260627-WA0015.mp3');
+        const audio = new Audio('https://drive.google.com/uc?export=download&id=1LV6US5RRc644oNd3-dGLbBHgpFKD2ggW');
         audio.volume = 1.0;
         audio.play().catch(function(e) {
             console.warn('Erro ao tocar áudio do Drive:', e);
@@ -596,7 +680,7 @@
                 cronometro.segundosRestantes = 0;
                 atualizarDisplayTempo();
                 pausarCronometro();
-                tocarApito(); // chama a função com o link + fallback
+                tocarApito();
             }
         }, 1000);
     }
