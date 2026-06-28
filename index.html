@@ -424,9 +424,9 @@
             <button class="btn-gerenciar" id="btnGerenciar" onclick="toggleGerenciamento()">📋 Gerenciar Plantel</button>
             <button onclick="selecionarTodos(true)">✅ Selecionar todos</button>
             <button onclick="selecionarTodos(false)">❌ Desmarcar todos</button>
-            <button class="btn-exportar" onclick="exportarDados()">📤 Exportar Dados</button>
-            <button class="btn-importar" onclick="document.getElementById('importInput').click()">📥 Importar Dados</button>
-            <input type="file" id="importInput" accept=".json" onchange="importarDados(event)">
+            <button class="btn-exportar" onclick="exportarDados()">📤 Exportar Dados (TXT)</button>
+            <button class="btn-importar" onclick="document.getElementById('importInput').click()">📥 Importar Dados (TXT)</button>
+            <input type="file" id="importInput" accept=".txt" onchange="importarDados(event)">
         </div>
 
         <div class="lista-jogadores" id="listaSorteio">
@@ -477,7 +477,7 @@
     let timesAtuais = [];
     let modoGerenciamento = false;
 
-    // ===== PERSISTÊNCIA =====
+    // ===== PERSISTÊNCIA (localStorage) =====
     function salvarJogadores() {
         localStorage.setItem('plantel', JSON.stringify(jogadores));
     }
@@ -500,27 +500,31 @@
         atualizarTodasListas();
     }
 
-    // ===== EXPORTAR DADOS =====
+    // ===== EXPORTAR DADOS (TXT) =====
     function exportarDados() {
         if (jogadores.length === 0) {
             alert('Não há dados para exportar.');
             return;
         }
-        // Remove o campo 'editando' antes de exportar (não precisa ser salvo)
-        const dadosParaExportar = jogadores.map(({ editando, ...rest }) => rest);
-        const json = JSON.stringify(dadosParaExportar, null, 2);
-        const blob = new Blob([json], { type: 'application/json' });
+        // Cria uma string com uma linha por jogador: Nome;Nota;Selecionado
+        let linhas = [];
+        for (let j of jogadores) {
+            const selecionado = j.selecionado ? 'true' : 'false';
+            linhas.push(`${j.nome};${j.nota};${selecionado}`);
+        }
+        const conteudo = linhas.join('\n');
+        const blob = new Blob([conteudo], { type: 'text/plain;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'plantel.json';
+        a.download = 'plantel.txt';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     }
 
-    // ===== IMPORTAR DADOS =====
+    // ===== IMPORTAR DADOS (TXT) =====
     function importarDados(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -528,33 +532,41 @@
         const reader = new FileReader();
         reader.onload = function(e) {
             try {
-                const dados = JSON.parse(e.target.result);
-                if (!Array.isArray(dados)) {
-                    alert('Arquivo inválido. Não é um array de jogadores.');
+                const texto = e.target.result;
+                const linhas = texto.split('\n').filter(line => line.trim() !== '');
+                const novosJogadores = [];
+
+                for (let line of linhas) {
+                    const partes = line.split(';').map(s => s.trim());
+                    if (partes.length < 2) continue; // linha inválida
+                    const nome = partes[0];
+                    const nota = parseFloat(partes[1]);
+                    if (isNaN(nota) || nota < 0 || nota > 10) continue;
+                    let selecionado = true;
+                    if (partes.length >= 3) {
+                        selecionado = (partes[2].toLowerCase() === 'true');
+                    }
+                    novosJogadores.push({ nome, nota, selecionado, editando: false });
+                }
+
+                if (novosJogadores.length === 0) {
+                    alert('Nenhum jogador válido encontrado no arquivo.');
                     return;
                 }
-                // Validar estrutura básica
-                if (dados.length > 0 && (!dados[0].nome || dados[0].nota === undefined)) {
-                    alert('Arquivo inválido. Estrutura incorreta.');
-                    return;
-                }
-                // Perguntar se deseja substituir ou mesclar
+
                 if (jogadores.length > 0) {
-                    if (!confirm('O plantel atual será substituído pelo importado. Continuar?')) {
+                    if (!confirm(`O plantel atual (${jogadores.length} jogadores) será substituído pelo importado (${novosJogadores.length} jogadores). Continuar?`)) {
                         return;
                     }
                 }
-                // Garantir que cada jogador tenha 'selecionado' e 'editando'
-                jogadores = dados.map(j => ({
-                    ...j,
-                    selecionado: j.selecionado !== undefined ? j.selecionado : true,
-                    editando: false
-                }));
+
+                jogadores = novosJogadores;
+                // Ordenar alfabeticamente
+                jogadores.sort((a, b) => a.nome.localeCompare(b.nome));
                 salvarJogadores();
                 atualizarTodasListas();
-                // Se o painel de gerenciamento estiver aberto, atualiza a lista
                 if (modoGerenciamento) renderizarPlantel();
-                alert('Dados importados com sucesso!');
+                alert(`Dados importados com sucesso! ${jogadores.length} jogadores carregados.`);
             } catch (err) {
                 alert('Erro ao ler o arquivo: ' + err.message);
             }
@@ -588,19 +600,16 @@
         document.getElementById('displayTempo').innerText = formatarTempo(cronometro.segundosRestantes);
     }
 
-    // ===== FUNÇÃO DO APITO (com link do Google Drive + fallback sintetizado) =====
+    // ===== FUNÇÃO DO APITO (Google Drive + fallback sintetizado) =====
     function tocarApito() {
-        // Tenta tocar o arquivo do Google Drive
         const audio = new Audio('https://drive.google.com/uc?export=download&id=1LV6US5RRc644oNd3-dGLbBHgpFKD2ggW');
         audio.volume = 1.0;
         audio.play().catch(function(e) {
             console.warn('Erro ao tocar áudio do Drive:', e);
-            // Fallback: som sintetizado
             tocarApitoSintetizado();
         });
     }
 
-    // ===== SOM SINTETIZADO (fallback) =====
     function tocarApitoSintetizado() {
         try {
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
