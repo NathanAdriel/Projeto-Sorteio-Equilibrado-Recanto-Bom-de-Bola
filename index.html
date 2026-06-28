@@ -859,31 +859,21 @@
         return;
     }
 
-    // 1. Criar uma cópia e ordenar por nota decrescente
-    const ranking = [...jogadores].sort((a, b) => b.nota - a.nota);
-
-    // 2. Atribuir posições com base na nota (mesma nota = mesma posição, posição sequencial)
-    let posicao = 1;
-    let ultimaNota = null;
-    let posicaoAnterior = 1;
-
-    const dadosRanking = ranking.map((j, i) => {
-        // Se for o primeiro ou a nota mudou, atualiza a posição
-        if (i === 0 || j.nota < ultimaNota) {
-            posicao = i + 1;
-            ultimaNota = j.nota;
-            posicaoAnterior = posicao;
-        } else {
-            // Mesma nota, mantém a posição anterior
-            posicao = posicaoAnterior;
+    // 1. Criar uma cópia e ordenar: primeiro por nota (decrescente), depois por nome (alfabético)
+    const ranking = [...jogadores].sort((a, b) => {
+        if (b.nota !== a.nota) {
+            return b.nota - a.nota; // nota decrescente
         }
-        return {
-            posicao: posicao,
-            nome: j.nome,
-            nota: j.nota,
-            selecionado: j.selecionado ? 'Sim' : 'Não'
-        };
+        return a.nome.localeCompare(b.nome); // nome alfabético (A-Z)
     });
+
+    // 2. Adicionar posição sequencial (1, 2, 3, ...)
+    const dadosRanking = ranking.map((j, i) => ({
+        posicao: i + 1,
+        nome: j.nome,
+        nota: j.nota,
+        selecionado: j.selecionado ? 'Sim' : 'Não'
+    }));
 
     // 3. Gerar o PDF
     const { jsPDF } = window.jspdf;
@@ -891,13 +881,16 @@
 
     // Título
     doc.setFontSize(18);
-    doc.text('📊 Ranking de Jogadores - Pelada da Paz', 40, 50);
+    doc.text('Ranking de Jogadores - Pelada da Paz', 40, 50);
     doc.setFontSize(10);
     doc.text(`Gerado em: ${new Date().toLocaleString()}`, 40, 70);
     doc.text(`Total de jogadores: ${jogadores.length}`, 40, 85);
 
-    // Tabela
-    const rows = dadosRanking.map(j => [j.posicao, j.nome, j.nota, j.selecionado]);
+    // Formatar posição com ordinal (1º, 2º, 3º, ...)
+    const rows = dadosRanking.map(j => {
+        const ordinal = j.posicao + 'º';
+        return [ordinal, j.nome, j.nota, j.selecionado];
+    });
 
     doc.autoTable({
         startY: 100,
