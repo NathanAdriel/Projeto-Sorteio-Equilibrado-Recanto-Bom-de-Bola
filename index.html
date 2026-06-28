@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pelada da Paz</title>
+    <title>🕊️ Pelada da Paz</title>
 
     <!-- Bibliotecas para gerar PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
@@ -710,6 +710,11 @@
 
     <script>
         // ============================================================
+        //  CONFIGURAÇÃO DO ÁUDIO (link do Dropbox)
+        // ============================================================
+        const URL_APITO = 'https://www.dropbox.com/scl/fi/3tk4hkb7r20ybxphavs9a/Football-Whistle-Sound-Effect-Referee-Whistle-SFX-Echovoid-sounds-youtube.mp3?rlkey=algairiexw2js8uodn6g6hnst&st=plw7l6xg&dl=1';
+
+        // ============================================================
         //  DADOS GLOBAIS
         // ============================================================
         let jogadores = [];
@@ -885,9 +890,23 @@
         }
 
         // ============================================================
-        //  SOM SINTETIZADO (apito)
+        //  FUNÇÃO DO APITO (com link do Dropbox + fallback)
         // ============================================================
         function tocarApito() {
+            // Tenta tocar o áudio do Dropbox
+            const audio = new Audio(URL_APITO);
+            audio.volume = 1.0;
+            audio.play().catch(function(e) {
+                console.warn('Erro ao tocar áudio do Dropbox:', e);
+                // Fallback: som sintetizado
+                tocarApitoSintetizado();
+            });
+        }
+
+        // ============================================================
+        //  SOM SINTETIZADO (fallback)
+        // ============================================================
+        function tocarApitoSintetizado() {
             try {
                 const audioCtx = new(window.AudioContext || window.webkitAudioContext)();
                 const osc1 = audioCtx.createOscillator();
