@@ -926,7 +926,7 @@
         // ============================================================
         function tocarApito() {
             // Tenta tocar o áudio do Dropbox
-            const audio = new Audio(URL_APITO);
+            const audio = new Audio('https://www.dropbox.com/scl/fi/7bwy6g2twi3q4cu6q9lhu/audio-cortado.mp3.mp3?rlkey=ic0ok4l6a5g6n9jdvcwrztovt&st=o8lzcilz&dl=1');
             audio.volume = 1.0;
             audio.play().catch(function(e) {
                 console.warn('Erro ao tocar áudio do Dropbox:', e);
