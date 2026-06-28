@@ -670,1085 +670,792 @@
             <div class="config">
                 <label for="tamanhoDesejado">Quantos jogadores por time (N)?</label>
                 <input type="number" id="tamanhoDesejado" value="4" min="3" step="1">
-                <span style="font-size:0.9rem; color:#555;">(Serã            background: #95a5a6;
-            color: #fff;
-        }
-        .plantel-item .controles .btn-cancelar:hover { background: #7f8c8d; }
-        .plantel-item .controles .btn-salvar {
-            background: #2ecc71;
-            color: #fff;
-        }
-        .plantel-item .controles .btn-salvar:hover { background: #27ae60; }
-
-        .sem-jogadores { color: #888; font-style: italic; padding: 10px; text-align: center; }
-
-        /* === ÁREA DE SORTEIO === */
-        .area-sorteio .lista-jogadores {
-            background: #f4f6f9;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 15px 0;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .jogador-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 4px 8px;
-            border-bottom: 1px solid #ddd;
-        }
-        .jogador-item label { flex: 1; cursor: pointer; }
-        .jogador-item .nota { color: #2980b9; font-weight: bold; margin-left: 10px; }
-
-        .acoes-lista {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .acoes-lista button {
-            background: #95a5a6;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 6px;
-            color: #fff;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        .acoes-lista button:hover { background: #7f8c8d; }
-        .btn-gerenciar {
-            background: #8e44ad !important;
-        }
-        .btn-gerenciar:hover { background: #6c3483 !important; }
-        .btn-gerenciar.ativo { background: #e67e22 !important; }
-
-        .btn-exportar {
-            background: #2980b9 !important;
-        }
-        .btn-exportar:hover { background: #1a5276 !important; }
-
-        .btn-importar {
-            background: #f39c12 !important;
-        }
-        .btn-importar:hover { background: #d68910 !important; }
-
-        .info { font-size: 0.95rem; color: #2c3e50; margin: 5px 0 10px 0; }
-
-        .config {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin: 15px 0;
-            flex-wrap: wrap;
-        }
-        .config label { font-weight: bold; }
-        .config input {
-            padding: 8px 15px;
-            border-radius: 8px;
-            border: 2px solid #ccc;
-            width: 80px;
-        }
-
-        .btn-sortear {
-            background: #e67e22;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-        }
-        .btn-sortear:hover { background: #d35400; }
-
-        /* ===== CRONÔMETRO (abaixo dos times) ===== */
-        .cronometro-area {
-            margin-top: 25px;
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 15px 20px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .cronometro-area .display-tempo {
-            font-size: 2.8rem;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 4px;
-            background: #1a252f;
-            padding: 6px 25px;
-            border-radius: 10px;
-            font-weight: bold;
-            min-width: 130px;
-            text-align: center;
-        }
-        .cronometro-area .controles-tempo {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .cronometro-area .controles-tempo button {
-            background: #34495e;
-            border: none;
-            color: #fff;
-            padding: 8px 18px;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .cronometro-area .controles-tempo button:hover { background: #5d6d7e; }
-        .cronometro-area .controles-tempo .iniciar { background: #27ae60; }
-        .cronometro-area .controles-tempo .iniciar:hover { background: #1e8449; }
-        .cronometro-area .controles-tempo .pausar { background: #f39c12; }
-        .cronometro-area .controles-tempo .pausar:hover { background: #d68910; }
-        .cronometro-area .controles-tempo .zerar { background: #e74c3c; }
-        .cronometro-area .controles-tempo .zerar:hover { background: #b03a2e; }
-        .cronometro-area .config-tempo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #fff;
-            flex-wrap: wrap;
-        }
-        .cronometro-area .config-tempo label {
-            font-weight: bold;
-            margin-right: 4px;
-        }
-        .cronometro-area .config-tempo input {
-            width: 50px;
-            padding: 6px 10px;
-            border-radius: 6px;
-            border: none;
-            font-size: 1rem;
-            text-align: center;
-        }
-        .cronometro-area .config-tempo .separador {
-            font-size: 1.5rem;
-            font-weight: bold;
-            padding: 0 2px;
-        }
-
-        .times-grid {
-            margin-top: 25px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .time-card {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 15px;
-            border-left: 6px solid #f39c12;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        .time-card h3 {
-            margin: 0 0 8px 0;
-            color: #2c3e50;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .time-card ul {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 10px 0;
-        }
-        .time-card ul li {
-            padding: 4px 0;
-            border-bottom: 1px dashed #ddd;
-            display: flex;
-            justify-content: space-between;
-        }
-        .time-card .soma-media {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: #555;
-            margin: 6px 0;
-        }
-        .placar-time {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 6px;
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 2px solid #ccc;
-        }
-        .placar-time span {
-            font-weight: bold;
-            margin-right: 6px;
-        }
-        .placar-time .v { color: #27ae60; }
-        .placar-time .e { color: #f39c12; }
-        .placar-time .d { color: #e74c3c; }
-        .placar-time .p { color: #2980b9; font-weight: bold; background: #ecf0f1; padding: 0 8px; border-radius: 6px; }
-        .placar-time button {
-            background: #ecf0f1;
-            border: none;
-            border-radius: 6px;
-            padding: 2px 10px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            margin: 0 2px;
-            font-weight: bold;
-        }
-        .placar-time button:hover { background: #d5dbdb; }
-        .placar-time .btn-vitoria { background: #27ae60; color: #fff; }
-        .placar-time .btn-vitoria:hover { background: #1e8449; }
-        .placar-time .btn-empate { background: #f39c12; color: #fff; }
-        .placar-time .btn-empate:hover { background: #d68910; }
-        .placar-time .btn-derrota { background: #e74c3c; color: #fff; }
-        .placar-time .btn-derrota:hover { background: #b03a2e; }
-
-        .desequilibrio {
-            text-align: center;
-            margin: 15px 0 5px 0;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .footer-acoes {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            margin-top: 15px;
-            gap: 10px;
-        }
-        .footer-acoes button {
-            background: #7f8c8d;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 8px;
-            color: #fff;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .footer-acoes button:hover { background: #5d6d7e; }
-        .btn-finalizar {
-            background: #8e44ad !important;
-        }
-        .btn-finalizar:hover { background: #6c3483 !important; }
-        .distribuicao-info {
-            text-align: center;
-            margin: 10px 0;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        /* esconde o input file */
-        #importInput {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-
-    <h1>⚽ Sorteio + Placar</h1>
-
-    <!-- ===== PAINEL DE GERENCIAMENTO ===== -->
-    <div class="painel-gerenciamento" id="painelGerenciamento">
-        <h2 style="margin-top:0; color:#8e44ad;">📋 Gerenciar Plantel</h2>
-
-        <div class="area-cadastro">
-            <input type="text" id="novoNome" placeholder="Nome do jogador">
-            <select id="novaNota">
-                <option value="0">0</option><option value="0.5">0.5</option>
-                <option value="1">1</option><option value="1.5">1.5</option>
-                <option value="2">2</option><option value="2.5">2.5</option>
-                <option value="3">3</option><option value="3.5">3.5</option>
-                <option value="4">4</option><option value="4.5">4.5</option>
-                <option value="5" selected>5</option>
-                <option value="5.5">5.5</option><option value="6">6</option>
-                <option value="6.5">6.5</option><option value="7">7</option>
-                <option value="7.5">7.5</option><option value="8">8</option>
-                <option value="8.5">8.5</option><option value="9">9</option>
-                <option value="9.5">9.5</option><option value="10">10</option>
-            </select>
-            <button onclick="adicionarJogadorPlantel()">➕ Adicionar</button>
-        </div>
-
-        <div class="busca">
-            <input type="text" id="buscaPlantel" placeholder="🔍 Buscar jogador..." oninput="renderizarPlantel()">
-        </div>
-
-        <div class="lista-plantel" id="listaPlantel">
-            <div class="sem-jogadores">Nenhum jogador cadastrado.</div>
-        </div>
-    </div>
-
-    <!-- ===== ÁREA DE SORTEIO ===== -->
-    <div class="area-sorteio">
-
-        <div class="acoes-lista">
-            <button class="btn-gerenciar" id="btnGerenciar" onclick="toggleGerenciamento()">📋 Gerenciar Plantel</button>
-            <button onclick="selecionarTodos(true)">✅ Selecionar todos</button>
-            <button onclick="selecionarTodos(false)">❌ Desmarcar todos</button>
-            <button class="btn-exportar" onclick="exportarDados()">📤 Exportar Dados (TXT)</button>
-            <button class="btn-importar" onclick="document.getElementById('importInput').click()">📥 Importar Dados (TXT)</button>
-            <input type="file" id="importInput" accept=".txt" onchange="importarDados(event)">
-        </div>
-
-        <div class="lista-jogadores" id="listaSorteio">
-            <em style="color: #888;">Nenhum jogador cadastrado.</em>
-        </div>
-        <div class="info" id="infoSelecionados">Nenhum jogador selecionado.</div>
-
-        <div class="config">
-            <label for="tamanhoDesejado">Quantos jogadores por time (N)?</label>
-            <input type="number" id="tamanhoDesejado" value="4" min="3" step="1">
-            <span style="font-size:0.9rem; color:#555;">(Serão formados times com N e N−1 jogadores)</span>
-        </div>
-
-        <button class="btn-sortear" onclick="sortearTimes()">🎲 Sortear Times</button>
-
-        <!-- Área de resultados (times) -->
-        <div id="resultado" style="margin-top: 20px;"></div>
-
-        <!-- ===== CRONÔMETRO (abaixo dos times) ===== -->
-        <div class="cronometro-area" id="cronometroArea">
-            <div class="display-tempo" id="displayTempo">00:00</div>
-            <div class="controles-tempo">
-                <button class="iniciar" onclick="iniciarCronometro()">▶ Iniciar</button>
-                <button class="pausar" onclick="pausarCronometro()">⏸ Pausar</button>
-                <button class="zerar" onclick="zerarCronometro()">⏹ Zerar</button>
+                <span style="font-size:0.9rem; color:#555;">(Serão formados times com N e N−1 jogadores)</span>
             </div>
-            <div class="config-tempo">
-                <label for="minutosPartida">Min:</label>
-                <input type="number" id="minutosPartida" value="5" min="0" max="99" step="1" style="width:50px;">
-                <span class="separador">:</span>
-                <label for="segundosPartida">Seg:</label>
-                <input type="number" id="segundosPartida" value="0" min="0" max="59" step="1" style="width:50px;">
+
+            <button class="btn-sortear" onclick="sortearTimes()">🎲 Sortear Times</button>
+
+            <!-- Área de resultados (times) -->
+            <div id="resultado" style="margin-top: 20px;"></div>
+
+            <!-- ===== CRONÔMETRO ===== -->
+            <div class="cronometro-area" id="cronometroArea">
+                <div class="display-tempo" id="displayTempo">00:00</div>
+                <div class="controles-tempo">
+                    <button class="iniciar" onclick="iniciarCronometro()">▶ Iniciar</button>
+                    <button class="pausar" onclick="pausarCronometro()">⏸ Pausar</button>
+                    <button class="zerar" onclick="zerarCronometro()">⏹ Zerar</button>
+                </div>
+                <div class="config-tempo">
+                    <label for="minutosPartida">Min:</label>
+                    <input type="number" id="minutosPartida" value="5" min="0" max="99" step="1" style="width:50px;">
+                    <span class="separador">:</span>
+                    <label for="segundosPartida">Seg:</label>
+                    <input type="number" id="segundosPartida" value="0" min="0" max="59" step="1" style="width:50px;">
+                </div>
+            </div>
+
+            <!-- Botões de ação -->
+            <div class="footer-acoes">
+                <button onclick="zerarTodosPlacares()">🔄 Zerar placares</button>
+                <button onclick="zerarTudo()">🗑️ Zerar tudo</button>
+                <button class="btn-finalizar" onclick="finalizarPelada()">🏁 Finalizar Pelada</button>
             </div>
         </div>
 
-        <!-- Botões de ação -->
-        <div class="footer-acoes">
-            <button onclick="zerarTodosPlacares()">🔄 Zerar placares</button>
-            <button onclick="zerarTudo()">🗑️ Zerar tudo</button>
-            <button class="btn-finalizar" onclick="finalizarPelada()">🏁 Finalizar Pelada</button>
-        </div>
+        <!-- Input oculto para importação -->
+        <input type="file" id="importInput" accept=".txt" onchange="importarDados(event)">
+
     </div>
-</div>
 
-<script>
-    // ===== DADOS GLOBAIS =====
-    let jogadores = [];
-    let timesAtuais = [];
-    let modoGerenciamento = false;
+    <script>
+        // ============================================================
+        //  DADOS GLOBAIS
+        // ============================================================
+        let jogadores = [];
+        let timesAtuais = [];
+        let modoGerenciamento = false;
 
-    // ===== PERSISTÊNCIA (localStorage) =====
-    function salvarJogadores() {
-        localStorage.setItem('plantel', JSON.stringify(jogadores));
-    }
+        // ============================================================
+        //  PERSISTÊNCIA (localStorage)
+        // ============================================================
+        function salvarJogadores() {
+            localStorage.setItem('plantel', JSON.stringify(jogadores));
+        }
 
-    function carregarJogadores() {
-        const dados = localStorage.getItem('plantel');
-        if (dados) {
-            try {
-                jogadores = JSON.parse(dados);
-                jogadores.forEach(j => {
-                    if (j.selecionado === undefined) j.selecionado = true;
-                    j.editando = false;
-                });
-            } catch (e) {
+        function carregarJogadores() {
+            const dados = localStorage.getItem('plantel');
+            if (dados) {
+                try {
+                    jogadores = JSON.parse(dados);
+                    jogadores.forEach(j => {
+                        if (j.selecionado === undefined) j.selecionado = true;
+                        j.editando = false;
+                    });
+                } catch (e) {
+                    jogadores = [];
+                }
+            } else {
                 jogadores = [];
             }
-        } else {
-            jogadores = [];
+            atualizarTodasListas();
         }
-        atualizarTodasListas();
-    }
 
-    // ===== EXPORTAR DADOS (TXT) =====
-    function exportarDados() {
-        if (jogadores.length === 0) {
-            alert('Não há dados para exportar.');
-            return;
+        // ============================================================
+        //  MENU DROPDOWN
+        // ============================================================
+        function toggleDropdown() {
+            document.getElementById('menuGerenciamento').classList.toggle('show');
         }
-        // Cria uma string com uma linha por jogador: Nome;Nota;Selecionado
-        let linhas = [];
-        for (let j of jogadores) {
-            const selecionado = j.selecionado ? 'true' : 'false';
-            linhas.push(`${j.nome};${j.nota};${selecionado}`);
-        }
-        const conteudo = linhas.join('\n');
-        const blob = new Blob([conteudo], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'plantel.txt';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
-
-    // ===== IMPORTAR DADOS (TXT) =====
-    function importarDados(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const texto = e.target.result;
-                const linhas = texto.split('\n').filter(line => line.trim() !== '');
-                const novosJogadores = [];
-
-                for (let line of linhas) {
-                    const partes = line.split(';').map(s => s.trim());
-                    if (partes.length < 2) continue; // linha inválida
-                    const nome = partes[0];
-                    const nota = parseFloat(partes[1]);
-                    if (isNaN(nota) || nota < 0 || nota > 10) continue;
-                    let selecionado = true;
-                    if (partes.length >= 3) {
-                        selecionado = (partes[2].toLowerCase() === 'true');
-                    }
-                    novosJogadores.push({ nome, nota, selecionado, editando: false });
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('#menuGerenciamento button')) {
+                const dropdowns = document.getElementsByClassName('dropdown-content');
+                for (let d of dropdowns) {
+                    d.parentElement.classList.remove('show');
                 }
-
-                if (novosJogadores.length === 0) {
-                    alert('Nenhum jogador válido encontrado no arquivo.');
-                    return;
-                }
-
-                if (jogadores.length > 0) {
-                    if (!confirm(`O plantel atual (${jogadores.length} jogadores) será substituído pelo importado (${novosJogadores.length} jogadores). Continuar?`)) {
-                        return;
-                    }
-                }
-
-                jogadores = novosJogadores;
-                // Ordenar alfabeticamente
-                jogadores.sort((a, b) => a.nome.localeCompare(b.nome));
-                salvarJogadores();
-                atualizarTodasListas();
-                if (modoGerenciamento) renderizarPlantel();
-                alert(`Dados importados com sucesso! ${jogadores.length} jogadores carregados.`);
-            } catch (err) {
-                alert('Erro ao ler o arquivo: ' + err.message);
             }
-        };
-        reader.readAsText(file);
-        // Limpar o input para permitir importar o mesmo arquivo novamente
-        event.target.value = '';
-    }
-
-    // ===== CRONÔMETRO REGRESSIVO =====
-    let cronometro = {
-        segundosRestantes: 0,
-        totalSegundos: 0,
-        intervalId: null,
-        rodando: false
-    };
-
-    function getTempoTotalSegundos() {
-        const minutos = parseInt(document.getElementById('minutosPartida').value) || 0;
-        const segundos = parseInt(document.getElementById('segundosPartida').value) || 0;
-        return minutos * 60 + segundos;
-    }
-
-    function formatarTempo(seg) {
-        const m = Math.floor(seg / 60);
-        const s = seg % 60;
-        return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-    }
-
-    function atualizarDisplayTempo() {
-        document.getElementById('displayTempo').innerText = formatarTempo(cronometro.segundosRestantes);
-    }
-
-    // ===== FUNÇÃO DO APITO (Google Drive + fallback sintetizado) =====
-    function tocarApito() {
-        const audio = new Audio('https://s21.aconvert.com/convert/p3r68-cdx67/51j9e-svrx4.mp3');
-        audio.volume = 1.0;
-        audio.play().catch(function(e) {
-            console.warn('Erro ao tocar áudio do Drive:', e);
-            tocarApitoSintetizado();
         });
-    }
 
-    function tocarApitoSintetizado() {
-        try {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc1 = audioCtx.createOscillator();
-            osc1.type = 'square';
-            osc1.frequency.setValueAtTime(880, audioCtx.currentTime);
-            osc1.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
-            osc1.frequency.linearRampToValueAtTime(1000, audioCtx.currentTime + 0.2);
-            osc1.frequency.linearRampToValueAtTime(1300, audioCtx.currentTime + 0.3);
-            osc1.frequency.linearRampToValueAtTime(1100, audioCtx.currentTime + 0.4);
-
-            const osc2 = audioCtx.createOscillator();
-            osc2.type = 'square';
-            osc2.frequency.setValueAtTime(1200, audioCtx.currentTime);
-            osc2.frequency.linearRampToValueAtTime(1600, audioCtx.currentTime + 0.1);
-            osc2.frequency.linearRampToValueAtTime(1400, audioCtx.currentTime + 0.2);
-            osc2.frequency.linearRampToValueAtTime(1700, audioCtx.currentTime + 0.3);
-            osc2.frequency.linearRampToValueAtTime(1500, audioCtx.currentTime + 0.4);
-
-            const gainNode = audioCtx.createGain();
-            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.9, audioCtx.currentTime + 0.05);
-            gainNode.gain.linearRampToValueAtTime(0.8, audioCtx.currentTime + 0.2);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
-
-            osc1.connect(gainNode);
-            osc2.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-
-            osc1.start();
-            osc2.start();
-            osc1.stop(audioCtx.currentTime + 1.2);
-            osc2.stop(audioCtx.currentTime + 1.2);
-
-            // Ruído para realismo
-            const bufferSize = audioCtx.sampleRate * 0.1;
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) {
-                data[i] = (Math.random() * 2 - 1) * 0.3;
-            }
-            const noise = audioCtx.createBufferSource();
-            noise.buffer = buffer;
-            const noiseGain = audioCtx.createGain();
-            noiseGain.gain.setValueAtTime(0, audioCtx.currentTime);
-            noiseGain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.02);
-            noiseGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-            noise.connect(noiseGain);
-            noiseGain.connect(audioCtx.destination);
-            noise.start();
-            noise.stop(audioCtx.currentTime + 0.1);
-
-        } catch (e) {
-            alert('⏰ Tempo esgotado! Apito!');
+        function fecharDropdown() {
+            document.getElementById('menuGerenciamento').classList.remove('show');
         }
-    }
 
-    function iniciarCronometro() {
-        if (cronometro.rodando) return;
+        // ============================================================
+        //  ABRIR / FECHAR GERENCIAMENTO
+        // ============================================================
+        function abrirGerenciamento() {
+            modoGerenciamento = true;
+            document.getElementById('painelGerenciamento').classList.add('ativo');
+            document.getElementById('areaPartida').classList.add('oculto');
+            renderizarPlantel();
+        }
 
-        if (cronometro.segundosRestantes <= 0) {
-            cronometro.totalSegundos = getTempoTotalSegundos();
-            if (cronometro.totalSegundos <= 0) {
-                alert('Defina um tempo maior que 0.');
+        function fecharGerenciamento() {
+            modoGerenciamento = false;
+            document.getElementById('painelGerenciamento').classList.remove('ativo');
+            document.getElementById('areaPartida').classList.remove('oculto');
+        }
+
+        // ============================================================
+        //  EXPORTAR / IMPORTAR (TXT)
+        // ============================================================
+        function exportarDados() {
+            if (jogadores.length === 0) {
+                alert('Não há dados para exportar.');
                 return;
             }
+            let linhas = [];
+            for (let j of jogadores) {
+                const selecionado = j.selecionado ? 'true' : 'false';
+                linhas.push(`${j.nome};${j.nota};${selecionado}`);
+            }
+            const conteudo = linhas.join('\n');
+            const blob = new Blob([conteudo], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'plantel.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importarDados(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const texto = e.target.result;
+                    const linhas = texto.split('\n').filter(line => line.trim() !== '');
+                    const novosJogadores = [];
+                    for (let line of linhas) {
+                        const partes = line.split(';').map(s => s.trim());
+                        if (partes.length < 2) continue;
+                        const nome = partes[0];
+                        const nota = parseFloat(partes[1]);
+                        if (isNaN(nota) || nota < 0 || nota > 10) continue;
+                        let selecionado = true;
+                        if (partes.length >= 3) {
+                            selecionado = (partes[2].toLowerCase() === 'true');
+                        }
+                        novosJogadores.push({ nome, nota, selecionado, editando: false });
+                    }
+                    if (novosJogadores.length === 0) {
+                        alert('Nenhum jogador válido encontrado no arquivo.');
+                        return;
+                    }
+                    if (jogadores.length > 0) {
+                        if (!confirm(`O plantel atual (${jogadores.length} jogadores) será substituído pelo importado (${novosJogadores.length} jogadores). Continuar?`)) {
+                            return;
+                        }
+                    }
+                    jogadores = novosJogadores;
+                    jogadores.sort((a, b) => a.nome.localeCompare(b.nome));
+                    salvarJogadores();
+                    atualizarTodasListas();
+                    if (modoGerenciamento) renderizarPlantel();
+                    alert(`Dados importados com sucesso! ${jogadores.length} jogadores carregados.`);
+                } catch (err) {
+                    alert('Erro ao ler o arquivo: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ============================================================
+        //  EXPORTAR PDF
+        // ============================================================
+        function exportarPDF() {
+            if (jogadores.length === 0) {
+                alert('Não há jogadores para exportar.');
+                return;
+            }
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'pt', 'a4');
+
+            doc.setFontSize(18);
+            doc.text('Lista de Jogadores - Plantel', 40, 50);
+            doc.setFontSize(10);
+            doc.text(`Gerado em: ${new Date().toLocaleString()}`, 40, 70);
+
+            const rows = jogadores.map((j, i) => [i + 1, j.nome, j.nota, j.selecionado ? 'Sim' : 'Não']);
+
+            doc.autoTable({
+                startY: 80,
+                head: [
+                    ['#', 'Nome', 'Nota', 'Selecionado']
+                ],
+                body: rows,
+                theme: 'striped',
+                headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 12 },
+                bodyStyles: { fontSize: 10 },
+                columnStyles: {
+                    0: { cellWidth: 30, halign: 'center' },
+                    1: { cellWidth: 200 },
+                    2: { cellWidth: 60, halign: 'center' },
+                    3: { cellWidth: 80, halign: 'center' }
+                },
+                margin: { left: 40, right: 40 }
+            });
+
+            doc.save('plantel.pdf');
+        }
+
+        // ============================================================
+        //  SOM SINTETIZADO (apito)
+        // ============================================================
+        function tocarApito() {
+            try {
+                const audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                const osc1 = audioCtx.createOscillator();
+                osc1.type = 'square';
+                osc1.frequency.setValueAtTime(880, audioCtx.currentTime);
+                osc1.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+                osc1.frequency.linearRampToValueAtTime(1000, audioCtx.currentTime + 0.2);
+                osc1.frequency.linearRampToValueAtTime(1300, audioCtx.currentTime + 0.3);
+                osc1.frequency.linearRampToValueAtTime(1100, audioCtx.currentTime + 0.4);
+
+                const osc2 = audioCtx.createOscillator();
+                osc2.type = 'square';
+                osc2.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                osc2.frequency.linearRampToValueAtTime(1600, audioCtx.currentTime + 0.1);
+                osc2.frequency.linearRampToValueAtTime(1400, audioCtx.currentTime + 0.2);
+                osc2.frequency.linearRampToValueAtTime(1700, audioCtx.currentTime + 0.3);
+                osc2.frequency.linearRampToValueAtTime(1500, audioCtx.currentTime + 0.4);
+
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.9, audioCtx.currentTime + 0.05);
+                gainNode.gain.linearRampToValueAtTime(0.8, audioCtx.currentTime + 0.2);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+
+                osc1.connect(gainNode);
+                osc2.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                osc1.start();
+                osc2.start();
+                osc1.stop(audioCtx.currentTime + 1.2);
+                osc2.stop(audioCtx.currentTime + 1.2);
+
+                // Ruído para realismo
+                const bufferSize = audioCtx.sampleRate * 0.1;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * 0.3;
+                }
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+                const noiseGain = audioCtx.createGain();
+                noiseGain.gain.setValueAtTime(0, audioCtx.currentTime);
+                noiseGain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.02);
+                noiseGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                noise.connect(noiseGain);
+                noiseGain.connect(audioCtx.destination);
+                noise.start();
+                noise.stop(audioCtx.currentTime + 0.1);
+
+            } catch (e) {
+                alert('⏰ Tempo esgotado! Apito!');
+            }
+        }
+
+        // ============================================================
+        //  CRONÔMETRO
+        // ============================================================
+        let cronometro = {
+            segundosRestantes: 0,
+            totalSegundos: 0,
+            intervalId: null,
+            rodando: false
+        };
+
+        function getTempoTotalSegundos() {
+            const minutos = parseInt(document.getElementById('minutosPartida').value) || 0;
+            const segundos = parseInt(document.getElementById('segundosPartida').value) || 0;
+            return minutos * 60 + segundos;
+        }
+
+        function formatarTempo(seg) {
+            const m = Math.floor(seg / 60);
+            const s = seg % 60;
+            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        function atualizarDisplayTempo() {
+            document.getElementById('displayTempo').innerText = formatarTempo(cronometro.segundosRestantes);
+        }
+
+        function iniciarCronometro() {
+            if (cronometro.rodando) return;
+            if (cronometro.segundosRestantes <= 0) {
+                cronometro.totalSegundos = getTempoTotalSegundos();
+                if (cronometro.totalSegundos <= 0) {
+                    alert('Defina um tempo maior que 0.');
+                    return;
+                }
+                cronometro.segundosRestantes = cronometro.totalSegundos;
+                atualizarDisplayTempo();
+            }
+            cronometro.rodando = true;
+            cronometro.intervalId = setInterval(() => {
+                cronometro.segundosRestantes--;
+                atualizarDisplayTempo();
+                if (cronometro.segundosRestantes <= 0) {
+                    cronometro.segundosRestantes = 0;
+                    atualizarDisplayTempo();
+                    pausarCronometro();
+                    tocarApito();
+                }
+            }, 1000);
+        }
+
+        function pausarCronometro() {
+            if (!cronometro.rodando) return;
+            cronometro.rodando = false;
+            clearInterval(cronometro.intervalId);
+            cronometro.intervalId = null;
+        }
+
+        function zerarCronometro() {
+            pausarCronometro();
+            cronometro.totalSegundos = getTempoTotalSegundos();
             cronometro.segundosRestantes = cronometro.totalSegundos;
             atualizarDisplayTempo();
         }
 
-        cronometro.rodando = true;
-        cronometro.intervalId = setInterval(() => {
-            cronometro.segundosRestantes--;
-            atualizarDisplayTempo();
-
-            if (cronometro.segundosRestantes <= 0) {
-                cronometro.segundosRestantes = 0;
-                atualizarDisplayTempo();
-                pausarCronometro();
-                tocarApito();
+        // ============================================================
+        //  JOGADORES (CRUD)
+        // ============================================================
+        function adicionarJogadorPlantel() {
+            const nomeInput = document.getElementById('novoNome');
+            const notaSelect = document.getElementById('novaNota');
+            const nome = nomeInput.value.trim();
+            const nota = parseFloat(notaSelect.value);
+            if (nome === '') {
+                alert('Digite o nome do jogador.');
+                return;
             }
-        }, 1000);
-    }
+            if (jogadores.some(j => j.nome.toLowerCase() === nome.toLowerCase())) {
+                alert('Jogador já cadastrado.');
+                return;
+            }
+            jogadores.push({ nome, nota, selecionado: true, editando: false });
+            nomeInput.value = '';
+            jogadores.sort((a, b) => a.nome.localeCompare(b.nome));
+            salvarJogadores();
+            atualizarTodasListas();
+            if (modoGerenciamento) renderizarPlantel();
+        }
 
-    function pausarCronometro() {
-        if (!cronometro.rodando) return;
-        cronometro.rodando = false;
-        clearInterval(cronometro.intervalId);
-        cronometro.intervalId = null;
-    }
+        function removerJogadorPlantel(index) {
+            if (!confirm('Remover este jogador do plantel?')) return;
+            jogadores.splice(index, 1);
+            salvarJogadores();
+            atualizarTodasListas();
+            if (modoGerenciamento) renderizarPlantel();
+            if (timesAtuais.length > 0) {
+                timesAtuais = timesAtuais.map(time => {
+                    time.jogadores = time.jogadores.filter(j => jogadores.some(p => p.nome === j.nome));
+                    return time;
+                }).filter(time => time.jogadores.length > 0);
+                if (timesAtuais.length === 0) document.getElementById('resultado').innerHTML = '';
+            }
+        }
 
-    function zerarCronometro() {
-        pausarCronometro();
+        function iniciarEdicaoPlantel(index) {
+            jogadores[index].editando = true;
+            renderizarPlantel();
+        }
+
+        function salvarEdicaoPlantel(index) {
+            const select = document.getElementById(`editNotaPlantel-${index}`);
+            if (!select) return;
+            const novaNota = parseFloat(select.value);
+            jogadores[index].nota = novaNota;
+            jogadores[index].editando = false;
+            salvarJogadores();
+            atualizarTodasListas();
+            if (modoGerenciamento) renderizarPlantel();
+            if (timesAtuais.length > 0) {
+                timesAtuais.forEach(time => {
+                    time.jogadores.forEach(j => {
+                        const encontrado = jogadores.find(p => p.nome === j.nome);
+                        if (encontrado) j.nota = encontrado.nota;
+                    });
+                });
+                const times = timesAtuais.map(t => t.jogadores);
+                const somas = times.map(t => t.reduce((acc, j) => acc + j.nota, 0));
+                const medias = times.map(t => {
+                    const soma = t.reduce((acc, j) => acc + j.nota, 0);
+                    return soma / t.length;
+                });
+                const tamanhos = times.map(t => t.length);
+                exibirTimes(times, somas, medias, tamanhos);
+            }
+        }
+
+        function cancelarEdicaoPlantel(index) {
+            jogadores[index].editando = false;
+            renderizarPlantel();
+        }
+
+        // ============================================================
+        //  RENDERIZAÇÃO
+        // ============================================================
+        function renderizarPlantel() {
+            const container = document.getElementById('listaPlantel');
+            const busca = document.getElementById('buscaPlantel').value.toLowerCase().trim();
+            const filtrados = jogadores.filter(j => j.nome.toLowerCase().includes(busca));
+            if (filtrados.length === 0) {
+                container.innerHTML = '<div class="sem-jogadores">Nenhum jogador encontrado.</div>';
+                return;
+            }
+            let html = '';
+            filtrados.forEach((j, i) => {
+                const idxGlobal = jogadores.indexOf(j);
+                const editando = j.editando || false;
+                html += `<div class="plantel-item" id="plantel-item-${idxGlobal}">`;
+                html += `<span class="nome">${j.nome}</span>`;
+                html += `<div class="controles">`;
+                if (editando) {
+                    const opcoes = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10];
+                    let selectHTML = `<select id="editNotaPlantel-${idxGlobal}">`;
+                    opcoes.forEach(v => {
+                        const selected = (v === j.nota) ? 'selected' : '';
+                        selectHTML += `<option value="${v}" ${selected}>${v}</option>`;
+                    });
+                    selectHTML += `</select>`;
+                    html += selectHTML;
+                    html += `<button class="btn-salvar" onclick="salvarEdicaoPlantel(${idxGlobal})">💾</button>`;
+                    html += `<button class="btn-cancelar" onclick="cancelarEdicaoPlantel(${idxGlobal})">✖</button>`;
+                } else {
+                    html += `<span style="font-weight:bold; color:#2980b9;">${j.nota}</span>`;
+                    html += `<button class="btn-editar-nota" onclick="iniciarEdicaoPlantel(${idxGlobal})">✏️</button>`;
+                }
+                html += `<button class="btn-excluir" onclick="removerJogadorPlantel(${idxGlobal})">🗑️</button>`;
+                html += `</div></div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderizarSorteio() {
+            const div = document.getElementById('listaSorteio');
+            const info = document.getElementById('infoSelecionados');
+            const busca = document.getElementById('buscaPartida').value.toLowerCase().trim();
+
+            if (jogadores.length === 0) {
+                div.innerHTML = '<em style="color: #888;">Nenhum jogador cadastrado.</em>';
+                info.innerText = 'Nenhum jogador selecionado.';
+                return;
+            }
+
+            const filtrados = jogadores.filter(j => j.nome.toLowerCase().includes(busca));
+
+            let html = '';
+            filtrados.forEach((j, i) => {
+                const idxGlobal = jogadores.indexOf(j);
+                html += `
+                    <div class="jogador-item">
+                        <input type="checkbox" ${j.selecionado ? 'checked' : ''} onchange="toggleSelecionado(${idxGlobal})">
+                        <label onclick="toggleSelecionado(${idxGlobal})">
+                            ${j.nome} <span class="nota">${j.nota}</span>
+                        </label>
+                    </div>
+                `;
+            });
+            div.innerHTML = html;
+
+            const selecionados = jogadores.filter(j => j.selecionado);
+            info.innerText = `📌 ${selecionados.length} jogador(es) selecionado(s) para o sorteio.`;
+            if (selecionados.length === 0) info.innerText = 'Nenhum jogador selecionado.';
+        }
+
+        function atualizarTodasListas() {
+            renderizarSorteio();
+            if (modoGerenciamento) renderizarPlantel();
+        }
+
+        function selecionarTodos(valor) {
+            jogadores.forEach(j => j.selecionado = valor);
+            salvarJogadores();
+            renderizarSorteio();
+        }
+
+        function toggleSelecionado(index) {
+            jogadores[index].selecionado = !jogadores[index].selecionado;
+            salvarJogadores();
+            renderizarSorteio();
+        }
+
+        // ============================================================
+        //  SORTEIO
+        // ============================================================
+        function calcularDistribuicao(total, N) {
+            if (total < N - 1) return null;
+            let maxA = Math.floor(total / N);
+            for (let a = maxA; a >= 0; a--) {
+                let resto = total - a * N;
+                if (resto % (N - 1) === 0) {
+                    let b = resto / (N - 1);
+                    return { a, b };
+                }
+            }
+            return null;
+        }
+
+        function sortearTimes() {
+            const N = parseInt(document.getElementById('tamanhoDesejado').value);
+            if (isNaN(N) || N < 3) {
+                alert('Informe um número inteiro maior ou igual a 3.');
+                return;
+            }
+            const selecionados = jogadores.filter(j => j.selecionado);
+            const total = selecionados.length;
+            if (total === 0) {
+                alert('Marque pelo menos alguns jogadores para o sorteio.');
+                return;
+            }
+            const dist = calcularDistribuicao(total, N);
+            if (!dist) {
+                alert(`Não é possível formar times com ${N} e ${N-1} jogadores para um total de ${total} atletas. Tente outro valor de N.`);
+                return;
+            }
+            const { a, b } = dist;
+            const tamanhos = [];
+            for (let i = 0; i < a; i++) tamanhos.push(N);
+            for (let i = 0; i < b; i++) tamanhos.push(N - 1);
+
+            let melhorSorteio = null;
+            let menorDiferenca = Infinity;
+
+            for (let tentativa = 0; tentativa < 1000; tentativa++) {
+                const copia = [...selecionados];
+                for (let i = copia.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [copia[i], copia[j]] = [copia[j], copia[i]];
+                }
+                const times = [];
+                let idx = 0;
+                for (let t = 0; t < tamanhos.length; t++) {
+                    const size = tamanhos[t];
+                    times.push(copia.slice(idx, idx + size));
+                    idx += size;
+                }
+                const medias = times.map(time => {
+                    const soma = time.reduce((acc, j) => acc + j.nota, 0);
+                    return soma / time.length;
+                });
+                const diferenca = Math.max(...medias) - Math.min(...medias);
+                if (diferenca < menorDiferenca) {
+                    menorDiferenca = diferenca;
+                    const somas = times.map(time => time.reduce((acc, j) => acc + j.nota, 0));
+                    melhorSorteio = { times, somas, medias };
+                }
+                if (diferenca === 0) break;
+            }
+
+            timesAtuais = melhorSorteio.times.map(time => ({
+                jogadores: time,
+                vitorias: 0,
+                empates: 0,
+                derrotas: 0,
+                pontos: 0
+            }));
+
+            exibirTimes(melhorSorteio.times, melhorSorteio.somas, melhorSorteio.medias, tamanhos);
+        }
+
+        function exibirTimes(times, somas, medias, tamanhos) {
+            const div = document.getElementById('resultado');
+            let html = `<div class="distribuicao-info">Times formados: ${times.length} equipes (${tamanhos.map(t => t+' jog.').join(', ')})</div>`;
+            html += '<div class="times-grid">';
+            times.forEach((time, idx) => {
+                const timeData = timesAtuais[idx];
+                html += `
+                    <div class="time-card" id="time-${idx}">
+                        <h3>⚽ Time ${idx + 1} (${time.length} jog.)</h3>
+                        <ul>
+                            ${time.map(j => `<li>${j.nome} <span style="color:#2980b9;">${j.nota}</span></li>`).join('')}
+                        </ul>
+                        <div class="soma-media">
+                            <span>Soma: ${somas[idx].toFixed(1)}</span>
+                            <span>Média: ${medias[idx].toFixed(2)}</span>
+                        </div>
+                        <div class="placar-time">
+                            <span class="v">V: ${timeData.vitorias}</span>
+                            <span class="e">E: ${timeData.empates}</span>
+                            <span class="d">D: ${timeData.derrotas}</span>
+                            <span class="p">Pts: ${timeData.pontos}</span>
+                            <button class="btn-vitoria" onclick="registrarResultado(${idx}, 'vitoria')">+Vit</button>
+                            <button class="btn-empate" onclick="registrarResultado(${idx}, 'empate')">+Emp</button>
+                            <button class="btn-derrota" onclick="registrarResultado(${idx}, 'derrota')">+Der</button>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            const diff = Math.max(...medias) - Math.min(...medias);
+            html += `<div class="desequilibrio">Desequilíbrio (diferença entre as médias): ${diff.toFixed(2)}</div>`;
+            div.innerHTML = html;
+        }
+
+        // ============================================================
+        //  REGISTRO DE RESULTADOS
+        // ============================================================
+        function registrarResultado(idx, tipo) {
+            if (idx < 0 || idx >= timesAtuais.length) return;
+            const time = timesAtuais[idx];
+            if (tipo === 'vitoria') {
+                time.vitorias++;
+                time.pontos += 3;
+            } else if (tipo === 'empate') {
+                time.empates++;
+                time.pontos += 1;
+            } else if (tipo === 'derrota') {
+                time.derrotas++;
+            }
+            atualizarPlacarTime(idx);
+        }
+
+        function atualizarPlacarTime(idx) {
+            const timeCard = document.getElementById(`time-${idx}`);
+            if (!timeCard) return;
+            const timeData = timesAtuais[idx];
+            const placarSpan = timeCard.querySelector('.placar-time');
+            if (placarSpan) {
+                const vSpan = placarSpan.querySelector('.v');
+                const eSpan = placarSpan.querySelector('.e');
+                const dSpan = placarSpan.querySelector('.d');
+                const pSpan = placarSpan.querySelector('.p');
+                if (vSpan) vSpan.innerText = `V: ${timeData.vitorias}`;
+                if (eSpan) eSpan.innerText = `E: ${timeData.empates}`;
+                if (dSpan) dSpan.innerText = `D: ${timeData.derrotas}`;
+                if (pSpan) pSpan.innerText = `Pts: ${timeData.pontos}`;
+            }
+        }
+
+        function zerarTodosPlacares() {
+            timesAtuais.forEach(time => {
+                time.vitorias = 0;
+                time.empates = 0;
+                time.derrotas = 0;
+                time.pontos = 0;
+            });
+            if (timesAtuais.length > 0) {
+                const div = document.getElementById('resultado');
+                const times = timesAtuais.map(t => t.jogadores);
+                const somas = times.map(t => t.reduce((acc, j) => acc + j.nota, 0));
+                const medias = times.map(t => {
+                    const soma = t.reduce((acc, j) => acc + j.nota, 0);
+                    return soma / t.length;
+                });
+                const tamanhos = times.map(t => t.length);
+                exibirTimes(times, somas, medias, tamanhos);
+            } else {
+                document.getElementById('resultado').innerHTML = '';
+            }
+        }
+
+        function zerarTudo() {
+            if (timesAtuais.length === 0) return;
+            if (!confirm('Zerar todos os placares e remover os times?')) return;
+            timesAtuais = [];
+            document.getElementById('resultado').innerHTML = '';
+        }
+
+        // ============================================================
+        //  FINALIZAR PELADA
+        // ============================================================
+        function finalizarPelada() {
+            if (timesAtuais.length === 0) {
+                alert('Não há times formados. Sorteie os times primeiro.');
+                return;
+            }
+            const pontos = timesAtuais.map(t => t.pontos);
+            const maxPontos = Math.max(...pontos);
+            const minPontos = Math.min(...pontos);
+            const indicesMax = pontos.reduce((acc, p, i) => p === maxPontos ? [...acc, i] : acc, []);
+            const indicesMin = pontos.reduce((acc, p, i) => p === minPontos ? [...acc, i] : acc, []);
+
+            let mensagem = '';
+            let houveBonus = false;
+            let houvePenalidade = false;
+
+            if (indicesMax.length > 1) {
+                mensagem = '🏆 Houve empate no primeiro lugar. Nenhum time receberá bônus.\n';
+            } else {
+                const idxCampeao = indicesMax[0];
+                const timeCampeao = timesAtuais[idxCampeao];
+                timeCampeao.jogadores.forEach(jog => {
+                    let novaNota = Math.min(10, jog.nota + 0.5);
+                    jog.nota = parseFloat(novaNota.toFixed(1));
+                    const idxPlantel = jogadores.findIndex(p => p.nome === jog.nome);
+                    if (idxPlantel !== -1) {
+                        jogadores[idxPlantel].nota = jog.nota;
+                    }
+                });
+                houveBonus = true;
+                mensagem = `🏆 Campeão: Time ${idxCampeao+1} (${timeCampeao.pontos} pts) → +0.5 para cada jogador.\n`;
+            }
+
+            if (indicesMin.length > 1) {
+                mensagem += '📉 Houve empate no último lugar. Nenhum time será penalizado.';
+            } else {
+                const idxLanterna = indicesMin[0];
+                const timeLanterna = timesAtuais[idxLanterna];
+                timeLanterna.jogadores.forEach(jog => {
+                    let novaNota = Math.max(0, jog.nota - 0.5);
+                    jog.nota = parseFloat(novaNota.toFixed(1));
+                    const idxPlantel = jogadores.findIndex(p => p.nome === jog.nome);
+                    if (idxPlantel !== -1) {
+                        jogadores[idxPlantel].nota = jog.nota;
+                    }
+                });
+                houvePenalidade = true;
+                mensagem += `📉 Lanterna: Time ${idxLanterna+1} (${timeLanterna.pontos} pts) → -0.5 para cada jogador.`;
+            }
+
+            if (!houveBonus && !houvePenalidade) {
+                mensagem = '🏆 Houve empate no primeiro lugar e no último lugar. Nenhuma alteração de nota.';
+            } else if (!houveBonus) {
+                mensagem += '\n\nNão houve bônus (empate no primeiro lugar).';
+            } else if (!houvePenalidade) {
+                mensagem += '\n\nNão houve penalidade (empate no último lugar).';
+            }
+
+            salvarJogadores();
+            atualizarTodasListas();
+
+            timesAtuais.forEach(time => {
+                time.vitorias = 0;
+                time.empates = 0;
+                time.derrotas = 0;
+                time.pontos = 0;
+            });
+
+            const times = timesAtuais.map(t => t.jogadores);
+            const somas = times.map(t => t.reduce((acc, j) => acc + j.nota, 0));
+            const medias = times.map(t => {
+                const soma = t.reduce((acc, j) => acc + j.nota, 0);
+                return soma / t.length;
+            });
+            const tamanhos = times.map(t => t.length);
+            exibirTimes(times, somas, medias, tamanhos);
+            alert(mensagem + '\n\nPlacares e pontuação zerados para uma nova rodada!');
+        }
+
+        // ============================================================
+        //  INICIALIZAÇÃO
+        // ============================================================
+        carregarJogadores();
         cronometro.totalSegundos = getTempoTotalSegundos();
         cronometro.segundosRestantes = cronometro.totalSegundos;
         atualizarDisplayTempo();
-    }
 
-    // ===== GERENCIAR PAINEL =====
-    function toggleGerenciamento() {
-        modoGerenciamento = !modoGerenciamento;
-        const painel = document.getElementById('painelGerenciamento');
-        const btn = document.getElementById('btnGerenciar');
-        if (modoGerenciamento) {
-            painel.classList.add('ativo');
-            btn.textContent = '🔒 Fechar Gerenciamento';
-            btn.classList.add('ativo');
-        } else {
-            painel.classList.remove('ativo');
-            btn.textContent = '📋 Gerenciar Plantel';
-            btn.classList.remove('ativo');
-        }
-        renderizarPlantel();
-    }
+        document.getElementById('novoNome').addEventListener('keypress', e => {
+            if (e.key === 'Enter') adicionarJogadorPlantel();
+        });
 
-    // ===== ADICIONAR JOGADOR (plantel) =====
-    function adicionarJogadorPlantel() {
-        const nomeInput = document.getElementById('novoNome');
-        const notaSelect = document.getElementById('novaNota');
-        const nome = nomeInput.value.trim();
-        const nota = parseFloat(notaSelect.value);
-
-        if (nome === '') {
-            alert('Digite o nome do jogador.');
-            return;
-        }
-        if (jogadores.some(j => j.nome.toLowerCase() === nome.toLowerCase())) {
-            alert('Jogador já cadastrado.');
-            return;
-        }
-
-        jogadores.push({ nome, nota, selecionado: true, editando: false });
-        nomeInput.value = '';
-        jogadores.sort((a, b) => a.nome.localeCompare(b.nome));
-        salvarJogadores();
-        atualizarTodasListas();
-        renderizarPlantel();
-    }
-
-    // ===== REMOVER JOGADOR =====
-    function removerJogadorPlantel(index) {
-        if (!confirm('Remover este jogador do plantel?')) return;
-        jogadores.splice(index, 1);
-        salvarJogadores();
-        atualizarTodasListas();
-        renderizarPlantel();
-        if (timesAtuais.length > 0) {
-            timesAtuais = timesAtuais.map(time => {
-                time.jogadores = time.jogadores.filter(j => jogadores.some(p => p.nome === j.nome));
-                return time;
-            }).filter(time => time.jogadores.length > 0);
-            if (timesAtuais.length === 0) document.getElementById('resultado').innerHTML = '';
-        }
-    }
-
-    // ===== EDIÇÃO DE NOTA =====
-    function iniciarEdicaoPlantel(index) {
-        jogadores[index].editando = true;
-        renderizarPlantel();
-    }
-
-    function salvarEdicaoPlantel(index) {
-        const select = document.getElementById(`editNotaPlantel-${index}`);
-        if (!select) return;
-        const novaNota = parseFloat(select.value);
-        jogadores[index].nota = novaNota;
-        jogadores[index].editando = false;
-        salvarJogadores();
-        atualizarTodasListas();
-        renderizarPlantel();
-        if (timesAtuais.length > 0) {
-            timesAtuais.forEach(time => {
-                time.jogadores.forEach(j => {
-                    const encontrado = jogadores.find(p => p.nome === j.nome);
-                    if (encontrado) j.nota = encontrado.nota;
-                });
-            });
-            const times = timesAtuais.map(t => t.jogadores);
-            const somas = times.map(t => t.reduce((acc, j) => acc + j.nota, 0));
-            const medias = times.map(t => {
-                const soma = t.reduce((acc, j) => acc + j.nota, 0);
-                return soma / t.length;
-            });
-            const tamanhos = times.map(t => t.length);
-            exibirTimes(times, somas, medias, tamanhos);
-        }
-    }
-
-    function cancelarEdicaoPlantel(index) {
-        jogadores[index].editando = false;
-        renderizarPlantel();
-    }
-
-    // ===== RENDERIZAR PLANTEL =====
-    function renderizarPlantel() {
-        const container = document.getElementById('listaPlantel');
-        const busca = document.getElementById('buscaPlantel').value.toLowerCase().trim();
-
-        const filtrados = jogadores.filter(j => j.nome.toLowerCase().includes(busca));
-
-        if (filtrados.length === 0) {
-            container.innerHTML = '<div class="sem-jogadores">Nenhum jogador encontrado.</div>';
-            return;
-        }
-
-        let html = '';
-        filtrados.forEach((j, i) => {
-            const idxGlobal = jogadores.indexOf(j);
-            const editando = j.editando || false;
-
-            html += `<div class="plantel-item" id="plantel-item-${idxGlobal}">`;
-            html += `<span class="nome">${j.nome}</span>`;
-            html += `<div class="controles">`;
-
-            if (editando) {
-                const opcoes = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10];
-                let selectHTML = `<select id="editNotaPlantel-${idxGlobal}">`;
-                opcoes.forEach(v => {
-                    const selected = (v === j.nota) ? 'selected' : '';
-                    selectHTML += `<option value="${v}" ${selected}>${v}</option>`;
-                });
-                selectHTML += `</select>`;
-                html += selectHTML;
-                html += `<button class="btn-salvar" onclick="salvarEdicaoPlantel(${idxGlobal})">💾</button>`;
-                html += `<button class="btn-cancelar" onclick="cancelarEdicaoPlantel(${idxGlobal})">✖</button>`;
-            } else {
-                html += `<span style="font-weight:bold; color:#2980b9;">${j.nota}</span>`;
-                html += `<button class="btn-editar-nota" onclick="iniciarEdicaoPlantel(${idxGlobal})">✏️</button>`;
+        document.getElementById('minutosPartida').addEventListener('change', function() {
+            if (!cronometro.rodando) {
+                cronometro.totalSegundos = getTempoTotalSegundos();
+                cronometro.segundosRestantes = cronometro.totalSegundos;
+                atualizarDisplayTempo();
             }
-
-            html += `<button class="btn-excluir" onclick="removerJogadorPlantel(${idxGlobal})">🗑️</button>`;
-            html += `</div></div>`;
         });
-        container.innerHTML = html;
-    }
-
-    // ===== RENDERIZAR SORTEIO =====
-    function renderizarSorteio() {
-        const div = document.getElementById('listaSorteio');
-        const info = document.getElementById('infoSelecionados');
-
-        if (jogadores.length === 0) {
-            div.innerHTML = '<em style="color: #888;">Nenhum jogador cadastrado.</em>';
-            info.innerText = 'Nenhum jogador selecionado.';
-            return;
-        }
-
-        let html = '';
-        jogadores.forEach((j, i) => {
-            html += `
-                <div class="jogador-item">
-                    <input type="checkbox" ${j.selecionado ? 'checked' : ''} onchange="toggleSelecionado(${i})">
-                    <label onclick="toggleSelecionado(${i})">
-                        ${j.nome} <span class="nota">${j.nota}</span>
-                    </label>
-                </div>
-            `;
-        });
-        div.innerHTML = html;
-
-        const selecionados = jogadores.filter(j => j.selecionado);
-        info.innerText = `📌 ${selecionados.length} jogador(es) selecionado(s) para o sorteio.`;
-        if (selecionados.length === 0) info.innerText = 'Nenhum jogador selecionado.';
-    }
-
-    function atualizarTodasListas() {
-        renderizarSorteio();
-        if (modoGerenciamento) renderizarPlantel();
-    }
-
-    // ===== SELEÇÃO (sorteio) =====
-    function selecionarTodos(valor) {
-        jogadores.forEach(j => j.selecionado = valor);
-        salvarJogadores();
-        renderizarSorteio();
-    }
-
-    function toggleSelecionado(index) {
-        jogadores[index].selecionado = !jogadores[index].selecionado;
-        salvarJogadores();
-        renderizarSorteio();
-    }
-
-    // ===== DISTRIBUIÇÃO E SORTEIO =====
-    function calcularDistribuicao(total, N) {
-        if (total < N-1) return null;
-        let maxA = Math.floor(total / N);
-        for (let a = maxA; a >= 0; a--) {
-            let resto = total - a * N;
-            if (resto % (N-1) === 0) {
-                let b = resto / (N-1);
-                return { a, b };
+        document.getElementById('segundosPartida').addEventListener('change', function() {
+            if (!cronometro.rodando) {
+                cronometro.totalSegundos = getTempoTotalSegundos();
+                cronometro.segundosRestantes = cronometro.totalSegundos;
+                atualizarDisplayTempo();
             }
-        }
-        return null;
-    }
-
-    function sortearTimes() {
-        const N = parseInt(document.getElementById('tamanhoDesejado').value);
-        if (isNaN(N) || N < 3) {
-            alert('Informe um número inteiro maior ou igual a 3.');
-            return;
-        }
-
-        const selecionados = jogadores.filter(j => j.selecionado);
-        const total = selecionados.length;
-
-        if (total === 0) {
-            alert('Marque pelo menos alguns jogadores para o sorteio.');
-            return;
-        }
-
-        const dist = calcularDistribuicao(total, N);
-        if (!dist) {
-            alert(`Não é possível formar times com ${N} e ${N-1} jogadores para um total de ${total} atletas. Tente outro valor de N.`);
-            return;
-        }
-
-        const { a, b } = dist;
-        const tamanhos = [];
-        for (let i = 0; i < a; i++) tamanhos.push(N);
-        for (let i = 0; i < b; i++) tamanhos.push(N-1);
-
-        let melhorSorteio = null;
-        let menorDiferenca = Infinity;
-
-        for (let tentativa = 0; tentativa < 1000; tentativa++) {
-            const copia = [...selecionados];
-            for (let i = copia.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [copia[i], copia[j]] = [copia[j], copia[i]];
-            }
-
-            const times = [];
-            let idx = 0;
-            for (let t = 0; t < tamanhos.length; t++) {
-                const size = tamanhos[t];
-                times.push(copia.slice(idx, idx + size));
-                idx += size;
-            }
-
-            const medias = times.map(time => {
-                const soma = time.reduce((acc, j) => acc + j.nota, 0);
-                return soma / time.length;
-            });
-            const diferenca = Math.max(...medias) - Math.min(...medias);
-
-            if (diferenca < menorDiferenca) {
-                menorDiferenca = diferenca;
-                const somas = times.map(time => time.reduce((acc, j) => acc + j.nota, 0));
-                melhorSorteio = { times, somas, medias };
-            }
-            if (diferenca === 0) break;
-        }
-
-        timesAtuais = melhorSorteio.times.map(time => ({
-            jogadores: time,
-            vitorias: 0,
-            empates: 0,
-            derrotas: 0,
-            pontos: 0
-        }));
-
-        exibirTimes(melhorSorteio.times, melhorSorteio.somas, melhorSorteio.medias, tamanhos);
-    }
-
-    function exibirTimes(times, somas, medias, tamanhos) {
-        const div = document.getElementById('resultado');
-        let html = `<div class="distribuicao-info">Times formados: ${times.length} equipes (${tamanhos.map(t => t+' jog.').join(', ')})</div>`;
-        html += '<div class="times-grid">';
-
-        times.forEach((time, idx) => {
-            const timeData = timesAtuais[idx];
-            html += `
-                <div class="time-card" id="time-${idx}">
-                    <h3>⚽ Time ${idx + 1} (${time.length} jog.)</h3>
-                    <ul>
-                        ${time.map(j => `<li>${j.nome} <span style="color:#2980b9;">${j.nota}</span></li>`).join('')}
-                    </ul>
-                    <div class="soma-media">
-                        <span>Soma: ${somas[idx].toFixed(1)}</span>
-                        <span>Média: ${medias[idx].toFixed(2)}</span>
-                    </div>
-                    <div class="placar-time">
-                        <span class="v">V: ${timeData.vitorias}</span>
-                        <span class="e">E: ${timeData.empates}</span>
-                        <span class="d">D: ${timeData.derrotas}</span>
-                        <span class="p">Pts: ${timeData.pontos}</span>
-                        <button class="btn-vitoria" onclick="registrarResultado(${idx}, 'vitoria')">+Vit</button>
-                        <button class="btn-empate" onclick="registrarResultado(${idx}, 'empate')">+Emp</button>
-                        <button class="btn-derrota" onclick="registrarResultado(${idx}, 'derrota')">+Der</button>
-                    </div>
-                </div>
-            `;
         });
+    </script>
 
-        html += '</div>';
-        const diff = Math.max(...medias) - Math.min(...medias);
-        html += `<div class="desequilibrio">Desequilíbrio (diferença entre as médias): ${diff.toFixed(2)}</div>`;
-        div.innerHTML = html;
-    }
-
-    // ===== REGISTRAR RESULTADOS =====
-    function registrarResultado(idx, tipo) {
-        if (idx < 0 || idx >= timesAtuais.length) return;
-        const time = timesAtuais[idx];
-        if (tipo === 'vitoria') {
-            time.vitorias++;
-            time.pontos += 3;
-        } else if (tipo === 'empate') {
-            time.empates++;
-            time.pontos += 1;
-        } else if (tipo === 'derrota') {
-            time.derrotas++;
-        }
-        atualizarPlacarTime(idx);
-    }
-
-    function atualizarPlacarTime(idx) {
-        const timeCard = document.getElementById(`time-${idx}`);
-        if (!timeCard) return;
-        const timeData = timesAtuais[idx];
-        const placarSpan = timeCard.querySelector('.placar-time');
-        if (placarSpan) {
-            const vSpan = placarSpan.querySelector('.v');
-            const eSpan = placarSpan.querySelector('.e');
-            const dSpan = placarSpan.querySelector('.d');
-            const pSpan = placarSpan.querySelector('.p');
-            if (vSpan) vSpan.innerText = `V: ${timeData.vitorias}`;
-            if (eSpan) eSpan.innerText = `E: ${timeData.empates}`;
-            if (dSpan) dSpan.innerText = `D: ${timeData.derrotas}`;
-            if (pSpan) pSpan.innerText = `Pts: ${timeData.pontos}`;
-        }
-    }
-
-    function zerarTodosPlacares() {
-        timesAtuais.forEach(time => {
-            time.vitorias = 0;
-            time.empates = 0;
-            time.derrotas = 0;
-            time.pontos = 0;
-        });
-        if (timesAtuais.length > 0) {
-            const div = document.getElementById('resultado');
-            const times = timesAtuais.map(t => t.jogadores);
-            const somas = times.map(t => t.reduce((acc, j) => acc + j.nota, 0));
-            const medias = times.map(t => {
-                const soma = t.reduce((acc, j) => acc + j.nota, 0);
-                return soma / t.length;
-            });
-            const tamanhos = times.map(t => t.length);
-            exibirTimes(times, somas, medias, tamanhos);
-        } else {
-            document.getElementById('resultado').innerHTML = '';
-        }
-    }
-
-    function zerarTudo() {
-        if (timesAtuais.length === 0) return;
-        if (!confirm('Zerar todos os placares e remover os times?')) return;
-        timesAtuais = [];
-        document.getElementById('resultado').innerHTML = '';
-    }
-
-    // ===== FINALIZAR PELADA =====
-    function finalizarPelada() {
-        if (timesAtuais.length === 0) {
-            alert('Não há times formados. Sorteie os times primeiro.');
-            return;
-        }
-
-        const pontos = timesAtuais.map(t => t.pontos);
-        const maxPontos = Math.max(...pontos);
-        const minPontos = Math.min(...pontos);
-
-        const indicesMax = pontos.reduce((acc, p, i) => p === maxPontos ? [...acc, i] : acc, []);
-        const indicesMin = pontos.reduce((acc, p, i) => p === minPontos ? [...acc, i] : acc, []);
-
-        let mensagem = '';
-        let houveBonus = false;
-        let houvePenalidade = false;
-
-        if (indicesMax.length > 1) {
-            mensagem = '🏆 Houve empate no primeiro lugar. Nenhum time receberá bônus.\n';
-        } else {
-            const idxCampeao = indicesMax[0];
-            const timeCampeao = timesAtuais[idxCampeao];
-            timeCampeao.jogadores.forEach(jog => {
-                let novaNota = Math.min(10, jog.nota + 0.5);
-                jog.nota = parseFloat(novaNota.toFixed(1));
-                const idxPlantel = jogadores.findIndex(p => p.nome === jog.nome);
-                if (idxPlantel !== -1) {
-                    jogadores[idxPlantel].nota = jog.nota;
-                }
-            });
-            houveBonus = true;
-            mensagem = `🏆 Campeão: Time ${idxCampeao+1} (${timeCampeao.pontos} pts) → +0.5 para cada jogador.\n`;
-        }
-
-        if (indicesMin.length > 1) {
-            mensagem += '📉 Houve empate no último lugar. Nenhum time será penalizado.';
-        } else {
-            const idxLanterna = indicesMin[0];
-            const timeLanterna = timesAtuais[idxLanterna];
-            timeLanterna.jogadores.forEach(jog => {
-                let novaNota = Math.max(0, jog.nota - 0.5);
-                jog.nota = parseFloat(novaNota.toFixed(1));
-                const idxPlantel = jogadores.findIndex(p => p.nome === jog.nome);
-                if (idxPlantel !== -1) {
-                    jogadores[idxPlantel].nota = jog.nota;
-                }
-            });
-            houvePenalidade = true;
-            mensagem += `📉 Lanterna: Time ${idxLanterna+1} (${timeLanterna.pontos} pts) → -0.5 para cada jogador.`;
-        }
-
-        if (!houveBonus && !houvePenalidade) {
-            mensagem = '🏆 Houve empate no primeiro lugar e no último lugar. Nenhuma alteração de nota.';
-        } else if (!houveBonus) {
-            mensagem += '\n\nNão houve bônus (empate no primeiro lugar).';
-        } else if (!houvePenalidade) {
-            mensagem += '\n\nNão houve penalidade (empate no último lugar).';
-        }
-
-        salvarJogadores();
-        atualizarTodasListas();
-
-        timesAtuais.forEach(time => {
-            time.vitorias = 0;
-            time.empates = 0;
-            time.derrotas = 0;
-            time.pontos = 0;
-        });
-
-        const times = timesAtuais.map(t => t.jogadores);
-        const somas = times.map(t => t.reduce((acc, j) => acc + j.nota, 0));
-        const medias = times.map(t => {
-            const soma = t.reduce((acc, j) => acc + j.nota, 0);
-            return soma / t.length;
-        });
-        const tamanhos = times.map(t => t.length);
-        exibirTimes(times, somas, medias, tamanhos);
-
-        alert(mensagem + '\n\nPlacares e pontuação zerados para uma nova rodada!');
-    }
-
-    // ===== INICIALIZAÇÃO =====
-    carregarJogadores();
-    cronometro.totalSegundos = getTempoTotalSegundos();
-    cronometro.segundosRestantes = cronometro.totalSegundos;
-    atualizarDisplayTempo();
-
-    document.getElementById('novoNome').addEventListener('keypress', e => {
-        if (e.key === 'Enter') adicionarJogadorPlantel();
-    });
-
-    document.getElementById('minutosPartida').addEventListener('change', function() {
-        if (!cronometro.rodando) {
-            cronometro.totalSegundos = getTempoTotalSegundos();
-            cronometro.segundosRestantes = cronometro.totalSegundos;
-            atualizarDisplayTempo();
-        }
-    });
-    document.getElementById('segundosPartida').addEventListener('change', function() {
-        if (!cronometro.rodando) {
-            cronometro.totalSegundos = getTempoTotalSegundos();
-            cronometro.segundosRestantes = cronometro.totalSegundos;
-            atualizarDisplayTempo();
-        }
-    });
-</script>
 </body>
 </html>
