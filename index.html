@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🕊️ Pelada da Paz</title>
 
-    <!-- Bibliotecas para gerar PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js">
@@ -43,7 +42,6 @@
             margin-right: 8px;
         }
 
-        /* ===== MENU SUSPENSO ===== */
         .dropdown {
             position: relative;
             display: inline-block;
@@ -90,7 +88,6 @@
             display: block;
         }
 
-        /* ===== PAINEL DE GERENCIAMENTO ===== */
         .painel-gerenciamento {
             background: #f0f3f7;
             border-radius: 16px;
@@ -102,7 +99,6 @@
         .painel-gerenciamento.ativo {
             display: block;
         }
-
         .painel-gerenciamento .area-cadastro {
             display: flex;
             gap: 10px;
@@ -130,7 +126,6 @@
         .painel-gerenciamento .area-cadastro button:hover {
             background: #27ae60;
         }
-
         .painel-gerenciamento .busca input {
             width: 100%;
             padding: 10px;
@@ -139,7 +134,6 @@
             margin-bottom: 15px;
             font-size: 1rem;
         }
-
         .lista-plantel {
             background: #fff;
             padding: 10px;
@@ -244,14 +238,12 @@
             background: #7f8c8d;
         }
 
-        /* ===== ÁREA DE PARTIDA ===== */
         .area-partida {
             display: block;
         }
         .area-partida.oculto {
             display: none;
         }
-
         .area-partida .lista-jogadores {
             background: #f4f6f9;
             padding: 10px;
@@ -272,9 +264,9 @@
             cursor: pointer;
         }
         .jogador-item .nota {
-            color: #2980b9;
             font-weight: bold;
             margin-left: 10px;
+            color: #2980b9;
         }
 
         .busca-partida {
@@ -346,112 +338,56 @@
             background: #d35400;
         }
 
-        /* Cronômetro */
-        .cronometro-area {
-            margin-top: 25px;
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 15px 20px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .cronometro-area .display-tempo {
-            font-size: 2.8rem;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 4px;
-            background: #1a252f;
-            padding: 6px 25px;
-            border-radius: 10px;
-            font-weight: bold;
-            min-width: 130px;
-            text-align: center;
-        }
-        .cronometro-area .controles-tempo {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .cronometro-area .controles-tempo button {
-            background: #34495e;
-            border: none;
-            color: #fff;
-            padding: 8px 18px;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .cronometro-area .controles-tempo button:hover {
-            background: #5d6d7e;
-        }
-        .cronometro-area .controles-tempo .iniciar {
-            background: #27ae60;
-        }
-        .cronometro-area .controles-tempo .iniciar:hover {
-            background: #1e8449;
-        }
-        .cronometro-area .controles-tempo .pausar {
-            background: #f39c12;
-        }
-        .cronometro-area .controles-tempo .pausar:hover {
-            background: #d68910;
-        }
-        .cronometro-area .controles-tempo .zerar {
-            background: #e74c3c;
-        }
-        .cronometro-area .controles-tempo .zerar:hover {
-            background: #b03a2e;
-        }
-        .cronometro-area .config-tempo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #fff;
-            flex-wrap: wrap;
-        }
-        .cronometro-area .config-tempo label {
-            font-weight: bold;
-            margin-right: 4px;
-        }
-        .cronometro-area .config-tempo input {
-            width: 50px;
-            padding: 6px 10px;
-            border-radius: 6px;
-            border: none;
-            font-size: 1rem;
-            text-align: center;
-        }
-        .cronometro-area .config-tempo .separador {
-            font-size: 1.5rem;
-            font-weight: bold;
-            padding: 0 2px;
-        }
-
-        /* Times */
         .times-grid {
             margin-top: 25px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
         }
         .time-card {
-            background: #f8f9fa;
             border-radius: 12px;
             padding: 15px;
             border-left: 6px solid #f39c12;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: background 0.3s, color 0.3s;
+            background: #f8f9fa;
+            color: #212529;
         }
-        .time-card h3 {
-            margin: 0 0 8px 0;
-            color: #2c3e50;
+        .time-card .time-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .time-card .time-header .nome-time {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+        .time-card .time-header .nome-time h3 {
+            margin: 0;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+            flex: 1;
+            color: inherit;
+        }
+        .time-card .time-header .nome-time h3:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .time-card .time-header .pontos-header {
+            font-size: 1.6rem;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 0 14px;
+            border-radius: 8px;
+            min-width: 60px;
+            text-align: center;
+            white-space: nowrap;
+            color: inherit;
         }
         .time-card ul {
             list-style: none;
@@ -460,55 +396,57 @@
         }
         .time-card ul li {
             padding: 4px 0;
-            border-bottom: 1px dashed #ddd;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
+            color: inherit;
+        }
+        .time-card ul li .nota {
+            font-weight: bold;
+            color: inherit;
         }
         .time-card .soma-media {
             display: flex;
             justify-content: space-between;
             font-size: 0.9rem;
-            color: #555;
             margin: 6px 0;
+            color: inherit;
         }
         .placar-time {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 6px;
+            justify-content: flex-start;
+            gap: 16px;
             margin-top: 8px;
             padding-top: 8px;
-            border-top: 2px solid #ccc;
+            border-top: 2px solid rgba(0, 0, 0, 0.15);
+            color: inherit;
         }
-        .placar-time span {
+        .placar-time .grupo {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .placar-time .grupo span {
             font-weight: bold;
-            margin-right: 6px;
-        }
-        .placar-time .v {
-            color: #27ae60;
-        }
-        .placar-time .e {
-            color: #f39c12;
-        }
-        .placar-time .d {
-            color: #e74c3c;
-        }
-        .placar-time .p {
-            color: #2980b9;
-            font-weight: bold;
-            background: #ecf0f1;
-            padding: 0 8px;
-            border-radius: 6px;
+            min-width: 35px;
+            text-align: left;
+            font-size: 1rem;
+            color: inherit;
         }
         .placar-time button {
             background: #ecf0f1;
             border: none;
             border-radius: 6px;
-            padding: 2px 10px;
-            font-size: 0.8rem;
+            padding: 4px 10px;
+            font-size: 1rem;
             cursor: pointer;
-            margin: 0 2px;
             font-weight: bold;
+            transition: 0.2s;
+            color: #000;
+            min-width: 30px;
+            line-height: 1.2;
         }
         .placar-time button:hover {
             background: #d5dbdb;
@@ -527,11 +465,12 @@
         .placar-time .btn-empate:hover {
             background: #d68910;
         }
-        .placar-time .btn-derrota {
+        .placar-time .btn-diminuir {
             background: #e74c3c;
             color: #fff;
+            padding: 4px 8px;
         }
-        .placar-time .btn-derrota:hover {
+        .placar-time .btn-diminuir:hover {
             background: #b03a2e;
         }
 
@@ -578,22 +517,20 @@
             display: none;
         }
 
-        /* Responsividade */
         @media (max-width: 700px) {
             .dropdown-content {
                 left: 0;
                 right: 0;
             }
-            .cronometro-area {
+            .time-card .time-header {
+                flex-wrap: wrap;
+            }
+            .placar-time {
                 flex-direction: column;
                 align-items: stretch;
             }
-            .cronometro-area .display-tempo {
-                text-align: center;
-            }
-            .cronometro-area .controles-tempo,
-            .cronometro-area .config-tempo {
-                justify-content: center;
+            .placar-time .grupo {
+                justify-content: flex-start;
             }
         }
     </style>
@@ -652,7 +589,6 @@
         <!-- ===== ÁREA DE PARTIDA ===== -->
         <div class="area-partida" id="areaPartida">
 
-            <!-- Lista de jogadores do dia com busca -->
             <div class="busca-partida">
                 <input type="text" id="buscaPartida" placeholder="🔍 Buscar jogador para selecionar..." oninput="renderizarSorteio()">
             </div>
@@ -675,25 +611,7 @@
 
             <button class="btn-sortear" onclick="sortearTimes()">🎲 Sortear Times</button>
 
-            <!-- Área de resultados (times) -->
             <div id="resultado" style="margin-top: 20px;"></div>
-
-            <!-- ===== CRONÔMETRO ===== -->
-            <div class="cronometro-area" id="cronometroArea">
-                <div class="display-tempo" id="displayTempo">00:00</div>
-                <div class="controles-tempo">
-                    <button class="iniciar" onclick="iniciarCronometro()">▶ Iniciar</button>
-                    <button class="pausar" onclick="pausarCronometro()">⏸ Pausar</button>
-                    <button class="zerar" onclick="zerarCronometro()">⏹ Zerar</button>
-                </div>
-                <div class="config-tempo">
-                    <label for="minutosPartida">Min:</label>
-                    <input type="number" id="minutosPartida" value="5" min="0" max="99" step="1" style="width:50px;">
-                    <span class="separador">:</span>
-                    <label for="segundosPartida">Seg:</label>
-                    <input type="number" id="segundosPartida" value="0" min="0" max="59" step="1" style="width:50px;">
-                </div>
-            </div>
 
             <!-- Botões de ação -->
             <div class="footer-acoes">
@@ -703,16 +621,47 @@
             </div>
         </div>
 
-        <!-- Input oculto para importação -->
         <input type="file" id="importInput" accept=".txt" onchange="importarDados(event)">
 
     </div>
 
     <script>
         // ============================================================
-        //  CONFIGURAÇÃO DO ÁUDIO (link do Dropbox)
+        //  DICIONÁRIO DE CORES (PORTUGUÊS → INGLÊS)
         // ============================================================
-        const URL_APITO = 'https://www.dropbox.com/scl/fi/3tk4hkb7r20ybxphavs9a/Football-Whistle-Sound-Effect-Referee-Whistle-SFX-Echovoid-sounds-youtube.mp3?rlkey=algairiexw2js8uodn6g6hnst&st=plw7l6xg&dl=1';
+        const coresPortugues = {
+            'vermelho': 'red',
+            'azul': 'blue',
+            'verde': 'green',
+            'amarelo': 'yellow',
+            'roxo': 'purple',
+            'laranja': 'orange',
+            'rosa': 'pink',
+            'marrom': 'brown',
+            'preto': 'black',
+            'branco': 'white',
+            'cinza': 'gray',
+            'ciano': 'cyan',
+            'magenta': 'magenta',
+            'limão': 'lime',
+            'oliva': 'olive',
+            'vinho': 'maroon',
+            'marinho': 'navy',
+            'turquesa': 'turquoise',
+            'violeta': 'violet',
+            'ouro': 'gold',
+            'prata': 'silver',
+            'coral': 'coral',
+            'salmão': 'salmon',
+            'pêssego': 'peachpuff',
+            'lavanda': 'lavender',
+            'menta': 'mintcream'
+        };
+
+        function traduzirCor(nome) {
+            const chave = nome.trim().toLowerCase();
+            return coresPortugues[chave] || chave;
+        }
 
         // ============================================================
         //  DADOS GLOBAIS
@@ -722,7 +671,7 @@
         let modoGerenciamento = false;
 
         // ============================================================
-        //  PERSISTÊNCIA (localStorage)
+        //  PERSISTÊNCIA
         // ============================================================
         function salvarJogadores() {
             localStorage.setItem('plantel', JSON.stringify(jogadores));
@@ -851,216 +800,67 @@
         }
 
         // ============================================================
-        //  EXPORTAR PDF
+        //  EXPORTAR PDF (RANKING)
         // ============================================================
-       function exportarPDF() {
-    if (jogadores.length === 0) {
-        alert('Não há jogadores para exportar.');
-        return;
-    }
+        function exportarPDF() {
+            if (jogadores.length === 0) {
+                alert('Não há jogadores para exportar.');
+                return;
+            }
 
-    // 1. Criar uma cópia e ordenar: primeiro por nota (decrescente), depois por nome (alfabético)
-    const ranking = [...jogadores].sort((a, b) => {
-        if (b.nota !== a.nota) {
-            return b.nota - a.nota; // nota decrescente
-        }
-        return a.nome.localeCompare(b.nome); // nome alfabético (A-Z)
-    });
-
-    // 2. Adicionar posição sequencial (1, 2, 3, ...)
-    const dadosRanking = ranking.map((j, i) => ({
-        posicao: i + 1,
-        nome: j.nome,
-        nota: j.nota,
-        selecionado: j.selecionado ? 'Sim' : 'Não'
-    }));
-
-    // 3. Gerar o PDF
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'pt', 'a4');
-
-    // Título
-    doc.setFontSize(18);
-    doc.text('Ranking de Jogadores - Pelada da Paz', 40, 50);
-    doc.setFontSize(10);
-    doc.text(`Gerado em: ${new Date().toLocaleString()}`, 40, 70);
-    doc.text(`Total de jogadores: ${jogadores.length}`, 40, 85);
-
-    // Formatar posição com ordinal (1º, 2º, 3º, ...)
-    const rows = dadosRanking.map(j => {
-        const ordinal = j.posicao + 'º';
-        return [ordinal, j.nome, j.nota, j.selecionado];
-    });
-
-    doc.autoTable({
-        startY: 100,
-        head: [
-            ['Posição', 'Nome', 'Nota', 'Selecionado']
-        ],
-        body: rows,
-        theme: 'striped',
-        headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 12 },
-        bodyStyles: { fontSize: 10 },
-        columnStyles: {
-            0: { cellWidth: 60, halign: 'center' },
-            1: { cellWidth: 200 },
-            2: { cellWidth: 60, halign: 'center' },
-            3: { cellWidth: 80, halign: 'center' }
-        },
-        margin: { left: 40, right: 40 }
-    });
-
-    // Rodapé
-    const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-        doc.setPage(i);
-        doc.setFontSize(8);
-        doc.text(`Pelada da Paz - Página ${i} de ${pageCount}`, 40, doc.internal.pageSize.height - 20);
-    }
-
-    doc.save('ranking_pelada_da_paz.pdf');
-}
-
-        // ============================================================
-        //  FUNÇÃO DO APITO (com link do Dropbox + fallback)
-        // ============================================================
-        function tocarApito() {
-            // Tenta tocar o áudio do Dropbox
-            const audio = new Audio('https://www.dropbox.com/scl/fi/7bwy6g2twi3q4cu6q9lhu/audio-cortado.mp3.mp3?rlkey=ic0ok4l6a5g6n9jdvcwrztovt&st=o8lzcilz&dl=1');
-            audio.volume = 1.0;
-            audio.play().catch(function(e) {
-                console.warn('Erro ao tocar áudio do Dropbox:', e);
-                // Fallback: som sintetizado
-                tocarApitoSintetizado();
+            const ranking = [...jogadores].sort((a, b) => {
+                if (b.nota !== a.nota) return b.nota - a.nota;
+                return a.nome.localeCompare(b.nome);
             });
-        }
 
-        // ============================================================
-        //  SOM SINTETIZADO (fallback)
-        // ============================================================
-        function tocarApitoSintetizado() {
-            try {
-                const audioCtx = new(window.AudioContext || window.webkitAudioContext)();
-                const osc1 = audioCtx.createOscillator();
-                osc1.type = 'square';
-                osc1.frequency.setValueAtTime(880, audioCtx.currentTime);
-                osc1.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
-                osc1.frequency.linearRampToValueAtTime(1000, audioCtx.currentTime + 0.2);
-                osc1.frequency.linearRampToValueAtTime(1300, audioCtx.currentTime + 0.3);
-                osc1.frequency.linearRampToValueAtTime(1100, audioCtx.currentTime + 0.4);
+            const dadosRanking = ranking.map((j, i) => ({
+                posicao: i + 1,
+                nome: j.nome,
+                nota: j.nota,
+                selecionado: j.selecionado ? 'Sim' : 'Não'
+            }));
 
-                const osc2 = audioCtx.createOscillator();
-                osc2.type = 'square';
-                osc2.frequency.setValueAtTime(1200, audioCtx.currentTime);
-                osc2.frequency.linearRampToValueAtTime(1600, audioCtx.currentTime + 0.1);
-                osc2.frequency.linearRampToValueAtTime(1400, audioCtx.currentTime + 0.2);
-                osc2.frequency.linearRampToValueAtTime(1700, audioCtx.currentTime + 0.3);
-                osc2.frequency.linearRampToValueAtTime(1500, audioCtx.currentTime + 0.4);
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'pt', 'a4');
 
-                const gainNode = audioCtx.createGain();
-                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-                gainNode.gain.linearRampToValueAtTime(0.9, audioCtx.currentTime + 0.05);
-                gainNode.gain.linearRampToValueAtTime(0.8, audioCtx.currentTime + 0.2);
-                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+            doc.setFontSize(18);
+            doc.text('📊 Ranking de Jogadores - Pelada da Paz', 40, 50);
+            doc.setFontSize(10);
+            doc.text(`Gerado em: ${new Date().toLocaleString()}`, 40, 70);
+            doc.text(`Total de jogadores: ${jogadores.length}`, 40, 85);
 
-                osc1.connect(gainNode);
-                osc2.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
+            const rows = dadosRanking.map(j => [j.posicao + 'º', j.nome, j.nota, j.selecionado]);
 
-                osc1.start();
-                osc2.start();
-                osc1.stop(audioCtx.currentTime + 1.2);
-                osc2.stop(audioCtx.currentTime + 1.2);
+            doc.autoTable({
+                startY: 100,
+                head: [
+                    ['Posição', 'Nome', 'Nota', 'Selecionado']
+                ],
+                body: rows,
+                theme: 'striped',
+                headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 12 },
+                bodyStyles: { fontSize: 10 },
+                columnStyles: {
+                    0: { cellWidth: 60, halign: 'center' },
+                    1: { cellWidth: 200 },
+                    2: { cellWidth: 60, halign: 'center' },
+                    3: { cellWidth: 80, halign: 'center' }
+                },
+                margin: { left: 40, right: 40 }
+            });
 
-                // Ruído para realismo
-                const bufferSize = audioCtx.sampleRate * 0.1;
-                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    data[i] = (Math.random() * 2 - 1) * 0.3;
-                }
-                const noise = audioCtx.createBufferSource();
-                noise.buffer = buffer;
-                const noiseGain = audioCtx.createGain();
-                noiseGain.gain.setValueAtTime(0, audioCtx.currentTime);
-                noiseGain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.02);
-                noiseGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-                noise.connect(noiseGain);
-                noiseGain.connect(audioCtx.destination);
-                noise.start();
-                noise.stop(audioCtx.currentTime + 0.1);
-
-            } catch (e) {
-                alert('⏰ Tempo esgotado! Apito!');
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.text(`🕊️ Pelada da Paz - Página ${i} de ${pageCount}`, 40, doc.internal.pageSize.height - 20);
             }
+
+            doc.save('ranking_pelada_da_paz.pdf');
         }
 
         // ============================================================
-        //  CRONÔMETRO
-        // ============================================================
-        let cronometro = {
-            segundosRestantes: 0,
-            totalSegundos: 0,
-            intervalId: null,
-            rodando: false
-        };
-
-        function getTempoTotalSegundos() {
-            const minutos = parseInt(document.getElementById('minutosPartida').value) || 0;
-            const segundos = parseInt(document.getElementById('segundosPartida').value) || 0;
-            return minutos * 60 + segundos;
-        }
-
-        function formatarTempo(seg) {
-            const m = Math.floor(seg / 60);
-            const s = seg % 60;
-            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-        }
-
-        function atualizarDisplayTempo() {
-            document.getElementById('displayTempo').innerText = formatarTempo(cronometro.segundosRestantes);
-        }
-
-        function iniciarCronometro() {
-            if (cronometro.rodando) return;
-            if (cronometro.segundosRestantes <= 0) {
-                cronometro.totalSegundos = getTempoTotalSegundos();
-                if (cronometro.totalSegundos <= 0) {
-                    alert('Defina um tempo maior que 0.');
-                    return;
-                }
-                cronometro.segundosRestantes = cronometro.totalSegundos;
-                atualizarDisplayTempo();
-            }
-            cronometro.rodando = true;
-            cronometro.intervalId = setInterval(() => {
-                cronometro.segundosRestantes--;
-                atualizarDisplayTempo();
-                if (cronometro.segundosRestantes <= 0) {
-                    cronometro.segundosRestantes = 0;
-                    atualizarDisplayTempo();
-                    pausarCronometro();
-                    tocarApito();
-                }
-            }, 1000);
-        }
-
-        function pausarCronometro() {
-            if (!cronometro.rodando) return;
-            cronometro.rodando = false;
-            clearInterval(cronometro.intervalId);
-            cronometro.intervalId = null;
-        }
-
-        function zerarCronometro() {
-            pausarCronometro();
-            cronometro.totalSegundos = getTempoTotalSegundos();
-            cronometro.segundosRestantes = cronometro.totalSegundos;
-            atualizarDisplayTempo();
-        }
-
-        // ============================================================
-        //  JOGADORES (CRUD)
+        //  CRUD JOGADORES
         // ============================================================
         function adicionarJogadorPlantel() {
             const nomeInput = document.getElementById('novoNome');
@@ -1194,7 +994,7 @@
                     <div class="jogador-item">
                         <input type="checkbox" ${j.selecionado ? 'checked' : ''} onchange="toggleSelecionado(${idxGlobal})">
                         <label onclick="toggleSelecionado(${idxGlobal})">
-                            ${j.nome} <span class="nota">${j.nota}</span>
+                            ${j.nome} <span class="nota" style="color:#2980b9;">${j.nota}</span>
                         </label>
                     </div>
                 `;
@@ -1290,45 +1090,95 @@
                 if (diferenca === 0) break;
             }
 
-            timesAtuais = melhorSorteio.times.map(time => ({
+            timesAtuais = melhorSorteio.times.map((time, i) => ({
                 jogadores: time,
+                nome: `Time ${i + 1}`,
                 vitorias: 0,
                 empates: 0,
-                derrotas: 0,
                 pontos: 0
             }));
 
             exibirTimes(melhorSorteio.times, melhorSorteio.somas, melhorSorteio.medias, tamanhos);
         }
 
+        // ============================================================
+        //  FUNÇÕES DE COR (COM TRADUÇÃO)
+        // ============================================================
+        function isValidColor(nomeCor) {
+            const corTraduzida = traduzirCor(nomeCor);
+            try {
+                const temp = document.createElement('div');
+                temp.style.color = corTraduzida;
+                return temp.style.color !== '';
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function getContrastColor(nomeCor) {
+            const corTraduzida = traduzirCor(nomeCor);
+            const temp = document.createElement('div');
+            temp.style.color = corTraduzida;
+            document.body.appendChild(temp);
+            const computedColor = getComputedStyle(temp).color;
+            document.body.removeChild(temp);
+
+            const match = computedColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+            if (!match) return '#000000';
+
+            const r = parseInt(match[1]);
+            const g = parseInt(match[2]);
+            const b = parseInt(match[3]);
+            const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            return luminance > 0.5 ? '#000000' : '#ffffff';
+        }
+
+        // ============================================================
+        //  EXIBIR TIMES (COM CONTRASTE AUTOMÁTICO)
+        // ============================================================
         function exibirTimes(times, somas, medias, tamanhos) {
             const div = document.getElementById('resultado');
             let html = `<div class="distribuicao-info">Times formados: ${times.length} equipes (${tamanhos.map(t => t+' jog.').join(', ')})</div>`;
             html += '<div class="times-grid">';
+
             times.forEach((time, idx) => {
                 const timeData = timesAtuais[idx];
+                const nomeTime = timeData.nome || `Time ${idx + 1}`;
+                const corTraduzida = traduzirCor(nomeTime);
+                const corValida = isValidColor(corTraduzida) ? corTraduzida : '#f8f9fa';
+                const corTexto = getContrastColor(corValida);
+
                 html += `
-                    <div class="time-card" id="time-${idx}">
-                        <h3>⚽ Time ${idx + 1} (${time.length} jog.)</h3>
+                    <div class="time-card" id="time-${idx}" style="background-color: ${corValida}; color: ${corTexto};">
+                        <div class="time-header">
+                            <div class="nome-time">
+                                <h3 onclick="editarNomeTime(${idx})" id="nome-time-${idx}">${nomeTime}</h3>
+                            </div>
+                            <div class="pontos-header">${timeData.pontos}</div>
+                        </div>
                         <ul>
-                            ${time.map(j => `<li>${j.nome} <span style="color:#2980b9;">${j.nota}</span></li>`).join('')}
+                            ${time.map(j => `<li>${j.nome} <span class="nota">${j.nota}</span></li>`).join('')}
                         </ul>
                         <div class="soma-media">
                             <span>Soma: ${somas[idx].toFixed(1)}</span>
                             <span>Média: ${medias[idx].toFixed(2)}</span>
                         </div>
                         <div class="placar-time">
-                            <span class="v">V: ${timeData.vitorias}</span>
-                            <span class="e">E: ${timeData.empates}</span>
-                            <span class="d">D: ${timeData.derrotas}</span>
-                            <span class="p">Pts: ${timeData.pontos}</span>
-                            <button class="btn-vitoria" onclick="registrarResultado(${idx}, 'vitoria')">+Vit</button>
-                            <button class="btn-empate" onclick="registrarResultado(${idx}, 'empate')">+Emp</button>
-                            <button class="btn-derrota" onclick="registrarResultado(${idx}, 'derrota')">+Der</button>
+                            <div class="grupo">
+                                <span class="v">Vit: ${timeData.vitorias}</span>
+                                <button class="btn-vitoria" onclick="alterarPlacar(${idx}, 'vitoria', 1)">+</button>
+                                <button class="btn-diminuir" onclick="alterarPlacar(${idx}, 'vitoria', -1)">-</button>
+                            </div>
+                            <div class="grupo">
+                                <span class="e">Emp: ${timeData.empates}</span>
+                                <button class="btn-empate" onclick="alterarPlacar(${idx}, 'empate', 1)">+</button>
+                                <button class="btn-diminuir" onclick="alterarPlacar(${idx}, 'empate', -1)">-</button>
+                            </div>
                         </div>
                     </div>
                 `;
             });
+
             html += '</div>';
             const diff = Math.max(...medias) - Math.min(...medias);
             html += `<div class="desequilibrio">Desequilíbrio (diferença entre as médias): ${diff.toFixed(2)}</div>`;
@@ -1336,49 +1186,71 @@
         }
 
         // ============================================================
-        //  REGISTRO DE RESULTADOS
+        //  EDITAR NOME DO TIME (COM TRADUÇÃO E CONTRASTE)
         // ============================================================
-        function registrarResultado(idx, tipo) {
+        function editarNomeTime(idx) {
+            const timeData = timesAtuais[idx];
+            const nomeAtual = timeData.nome || `Time ${idx + 1}`;
+            const novoNome = prompt('Digite o novo nome do time (pode ser uma cor em português):', nomeAtual);
+            if (novoNome !== null && novoNome.trim() !== '') {
+                timeData.nome = novoNome.trim();
+                const nomeEl = document.getElementById(`nome-time-${idx}`);
+                if (nomeEl) nomeEl.innerText = timeData.nome;
+
+                const card = document.getElementById(`time-${idx}`);
+                const corTraduzida = traduzirCor(timeData.nome);
+                const corValida = isValidColor(corTraduzida) ? corTraduzida : '#f8f9fa';
+                const corTexto = getContrastColor(corValida);
+                if (card) {
+                    card.style.backgroundColor = corValida;
+                    card.style.color = corTexto;
+                }
+            }
+        }
+
+        // ============================================================
+        //  ALTERAR PLACAR
+        // ============================================================
+        function alterarPlacar(idx, tipo, delta) {
             if (idx < 0 || idx >= timesAtuais.length) return;
             const time = timesAtuais[idx];
             if (tipo === 'vitoria') {
-                time.vitorias++;
-                time.pontos += 3;
+                const nova = time.vitorias + delta;
+                if (nova < 0) {
+                    alert('Vitórias não podem ficar negativas.');
+                    return;
+                }
+                time.vitorias = nova;
+                time.pontos += delta * 3;
             } else if (tipo === 'empate') {
-                time.empates++;
-                time.pontos += 1;
-            } else if (tipo === 'derrota') {
-                time.derrotas++;
+                const nova = time.empates + delta;
+                if (nova < 0) {
+                    alert('Empates não podem ficar negativos.');
+                    return;
+                }
+                time.empates = nova;
+                time.pontos += delta * 1;
             }
-            atualizarPlacarTime(idx);
+            const times = timesAtuais.map(t => t.jogadores);
+            const somas = times.map(t => t.reduce((acc, j) => acc + j.nota, 0));
+            const medias = times.map(t => {
+                const soma = t.reduce((acc, j) => acc + j.nota, 0);
+                return soma / t.length;
+            });
+            const tamanhos = times.map(t => t.length);
+            exibirTimes(times, somas, medias, tamanhos);
         }
 
-        function atualizarPlacarTime(idx) {
-            const timeCard = document.getElementById(`time-${idx}`);
-            if (!timeCard) return;
-            const timeData = timesAtuais[idx];
-            const placarSpan = timeCard.querySelector('.placar-time');
-            if (placarSpan) {
-                const vSpan = placarSpan.querySelector('.v');
-                const eSpan = placarSpan.querySelector('.e');
-                const dSpan = placarSpan.querySelector('.d');
-                const pSpan = placarSpan.querySelector('.p');
-                if (vSpan) vSpan.innerText = `V: ${timeData.vitorias}`;
-                if (eSpan) eSpan.innerText = `E: ${timeData.empates}`;
-                if (dSpan) dSpan.innerText = `D: ${timeData.derrotas}`;
-                if (pSpan) pSpan.innerText = `Pts: ${timeData.pontos}`;
-            }
-        }
-
+        // ============================================================
+        //  ZERAR PLACARES
+        // ============================================================
         function zerarTodosPlacares() {
             timesAtuais.forEach(time => {
                 time.vitorias = 0;
                 time.empates = 0;
-                time.derrotas = 0;
                 time.pontos = 0;
             });
             if (timesAtuais.length > 0) {
-                const div = document.getElementById('resultado');
                 const times = timesAtuais.map(t => t.jogadores);
                 const somas = times.map(t => t.reduce((acc, j) => acc + j.nota, 0));
                 const medias = times.map(t => {
@@ -1431,7 +1303,7 @@
                     }
                 });
                 houveBonus = true;
-                mensagem = `🏆 Campeão: Time ${idxCampeao+1} (${timeCampeao.pontos} pts) → +0.5 para cada jogador.\n`;
+                mensagem = `🏆 Campeão: ${timeCampeao.nome || 'Time ' + (idxCampeao+1)} (${timeCampeao.pontos} pts) → +0.5 para cada jogador.\n`;
             }
 
             if (indicesMin.length > 1) {
@@ -1448,7 +1320,7 @@
                     }
                 });
                 houvePenalidade = true;
-                mensagem += `📉 Lanterna: Time ${idxLanterna+1} (${timeLanterna.pontos} pts) → -0.5 para cada jogador.`;
+                mensagem += `📉 Lanterna: ${timeLanterna.nome || 'Time ' + (idxLanterna+1)} (${timeLanterna.pontos} pts) → -0.5 para cada jogador.`;
             }
 
             if (!houveBonus && !houvePenalidade) {
@@ -1465,7 +1337,6 @@
             timesAtuais.forEach(time => {
                 time.vitorias = 0;
                 time.empates = 0;
-                time.derrotas = 0;
                 time.pontos = 0;
             });
 
@@ -1477,36 +1348,17 @@
             });
             const tamanhos = times.map(t => t.length);
             exibirTimes(times, somas, medias, tamanhos);
-            alert(mensagem + '\n\nPlacares e pontuação zerados para uma nova rodada!');
+            alert(mensagem + '\n\nPlacares zerados para uma nova rodada!');
         }
 
         // ============================================================
         //  INICIALIZAÇÃO
         // ============================================================
         carregarJogadores();
-        cronometro.totalSegundos = getTempoTotalSegundos();
-        cronometro.segundosRestantes = cronometro.totalSegundos;
-        atualizarDisplayTempo();
 
         document.getElementById('novoNome').addEventListener('keypress', e => {
             if (e.key === 'Enter') adicionarJogadorPlantel();
         });
-
-        document.getElementById('minutosPartida').addEventListener('change', function() {
-            if (!cronometro.rodando) {
-                cronometro.totalSegundos = getTempoTotalSegundos();
-                cronometro.segundosRestantes = cronometro.totalSegundos;
-                atualizarDisplayTempo();
-            }
-        });
-        document.getElementById('segundosPartida').addEventListener('change', function() {
-            if (!cronometro.rodando) {
-                cronometro.totalSegundos = getTempoTotalSegundos();
-                cronometro.segundosRestantes = cronometro.totalSegundos;
-                atualizarDisplayTempo();
-            }
-        });
     </script>
-
 </body>
 </html>
