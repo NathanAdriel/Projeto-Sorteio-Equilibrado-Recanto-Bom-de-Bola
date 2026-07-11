@@ -434,11 +434,12 @@ function exportarPDF() {
         capas: j.pontosCapa || 0
     }));
 
-    // ===== CONFIGURAÇÃO =====
+    // ===== CONFIGURAÇÃO (larguras fixas em pontos) =====
     const marginLeft = 40;
     const marginTop = 60;
-    const pageWidth = doc.internal.pageSize.width;
-    const colWidth = (pageWidth - 80) / 2 - 10;
+    const pageWidth = doc.internal.pageSize.width; // ~595pt para A4
+    const colWidth = 230; // largura fixa para cada tabela
+    const gap = 20; // espaço entre as tabelas
 
     // ===== TABELA 1 (Notas) =====
     doc.setFontSize(14);
@@ -452,21 +453,21 @@ function exportarPDF() {
         headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 10 },
         bodyStyles: { fontSize: 9 },
         columnStyles: {
-            0: { cellWidth: 35, halign: 'center' },
-            1: { cellWidth: 100 },
-            2: { cellWidth: 35, halign: 'center' },
-            3: { cellWidth: 40, halign: 'center' }
+            0: { cellWidth: 30, halign: 'center' },
+            1: { cellWidth: 110 },
+            2: { cellWidth: 30, halign: 'center' },
+            3: { cellWidth: 35, halign: 'center' }
         },
-        margin: { left: marginLeft, right: marginLeft + colWidth + 20 },
+        margin: { left: marginLeft, right: marginLeft + colWidth + gap },
         tableWidth: colWidth
     };
 
     doc.autoTable(tableNotas);
 
     // ===== TABELA 2 (Capas) =====
-    const startYCapas = marginTop; // mesma altura da primeira
+    const startYCapas = marginTop;
     doc.setFontSize(14);
-    doc.text('Ranking de Capas', marginLeft + colWidth + 20, startYCapas);
+    doc.text('Ranking de Capas', marginLeft + colWidth + gap, startYCapas);
 
     const tableCapas = {
         startY: startYCapas + 10,
@@ -476,11 +477,11 @@ function exportarPDF() {
         headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 10 },
         bodyStyles: { fontSize: 9 },
         columnStyles: {
-            0: { cellWidth: 35, halign: 'center' },
-            1: { cellWidth: 100 },
-            2: { cellWidth: 45, halign: 'center' }
+            0: { cellWidth: 30, halign: 'center' },
+            1: { cellWidth: 140 },
+            2: { cellWidth: 35, halign: 'center' }
         },
-        margin: { left: marginLeft + colWidth + 20, right: 40 },
+        margin: { left: marginLeft + colWidth + gap, right: 40 },
         tableWidth: colWidth
     };
 
