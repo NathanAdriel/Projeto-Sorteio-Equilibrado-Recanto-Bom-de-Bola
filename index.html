@@ -411,7 +411,7 @@ function exportarPDF() {
     doc.text('Rankings - Pelada da Paz', 40, 40);
 
     // ===== DADOS =====
-    // Ranking de Capas (será a primeira tabela, à esquerda)
+    // Ranking de Capas
     const rankingCapas = [...jogadores].sort((a, b) => {
         if (b.pontosCapa !== a.pontosCapa) return b.pontosCapa - a.pontosCapa;
         return a.nome.localeCompare(b.nome);
@@ -423,7 +423,7 @@ function exportarPDF() {
         capas: j.pontosCapa || 0
     }));
 
-    // Ranking de Notas (será a segunda tabela, à direita)
+    // Ranking de Notas
     const rankingNotas = [...jogadores].sort((a, b) => {
         if (b.nota !== a.nota) return b.nota - a.nota;
         return (b.pontosCapa || 0) - (a.pontosCapa || 0);
@@ -436,39 +436,66 @@ function exportarPDF() {
         capas: j.pontosCapa || 0
     }));
 
-    // ===== CONFIGURAÇÃO =====
+    // ================================================================
+    //  RANKING DE CAPAS EM DUAS COLUNAS
+    // ================================================================
     const marginLeft = 40;
     const marginTop = 60;
-    const pageWidth = doc.internal.pageSize.width; // ~595pt para A4
-    const colWidth = (pageWidth - 80 - 10) / 2; // 245pt cada
-    const gap = 10; // espaço entre as tabelas
+    const pageWidth = doc.internal.pageSize.width;
+    const colWidth = (pageWidth - 80) / 2;
 
-    // ===== TABELA 1 (Capas - ESQUERDA) =====
+    // Dividir os dados em duas metades
+    const metade = Math.ceil(dadosCapas.length / 2);
+    const colunaEsquerda = dadosCapas.slice(0, metade);
+    const colunaDireita = dadosCapas.slice(metade);
+
+    // Título do Ranking de Capas
     doc.setFontSize(14);
     doc.text('Ranking de Capas', marginLeft, marginTop);
 
-    const tableCapas = {
+    // Construir corpo da tabela com duas colunas
+    const maxLinhas = Math.max(colunaEsquerda.length, colunaDireita.length);
+    const bodyCapas = [];
+    for (let i = 0; i < maxLinhas; i++) {
+        const esq = colunaEsquerda[i] || { posicao: '', nome: '', capas: '' };
+        const dir = colunaDireita[i] || { posicao: '', nome: '', capas: '' };
+        bodyCapas.push([
+            esq.posicao ? esq.posicao + '°' : '',
+            esq.nome,
+            esq.capas !== '' ? esq.capas : '',
+            dir.posicao ? dir.posicao + '°' : '',
+            dir.nome,
+            dir.capas !== '' ? dir.capas : ''
+        ]);
+    }
+
+    doc.autoTable({
         startY: marginTop + 10,
-        head: [['Pos.', 'Nome', 'Capas']],
-        body: dadosCapas.map(j => [j.posicao + '°', j.nome, j.capas]),
+        head: [
+            ['Pos.', 'Nome', 'Capas', 'Pos.', 'Nome', 'Capas']
+        ],
+        body: bodyCapas,
         theme: 'striped',
         headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 10 },
         bodyStyles: { fontSize: 9 },
         columnStyles: {
-            0: { cellWidth: 35, halign: 'center' },
-            1: { cellWidth: 140 },
-            2: { cellWidth: 45, halign: 'center' }
+            0: { cellWidth: 30, halign: 'center' },
+            1: { cellWidth: 130 },
+            2: { cellWidth: 35, halign: 'center' },
+            3: { cellWidth: 30, halign: 'center' },
+            4: { cellWidth: 130 },
+            5: { cellWidth: 35, halign: 'center' }
         },
-        margin: { left: marginLeft, right: marginLeft + colWidth + gap },
-        tableWidth: colWidth
-    };
+        margin: { left: marginLeft, right: 40 }
+    });
 
-    doc.autoTable(tableCapas);
+    // ================================================================
+    //  RANKING DE NOTAS EM UMA COLUNA
+    // ================================================================
+    const startYNotas = doc.previousAutoTable.finalY + 30;
 
-    // ===== TABELA 2 (Notas - DIREITA) =====
-    const startYNotas = marginTop;
     doc.setFontSize(14);
-    doc.text('Ranking de Notas', marginLeft + colWidth + gap, startYNotas);
+    doc.text('Ranking de Notas', marginLeft, startYNotas);
 
     const tableNotas = {
         startY: startYNotas + 10,
@@ -478,13 +505,12 @@ function exportarPDF() {
         headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 10 },
         bodyStyles: { fontSize: 9 },
         columnStyles: {
-            0: { cellWidth: 30, halign: 'center' },
-            1: { cellWidth: 105 },
-            2: { cellWidth: 35, halign: 'center' },
-            3: { cellWidth: 35, halign: 'center' }
+            0: { cellWidth: 35, halign: 'center' },
+            1: { cellWidth: 200 },
+            2: { cellWidth: 40, halign: 'center' },
+            3: { cellWidth: 40, halign: 'center' }
         },
-        margin: { left: marginLeft + colWidth + gap, right: 40 },
-        tableWidth: colWidth
+        margin: { left: marginLeft, right: 40 }
     };
 
     doc.autoTable(tableNotas);
