@@ -397,106 +397,108 @@
         // ============================================================
         //  EXPORTAR PDF (CORRIGIDO)
         // ============================================================
-        function exportarPDF() {
-            if (jogadores.length === 0) {
-                alert('Não há jogadores para exportar.');
-                return;
-            }
+function exportarPDF() {
+    if (jogadores.length === 0) {
+        alert('Não há jogadores para exportar.');
+        return;
+    }
 
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'pt', 'a4');
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'pt', 'a4');
 
-            // ===== TÍTULO =====
-            doc.setFontSize(16);
-            doc.text('Rankings - Pelada da Paz', 40, 40);
+    // ===== TÍTULO =====
+    doc.setFontSize(14);
+    doc.text('Rankings - Pelada da Paz', 15, 30);
 
-            // ===== COLUNA ESQUERDA: RANKING DE NOTAS =====
-            const rankingNotas = [...jogadores].sort((a, b) => {
-                if (b.nota !== a.nota) return b.nota - a.nota;
-                return (b.pontosCapa || 0) - (a.pontosCapa || 0);
-            });
+    // ===== COLUNA ESQUERDA: RANKING DE NOTAS =====
+    const rankingNotas = [...jogadores].sort((a, b) => {
+        if (b.nota !== a.nota) return b.nota - a.nota;
+        return (b.pontosCapa || 0) - (a.pontosCapa || 0);
+    });
 
-            const dadosNotas = rankingNotas.map((j, i) => ({
-                posicao: i + 1,
-                nome: j.nome,
-                nota: j.nota,
-                capas: j.pontosCapa || 0
-            }));
+    const dadosNotas = rankingNotas.map((j, i) => ({
+        posicao: i + 1,
+        nome: j.nome,
+        nota: j.nota,
+        capas: j.pontosCapa || 0
+    }));
 
-            // ===== COLUNA DIREITA: RANKING DE CAPAS =====
-            const rankingCapas = [...jogadores].sort((a, b) => {
-                if (b.pontosCapa !== a.pontosCapa) return b.pontosCapa - a.pontosCapa;
-                return a.nome.localeCompare(b.nome);
-            });
+    // ===== COLUNA DIREITA: RANKING DE CAPAS =====
+    const rankingCapas = [...jogadores].sort((a, b) => {
+        if (b.pontosCapa !== a.pontosCapa) return b.pontosCapa - a.pontosCapa;
+        return a.nome.localeCompare(b.nome);
+    });
 
-            const dadosCapas = rankingCapas.map((j, i) => ({
-                posicao: i + 1,
-                nome: j.nome,
-                capas: j.pontosCapa || 0
-            }));
+    const dadosCapas = rankingCapas.map((j, i) => ({
+        posicao: i + 1,
+        nome: j.nome,
+        capas: j.pontosCapa || 0
+    }));
 
-            // ===== CONFIGURAR TABELAS LADO A LADO =====
-            const marginLeft = 30;
-            const marginTop = 60;
-            const colWidth = (doc.internal.pageSize.width - 60) / 2 - 10;
+    // ===== CONFIGURAR TABELAS LADO A LADO =====
+    const marginLeft = 15;
+    const marginTop = 40;
+    // Largura disponível: 595 - 30 = 565
+    // Dividir em duas colunas com espaço de 5pt entre elas
+    const colWidth = (565 - 5) / 2;
 
-            // Coluna esquerda: Notas
-            doc.setFontSize(11);
-            doc.text('Ranking de Notas', marginLeft, marginTop);
+    // Coluna esquerda: Notas
+    doc.setFontSize(10);
+    doc.text('Ranking de Notas', marginLeft, marginTop);
 
-            const tableNotas = {
-                startY: marginTop + 10,
-                head: [
-                    ['Pos.', 'Nome', 'Nota', 'Capas']
-                ],
-                body: dadosNotas.map(j => [j.posicao + '°', j.nome, j.nota, j.capas]),
-                theme: 'striped',
-                headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 8 },
-                bodyStyles: { fontSize: 7 },
-                columnStyles: {
-                    0: { cellWidth: 20, halign: 'center' },
-                    1: { cellWidth: 120 },
-                    2: { cellWidth: 25, halign: 'center' },
-                    3: { cellWidth: 25, halign: 'center' }
-                },
-                margin: { left: marginLeft, right: marginLeft + colWidth + 10 }
-            };
+    const tableNotas = {
+        startY: marginTop + 8,
+        head: [
+            ['Pos.', 'Nome', 'Nota', 'Capas']
+        ],
+        body: dadosNotas.map(j => [j.posicao + '°', j.nome, j.nota, j.capas]),
+        theme: 'striped',
+        headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 7 },
+        bodyStyles: { fontSize: 6 },
+        columnStyles: {
+            0: { cellWidth: 18, halign: 'center' },
+            1: { cellWidth: 100 },
+            2: { cellWidth: 22, halign: 'center' },
+            3: { cellWidth: 22, halign: 'center' }
+        },
+        margin: { left: marginLeft, right: marginLeft + colWidth + 5 }
+    };
 
-            doc.autoTable(tableNotas);
+    doc.autoTable(tableNotas);
 
-            // Coluna direita: Capas
-            doc.setFontSize(11);
-            doc.text('Ranking de Capas', marginLeft + colWidth + 10, marginTop);
+    // Coluna direita: Capas
+    doc.setFontSize(10);
+    doc.text('Ranking de Capas', marginLeft + colWidth + 5, marginTop);
 
-            const tableCapas = {
-                startY: marginTop + 10,
-                head: [
-                    ['Pos.', 'Nome', 'Capas']
-                ],
-                body: dadosCapas.map(j => [j.posicao + '°', j.nome, j.capas]),
-                theme: 'striped',
-                headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 8 },
-                bodyStyles: { fontSize: 7 },
-                columnStyles: {
-                    0: { cellWidth: 20, halign: 'center' },
-                    1: { cellWidth: 120 },
-                    2: { cellWidth: 30, halign: 'center' }
-                },
-                margin: { left: marginLeft + colWidth + 10, right: 30 }
-            };
+    const tableCapas = {
+        startY: marginTop + 8,
+        head: [
+            ['Pos.', 'Nome', 'Capas']
+        ],
+        body: dadosCapas.map(j => [j.posicao + '°', j.nome, j.capas]),
+        theme: 'striped',
+        headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 7 },
+        bodyStyles: { fontSize: 6 },
+        columnStyles: {
+            0: { cellWidth: 18, halign: 'center' },
+            1: { cellWidth: 100 },
+            2: { cellWidth: 25, halign: 'center' }
+        },
+        margin: { left: marginLeft + colWidth + 5, right: 15 }
+    };
 
-            doc.autoTable(tableCapas);
+    doc.autoTable(tableCapas);
 
-            // Rodapé
-            const pageCount = doc.internal.getNumberOfPages();
-            for (let i = 1; i <= pageCount; i++) {
-                doc.setPage(i);
-                doc.setFontSize(8);
-                doc.text(`Pelada da Paz - Página ${i} de ${pageCount}`, 40, doc.internal.pageSize.height - 20);
-            }
+    // Rodapé
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(7);
+        doc.text(`Pelada da Paz - Página ${i} de ${pageCount}`, 15, doc.internal.pageSize.height - 15);
+    }
 
-            doc.save('ranking_pelada_da_paz.pdf');
-        }
+    doc.save('ranking_pelada_da_paz.pdf');
+}
 
         // ============================================================
         //  CRUD JOGADORES
