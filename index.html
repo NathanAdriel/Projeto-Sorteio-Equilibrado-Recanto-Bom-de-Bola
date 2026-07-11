@@ -410,8 +410,7 @@ function exportarPDF() {
     doc.setFontSize(20);
     doc.text('Rankings - Pelada da Paz', 40, 40);
 
-    // ===== COLUNA ESQUERDA: RANKING DE NOTAS =====
-    // Ordena por nota (decrescente) e desempate por capas (decrescente)
+    // ===== DADOS =====
     const rankingNotas = [...jogadores].sort((a, b) => {
         if (b.nota !== a.nota) return b.nota - a.nota;
         return (b.pontosCapa || 0) - (a.pontosCapa || 0);
@@ -424,7 +423,6 @@ function exportarPDF() {
         capas: j.pontosCapa || 0
     }));
 
-    // ===== COLUNA DIREITA: RANKING DE CAPAS =====
     const rankingCapas = [...jogadores].sort((a, b) => {
         if (b.pontosCapa !== a.pontosCapa) return b.pontosCapa - a.pontosCapa;
         return a.nome.localeCompare(b.nome);
@@ -436,59 +434,59 @@ function exportarPDF() {
         capas: j.pontosCapa || 0
     }));
 
-    // ===== CONFIGURAR TABELAS =====
+    // ===== CONFIGURAÇÃO =====
     const marginLeft = 40;
     const marginTop = 60;
-    const colWidth = (doc.internal.pageSize.width - 80) / 2 - 10;
+    const pageWidth = doc.internal.pageSize.width;
+    const colWidth = (pageWidth - 80) / 2 - 10;
 
-    // Coluna esquerda: Notas
+    // ===== TABELA 1 (Notas) =====
     doc.setFontSize(14);
     doc.text('Ranking de Notas', marginLeft, marginTop);
 
     const tableNotas = {
         startY: marginTop + 10,
-        head: [
-            ['Pos.', 'Nome', 'Nota', 'Capas']
-        ],
+        head: [['Pos.', 'Nome', 'Nota', 'Capas']],
         body: dadosNotas.map(j => [j.posicao + '°', j.nome, j.nota, j.capas]),
         theme: 'striped',
         headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 10 },
         bodyStyles: { fontSize: 9 },
         columnStyles: {
             0: { cellWidth: 35, halign: 'center' },
-            1: { cellWidth: 105 },
+            1: { cellWidth: 100 },
             2: { cellWidth: 35, halign: 'center' },
             3: { cellWidth: 40, halign: 'center' }
         },
-        margin: { left: marginLeft, right: marginLeft + colWidth + 20 }
+        margin: { left: marginLeft, right: marginLeft + colWidth + 20 },
+        tableWidth: colWidth
     };
 
     doc.autoTable(tableNotas);
 
-    // Coluna direita: Capas
+    // ===== TABELA 2 (Capas) =====
+    const startYCapas = marginTop; // mesma altura da primeira
     doc.setFontSize(14);
-    doc.text('Ranking de Capas', marginLeft + colWidth + 20, marginTop);
+    doc.text('Ranking de Capas', marginLeft + colWidth + 20, startYCapas);
 
     const tableCapas = {
-        startY: marginTop + 10,
-        head: [
-            ['Pos.', 'Nome', 'Capas']
-        ],
+        startY: startYCapas + 10,
+        head: [['Pos.', 'Nome', 'Capas']],
         body: dadosCapas.map(j => [j.posicao + '°', j.nome, j.capas]),
         theme: 'striped',
         headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 10 },
         bodyStyles: { fontSize: 9 },
         columnStyles: {
             0: { cellWidth: 35, halign: 'center' },
-            1: { cellWidth: 105 },
+            1: { cellWidth: 100 },
             2: { cellWidth: 45, halign: 'center' }
         },
-        margin: { left: marginLeft + colWidth + 20, right: 40 }
+        margin: { left: marginLeft + colWidth + 20, right: 40 },
+        tableWidth: colWidth
     };
 
     doc.autoTable(tableCapas);
 
-    // Rodapé
+    // ===== RODAPÉ =====
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
