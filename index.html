@@ -438,107 +438,60 @@ function exportarPDF() {
     }));
 
     // ================================================================
-    //  CONFIGURAÇÕES - PAISAGEM
+    //  TABELA 1: RANKING DE NOTAS (1 coluna)
     // ================================================================
     const marginLeft = 40;
     const marginTop = 60;
-    const pageWidth = doc.internal.pageSize.width; // ~842pt em paisagem
-    const colWidth = (pageWidth - 80) / 2; // ~381pt cada
-
-    // ================================================================
-    //  TABELA 1: RANKING DE NOTAS (2 colunas, ESQUERDA)
-    // ================================================================
-    const metadeNotas = Math.ceil(dadosNotas.length / 2);
-    const colNotasEsq = dadosNotas.slice(0, metadeNotas);
-    const colNotasDir = dadosNotas.slice(metadeNotas);
-
-    const maxLinhasNotas = Math.max(colNotasEsq.length, colNotasDir.length);
-    const bodyNotas = [];
-    for (let i = 0; i < maxLinhasNotas; i++) {
-        const esq = colNotasEsq[i] || { posicao: '', nome: '', nota: '', capas: '' };
-        const dir = colNotasDir[i] || { posicao: '', nome: '', nota: '', capas: '' };
-        bodyNotas.push([
-            esq.posicao ? esq.posicao + '°' : '',
-            esq.nome,
-            esq.nota !== '' ? esq.nota : '',
-            esq.capas !== '' ? esq.capas : '',
-            dir.posicao ? dir.posicao + '°' : '',
-            dir.nome,
-            dir.nota !== '' ? dir.nota : '',
-            dir.capas !== '' ? dir.capas : ''
-        ]);
-    }
 
     doc.setFontSize(14);
     doc.text('Ranking de Notas', marginLeft, marginTop);
 
-    doc.autoTable({
+    const tableNotas = {
         startY: marginTop + 10,
         head: [
-            ['Pos.', 'Nome', 'Nota', 'Capas', 'Pos.', 'Nome', 'Nota', 'Capas']
+            ['Pos.', 'Nome', 'Nota', 'Capas']
         ],
-        body: bodyNotas,
+        body: dadosNotas.map(j => [j.posicao + '°', j.nome, j.nota, j.capas]),
         theme: 'striped',
         headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 10 },
         bodyStyles: { fontSize: 9 },
         columnStyles: {
-            0: { cellWidth: 30, halign: 'center' },
-            1: { cellWidth: 120 },
-            2: { cellWidth: 35, halign: 'center' },
-            3: { cellWidth: 35, halign: 'center' },
-            4: { cellWidth: 30, halign: 'center' },
-            5: { cellWidth: 120 },
-            6: { cellWidth: 35, halign: 'center' },
-            7: { cellWidth: 35, halign: 'center' }
+            0: { cellWidth: 40, halign: 'center' },
+            1: { cellWidth: 220 },
+            2: { cellWidth: 50, halign: 'center' },
+            3: { cellWidth: 50, halign: 'center' }
         },
-        margin: { left: marginLeft, right: marginLeft + colWidth + 15 }
-    });
+        margin: { left: marginLeft, right: 40 }
+    };
+
+    doc.autoTable(tableNotas);
 
     // ================================================================
-    //  TABELA 2: RANKING DE CAPAS (2 colunas, DIREITA)
+    //  TABELA 2: RANKING DE CAPAS (1 coluna)
     // ================================================================
-    const metadeCapas = Math.ceil(dadosCapas.length / 2);
-    const colCapasEsq = dadosCapas.slice(0, metadeCapas);
-    const colCapasDir = dadosCapas.slice(metadeCapas);
+    const startYCapas = doc.previousAutoTable.finalY + 40;
 
-    const maxLinhasCapas = Math.max(colCapasEsq.length, colCapasDir.length);
-    const bodyCapas = [];
-    for (let i = 0; i < maxLinhasCapas; i++) {
-        const esq = colCapasEsq[i] || { posicao: '', nome: '', capas: '' };
-        const dir = colCapasDir[i] || { posicao: '', nome: '', capas: '' };
-        bodyCapas.push([
-            esq.posicao ? esq.posicao + '°' : '',
-            esq.nome,
-            esq.capas !== '' ? esq.capas : '',
-            dir.posicao ? dir.posicao + '°' : '',
-            dir.nome,
-            dir.capas !== '' ? dir.capas : ''
-        ]);
-    }
-
-    const startYCapas = marginTop;
     doc.setFontSize(14);
-    doc.text('Ranking de Capas', marginLeft + colWidth + 15, startYCapas);
+    doc.text('Ranking de Capas', marginLeft, startYCapas);
 
-    doc.autoTable({
+    const tableCapas = {
         startY: startYCapas + 10,
         head: [
-            ['Pos.', 'Nome', 'Capas', 'Pos.', 'Nome', 'Capas']
+            ['Pos.', 'Nome', 'Capas']
         ],
-        body: bodyCapas,
+        body: dadosCapas.map(j => [j.posicao + '°', j.nome, j.capas]),
         theme: 'striped',
         headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 10 },
         bodyStyles: { fontSize: 9 },
         columnStyles: {
-            0: { cellWidth: 30, halign: 'center' },
-            1: { cellWidth: 130 },
-            2: { cellWidth: 35, halign: 'center' },
-            3: { cellWidth: 30, halign: 'center' },
-            4: { cellWidth: 130 },
-            5: { cellWidth: 35, halign: 'center' }
+            0: { cellWidth: 40, halign: 'center' },
+            1: { cellWidth: 280 },
+            2: { cellWidth: 50, halign: 'center' }
         },
-        margin: { left: marginLeft + colWidth + 15, right: 40 }
-    });
+        margin: { left: marginLeft, right: 40 }
+    };
+
+    doc.autoTable(tableCapas);
 
     // ===== RODAPÉ =====
     const pageCount = doc.internal.getNumberOfPages();
