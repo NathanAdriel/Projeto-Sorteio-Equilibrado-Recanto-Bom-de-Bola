@@ -404,7 +404,8 @@ function exportarPDF() {
     }
 
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'pt', 'a4');
+    // ===== ORIENTAÇÃO PAISAGEM (HORIZONTAL) =====
+    const doc = new jsPDF('landscape', 'pt', 'a4');
 
     // ===== TÍTULO =====
     doc.setFontSize(20);
@@ -437,12 +438,12 @@ function exportarPDF() {
     }));
 
     // ================================================================
-    //  CONFIGURAÇÕES GERAIS
+    //  CONFIGURAÇÕES - PAISAGEM
     // ================================================================
     const marginLeft = 40;
     const marginTop = 60;
-    const pageWidth = doc.internal.pageSize.width;
-    const colWidth = (pageWidth - 80) / 2; // largura de cada metade
+    const pageWidth = doc.internal.pageSize.width; // ~842pt em paisagem
+    const colWidth = (pageWidth - 80) / 2; // ~381pt cada
 
     // ================================================================
     //  TABELA 1: RANKING DE NOTAS (2 colunas, ESQUERDA)
@@ -481,16 +482,16 @@ function exportarPDF() {
         headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 10 },
         bodyStyles: { fontSize: 9 },
         columnStyles: {
-            0: { cellWidth: 25, halign: 'center' },
-            1: { cellWidth: 85 },
-            2: { cellWidth: 30, halign: 'center' },
-            3: { cellWidth: 30, halign: 'center' },
-            4: { cellWidth: 25, halign: 'center' },
-            5: { cellWidth: 85 },
-            6: { cellWidth: 30, halign: 'center' },
-            7: { cellWidth: 30, halign: 'center' }
+            0: { cellWidth: 30, halign: 'center' },
+            1: { cellWidth: 120 },
+            2: { cellWidth: 35, halign: 'center' },
+            3: { cellWidth: 35, halign: 'center' },
+            4: { cellWidth: 30, halign: 'center' },
+            5: { cellWidth: 120 },
+            6: { cellWidth: 35, halign: 'center' },
+            7: { cellWidth: 35, halign: 'center' }
         },
-        margin: { left: marginLeft, right: marginLeft + colWidth + 10 }
+        margin: { left: marginLeft, right: marginLeft + colWidth + 15 }
     });
 
     // ================================================================
@@ -515,9 +516,9 @@ function exportarPDF() {
         ]);
     }
 
-    const startYCapas = marginTop; // mesma altura da tabela de notas
+    const startYCapas = marginTop;
     doc.setFontSize(14);
-    doc.text('Ranking de Capas', marginLeft + colWidth + 10, startYCapas);
+    doc.text('Ranking de Capas', marginLeft + colWidth + 15, startYCapas);
 
     doc.autoTable({
         startY: startYCapas + 10,
@@ -529,14 +530,14 @@ function exportarPDF() {
         headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 10 },
         bodyStyles: { fontSize: 9 },
         columnStyles: {
-            0: { cellWidth: 25, halign: 'center' },
-            1: { cellWidth: 95 },
-            2: { cellWidth: 30, halign: 'center' },
-            3: { cellWidth: 25, halign: 'center' },
-            4: { cellWidth: 95 },
-            5: { cellWidth: 30, halign: 'center' }
+            0: { cellWidth: 30, halign: 'center' },
+            1: { cellWidth: 130 },
+            2: { cellWidth: 35, halign: 'center' },
+            3: { cellWidth: 30, halign: 'center' },
+            4: { cellWidth: 130 },
+            5: { cellWidth: 35, halign: 'center' }
         },
-        margin: { left: marginLeft + colWidth + 10, right: 40 }
+        margin: { left: marginLeft + colWidth + 15, right: 40 }
     });
 
     // ===== RODAPÉ =====
