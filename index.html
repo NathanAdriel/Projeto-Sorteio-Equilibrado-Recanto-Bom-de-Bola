@@ -407,10 +407,11 @@ function exportarPDF() {
     const doc = new jsPDF('p', 'pt', 'a4');
 
     // ===== TÍTULO =====
-    doc.setFontSize(12);
-    doc.text('Rankings - Pelada da Paz', 10, 25);
+    doc.setFontSize(20);
+    doc.text('Rankings - Pelada da Paz', 40, 40);
 
     // ===== COLUNA ESQUERDA: RANKING DE NOTAS =====
+    // Ordena por nota (decrescente) e desempate por capas (decrescente)
     const rankingNotas = [...jogadores].sort((a, b) => {
         if (b.nota !== a.nota) return b.nota - a.nota;
         return (b.pontosCapa || 0) - (a.pontosCapa || 0);
@@ -435,58 +436,54 @@ function exportarPDF() {
         capas: j.pontosCapa || 0
     }));
 
-    // ===== CONFIGURAR TABELAS LADO A LADO =====
-    const marginLeft = 8;
-    const marginTop = 35;
-    // Largura total da página: 595pt
-    // Margens: 8 + 8 = 16, espaço entre tabelas: 5
-    // Largura disponível: 595 - 16 - 5 = 574
-    // Cada tabela: 574 / 2 = 287pt
-    const colWidth = 287;
+    // ===== CONFIGURAR TABELAS =====
+    const marginLeft = 40;
+    const marginTop = 60;
+    const colWidth = (doc.internal.pageSize.width - 80) / 2 - 10;
 
     // Coluna esquerda: Notas
-    doc.setFontSize(9);
+    doc.setFontSize(14);
     doc.text('Ranking de Notas', marginLeft, marginTop);
 
     const tableNotas = {
-        startY: marginTop + 6,
+        startY: marginTop + 10,
         head: [
             ['Pos.', 'Nome', 'Nota', 'Capas']
         ],
         body: dadosNotas.map(j => [j.posicao + '°', j.nome, j.nota, j.capas]),
         theme: 'striped',
-        headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 6 },
-        bodyStyles: { fontSize: 5 },
+        headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 10 },
+        bodyStyles: { fontSize: 9 },
         columnStyles: {
-            0: { cellWidth: 16, halign: 'center' },
-            1: { cellWidth: 100 },
-            2: { cellWidth: 18, halign: 'center' },
-            3: { cellWidth: 18, halign: 'center' }
+            0: { cellWidth: 35, halign: 'center' },
+            1: { cellWidth: 105 },
+            2: { cellWidth: 35, halign: 'center' },
+            3: { cellWidth: 40, halign: 'center' }
         },
-        margin: { left: marginLeft, right: marginLeft + colWidth + 5 }
+        margin: { left: marginLeft, right: marginLeft + colWidth + 20 }
     };
 
     doc.autoTable(tableNotas);
 
     // Coluna direita: Capas
-    doc.setFontSize(9);
-    doc.text('Ranking de Capas', marginLeft + colWidth + 5, marginTop);
+    doc.setFontSize(14);
+    doc.text('Ranking de Capas', marginLeft + colWidth + 20, marginTop);
 
     const tableCapas = {
-        startY: marginTop + 6,
+        startY: marginTop + 10,
         head: [
             ['Pos.', 'Nome', 'Capas']
         ],
         body: dadosCapas.map(j => [j.posicao + '°', j.nome, j.capas]),
         theme: 'striped',
-        headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 6 },
-        bodyStyles: { fontSize: 5 },
+        headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 10 },
+        bodyStyles: { fontSize: 9 },
         columnStyles: {
-            0: { cellWidth: 16, halign: 'center' },
-            1: { cellWidth: 100 },
-            2: { cellWidth: 20, halign: 'center' }
+            0: { cellWidth: 35, halign: 'center' },
+            1: { cellWidth: 105 },
+            2: { cellWidth: 45, halign: 'center' }
         },
-        margin: { left: marginLeft + colWidth + 5, right: 8 }
+        margin: { left: marginLeft + colWidth + 20, right: 40 }
     };
 
     doc.autoTable(tableCapas);
@@ -495,13 +492,12 @@ function exportarPDF() {
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
-        doc.setFontSize(6);
-        doc.text(`Pelada da Paz - Página ${i} de ${pageCount}`, 8, doc.internal.pageSize.height - 10);
+        doc.setFontSize(8);
+        doc.text(`Pelada da Paz - Página ${i} de ${pageCount}`, 40, doc.internal.pageSize.height - 20);
     }
 
     doc.save('ranking_pelada_da_paz.pdf');
 }
-
         // ============================================================
         //  CRUD JOGADORES
         // ============================================================
