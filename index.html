@@ -438,11 +438,16 @@ function exportarPDF() {
     }));
 
     // ================================================================
-    //  TABELA 1: RANKING DE NOTAS (1 coluna)
+    //  CONFIGURAÇÕES - PAISAGEM
     // ================================================================
     const marginLeft = 40;
     const marginTop = 60;
+    const pageWidth = doc.internal.pageSize.width; // ~842pt em paisagem
+    const colWidth = (pageWidth - 80) / 2; // ~381pt cada
 
+    // ================================================================
+    //  TABELA 1: RANKING DE NOTAS (ESQUERDA)
+    // ================================================================
     doc.setFontSize(14);
     doc.text('Ranking de Notas', marginLeft, marginTop);
 
@@ -456,23 +461,22 @@ function exportarPDF() {
         headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 10 },
         bodyStyles: { fontSize: 9 },
         columnStyles: {
-            0: { cellWidth: 40, halign: 'center' },
-            1: { cellWidth: 220 },
-            2: { cellWidth: 50, halign: 'center' },
-            3: { cellWidth: 50, halign: 'center' }
+            0: { cellWidth: 35, halign: 'center' },
+            1: { cellWidth: 160 },
+            2: { cellWidth: 40, halign: 'center' },
+            3: { cellWidth: 40, halign: 'center' }
         },
-        margin: { left: marginLeft, right: 40 }
+        margin: { left: marginLeft, right: marginLeft + colWidth + 15 }
     };
 
     doc.autoTable(tableNotas);
 
     // ================================================================
-    //  TABELA 2: RANKING DE CAPAS (1 coluna)
+    //  TABELA 2: RANKING DE CAPAS (DIREITA)
     // ================================================================
-    const startYCapas = doc.previousAutoTable.finalY + 40;
-
+    const startYCapas = marginTop;
     doc.setFontSize(14);
-    doc.text('Ranking de Capas', marginLeft, startYCapas);
+    doc.text('Ranking de Capas', marginLeft + colWidth + 15, startYCapas);
 
     const tableCapas = {
         startY: startYCapas + 10,
@@ -484,11 +488,11 @@ function exportarPDF() {
         headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 10 },
         bodyStyles: { fontSize: 9 },
         columnStyles: {
-            0: { cellWidth: 40, halign: 'center' },
-            1: { cellWidth: 280 },
-            2: { cellWidth: 50, halign: 'center' }
+            0: { cellWidth: 35, halign: 'center' },
+            1: { cellWidth: 190 },
+            2: { cellWidth: 40, halign: 'center' }
         },
-        margin: { left: marginLeft, right: 40 }
+        margin: { left: marginLeft + colWidth + 15, right: 40 }
     };
 
     doc.autoTable(tableCapas);
