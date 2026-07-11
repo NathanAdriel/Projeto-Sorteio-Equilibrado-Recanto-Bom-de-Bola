@@ -407,7 +407,7 @@
             const doc = new jsPDF('p', 'pt', 'a4');
 
             // ===== TÍTULO =====
-            doc.setFontSize(20);
+            doc.setFontSize(16);
             doc.text('Rankings - Pelada da Paz', 40, 40);
 
             // ===== COLUNA ESQUERDA: RANKING DE NOTAS =====
@@ -435,13 +435,13 @@
                 capas: j.pontosCapa || 0
             }));
 
-            // ===== CONFIGURAR TABELAS =====
-            const marginLeft = 40;
+            // ===== CONFIGURAR TABELAS LADO A LADO =====
+            const marginLeft = 30;
             const marginTop = 60;
-            const colWidth = (doc.internal.pageSize.width - 80) / 2 - 10;
+            const colWidth = (doc.internal.pageSize.width - 60) / 2 - 10;
 
             // Coluna esquerda: Notas
-            doc.setFontSize(14);
+            doc.setFontSize(11);
             doc.text('Ranking de Notas', marginLeft, marginTop);
 
             const tableNotas = {
@@ -451,22 +451,22 @@
                 ],
                 body: dadosNotas.map(j => [j.posicao + '°', j.nome, j.nota, j.capas]),
                 theme: 'striped',
-                headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 10 },
-                bodyStyles: { fontSize: 9 },
+                headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 8 },
+                bodyStyles: { fontSize: 7 },
                 columnStyles: {
-                    0: { cellWidth: 35, halign: 'center' },
-                    1: { cellWidth: 105 },
-                    2: { cellWidth: 35, halign: 'center' },
-                    3: { cellWidth: 40, halign: 'center' }
+                    0: { cellWidth: 20, halign: 'center' },
+                    1: { cellWidth: 120 },
+                    2: { cellWidth: 25, halign: 'center' },
+                    3: { cellWidth: 25, halign: 'center' }
                 },
-                margin: { left: marginLeft, right: marginLeft + colWidth + 20 }
+                margin: { left: marginLeft, right: marginLeft + colWidth + 10 }
             };
 
             doc.autoTable(tableNotas);
 
             // Coluna direita: Capas
-            doc.setFontSize(14);
-            doc.text('Ranking de Capas', marginLeft + colWidth + 20, marginTop);
+            doc.setFontSize(11);
+            doc.text('Ranking de Capas', marginLeft + colWidth + 10, marginTop);
 
             const tableCapas = {
                 startY: marginTop + 10,
@@ -475,14 +475,14 @@
                 ],
                 body: dadosCapas.map(j => [j.posicao + '°', j.nome, j.capas]),
                 theme: 'striped',
-                headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 10 },
-                bodyStyles: { fontSize: 9 },
+                headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 8 },
+                bodyStyles: { fontSize: 7 },
                 columnStyles: {
-                    0: { cellWidth: 35, halign: 'center' },
-                    1: { cellWidth: 105 },
-                    2: { cellWidth: 45, halign: 'center' }
+                    0: { cellWidth: 20, halign: 'center' },
+                    1: { cellWidth: 120 },
+                    2: { cellWidth: 30, halign: 'center' }
                 },
-                margin: { left: marginLeft + colWidth + 20, right: 40 }
+                margin: { left: marginLeft + colWidth + 10, right: 30 }
             };
 
             doc.autoTable(tableCapas);
