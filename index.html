@@ -407,8 +407,8 @@ function exportarPDF() {
     const doc = new jsPDF('p', 'pt', 'a4');
 
     // ===== TÍTULO =====
-    doc.setFontSize(14);
-    doc.text('Rankings - Pelada da Paz', 15, 30);
+    doc.setFontSize(12);
+    doc.text('Rankings - Pelada da Paz', 10, 25);
 
     // ===== COLUNA ESQUERDA: RANKING DE NOTAS =====
     const rankingNotas = [...jogadores].sort((a, b) => {
@@ -436,30 +436,32 @@ function exportarPDF() {
     }));
 
     // ===== CONFIGURAR TABELAS LADO A LADO =====
-    const marginLeft = 15;
-    const marginTop = 40;
-    // Largura disponível: 595 - 30 = 565
-    // Dividir em duas colunas com espaço de 5pt entre elas
-    const colWidth = (565 - 5) / 2;
+    const marginLeft = 8;
+    const marginTop = 35;
+    // Largura total da página: 595pt
+    // Margens: 8 + 8 = 16, espaço entre tabelas: 5
+    // Largura disponível: 595 - 16 - 5 = 574
+    // Cada tabela: 574 / 2 = 287pt
+    const colWidth = 287;
 
     // Coluna esquerda: Notas
-    doc.setFontSize(10);
+    doc.setFontSize(9);
     doc.text('Ranking de Notas', marginLeft, marginTop);
 
     const tableNotas = {
-        startY: marginTop + 8,
+        startY: marginTop + 6,
         head: [
             ['Pos.', 'Nome', 'Nota', 'Capas']
         ],
         body: dadosNotas.map(j => [j.posicao + '°', j.nome, j.nota, j.capas]),
         theme: 'striped',
-        headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 7 },
-        bodyStyles: { fontSize: 6 },
+        headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 6 },
+        bodyStyles: { fontSize: 5 },
         columnStyles: {
-            0: { cellWidth: 18, halign: 'center' },
+            0: { cellWidth: 16, halign: 'center' },
             1: { cellWidth: 100 },
-            2: { cellWidth: 22, halign: 'center' },
-            3: { cellWidth: 22, halign: 'center' }
+            2: { cellWidth: 18, halign: 'center' },
+            3: { cellWidth: 18, halign: 'center' }
         },
         margin: { left: marginLeft, right: marginLeft + colWidth + 5 }
     };
@@ -467,24 +469,24 @@ function exportarPDF() {
     doc.autoTable(tableNotas);
 
     // Coluna direita: Capas
-    doc.setFontSize(10);
+    doc.setFontSize(9);
     doc.text('Ranking de Capas', marginLeft + colWidth + 5, marginTop);
 
     const tableCapas = {
-        startY: marginTop + 8,
+        startY: marginTop + 6,
         head: [
             ['Pos.', 'Nome', 'Capas']
         ],
         body: dadosCapas.map(j => [j.posicao + '°', j.nome, j.capas]),
         theme: 'striped',
-        headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 7 },
-        bodyStyles: { fontSize: 6 },
+        headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 6 },
+        bodyStyles: { fontSize: 5 },
         columnStyles: {
-            0: { cellWidth: 18, halign: 'center' },
+            0: { cellWidth: 16, halign: 'center' },
             1: { cellWidth: 100 },
-            2: { cellWidth: 25, halign: 'center' }
+            2: { cellWidth: 20, halign: 'center' }
         },
-        margin: { left: marginLeft + colWidth + 5, right: 15 }
+        margin: { left: marginLeft + colWidth + 5, right: 8 }
     };
 
     doc.autoTable(tableCapas);
@@ -493,8 +495,8 @@ function exportarPDF() {
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
-        doc.setFontSize(7);
-        doc.text(`Pelada da Paz - Página ${i} de ${pageCount}`, 15, doc.internal.pageSize.height - 15);
+        doc.setFontSize(6);
+        doc.text(`Pelada da Paz - Página ${i} de ${pageCount}`, 8, doc.internal.pageSize.height - 10);
     }
 
     doc.save('ranking_pelada_da_paz.pdf');
