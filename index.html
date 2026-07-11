@@ -411,6 +411,19 @@ function exportarPDF() {
     doc.text('Rankings - Pelada da Paz', 40, 40);
 
     // ===== DADOS =====
+    // Ranking de Capas (será a primeira tabela, à esquerda)
+    const rankingCapas = [...jogadores].sort((a, b) => {
+        if (b.pontosCapa !== a.pontosCapa) return b.pontosCapa - a.pontosCapa;
+        return a.nome.localeCompare(b.nome);
+    });
+
+    const dadosCapas = rankingCapas.map((j, i) => ({
+        posicao: i + 1,
+        nome: j.nome,
+        capas: j.pontosCapa || 0
+    }));
+
+    // Ranking de Notas (será a segunda tabela, à direita)
     const rankingNotas = [...jogadores].sort((a, b) => {
         if (b.nota !== a.nota) return b.nota - a.nota;
         return (b.pontosCapa || 0) - (a.pontosCapa || 0);
@@ -423,30 +436,42 @@ function exportarPDF() {
         capas: j.pontosCapa || 0
     }));
 
-    const rankingCapas = [...jogadores].sort((a, b) => {
-        if (b.pontosCapa !== a.pontosCapa) return b.pontosCapa - a.pontosCapa;
-        return a.nome.localeCompare(b.nome);
-    });
-
-    const dadosCapas = rankingCapas.map((j, i) => ({
-        posicao: i + 1,
-        nome: j.nome,
-        capas: j.pontosCapa || 0
-    }));
-
-    // ===== CONFIGURAÇÃO (larguras fixas em pontos) =====
+    // ===== CONFIGURAÇÃO =====
     const marginLeft = 40;
     const marginTop = 60;
     const pageWidth = doc.internal.pageSize.width; // ~595pt para A4
-    const colWidth = 230; // largura fixa para cada tabela
-    const gap = 20; // espaço entre as tabelas
+    const colWidth = (pageWidth - 80 - 10) / 2; // 245pt cada
+    const gap = 10; // espaço entre as tabelas
 
-    // ===== TABELA 1 (Notas) =====
+    // ===== TABELA 1 (Capas - ESQUERDA) =====
     doc.setFontSize(14);
-    doc.text('Ranking de Notas', marginLeft, marginTop);
+    doc.text('Ranking de Capas', marginLeft, marginTop);
+
+    const tableCapas = {
+        startY: marginTop + 10,
+        head: [['Pos.', 'Nome', 'Capas']],
+        body: dadosCapas.map(j => [j.posicao + '°', j.nome, j.capas]),
+        theme: 'striped',
+        headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 10 },
+        bodyStyles: { fontSize: 9 },
+        columnStyles: {
+            0: { cellWidth: 35, halign: 'center' },
+            1: { cellWidth: 140 },
+            2: { cellWidth: 45, halign: 'center' }
+        },
+        margin: { left: marginLeft, right: marginLeft + colWidth + gap },
+        tableWidth: colWidth
+    };
+
+    doc.autoTable(tableCapas);
+
+    // ===== TABELA 2 (Notas - DIREITA) =====
+    const startYNotas = marginTop;
+    doc.setFontSize(14);
+    doc.text('Ranking de Notas', marginLeft + colWidth + gap, startYNotas);
 
     const tableNotas = {
-        startY: marginTop + 10,
+        startY: startYNotas + 10,
         head: [['Pos.', 'Nome', 'Nota', 'Capas']],
         body: dadosNotas.map(j => [j.posicao + '°', j.nome, j.nota, j.capas]),
         theme: 'striped',
@@ -454,38 +479,15 @@ function exportarPDF() {
         bodyStyles: { fontSize: 9 },
         columnStyles: {
             0: { cellWidth: 30, halign: 'center' },
-            1: { cellWidth: 110 },
-            2: { cellWidth: 30, halign: 'center' },
+            1: { cellWidth: 105 },
+            2: { cellWidth: 35, halign: 'center' },
             3: { cellWidth: 35, halign: 'center' }
-        },
-        margin: { left: marginLeft, right: marginLeft + colWidth + gap },
-        tableWidth: colWidth
-    };
-
-    doc.autoTable(tableNotas);
-
-    // ===== TABELA 2 (Capas) =====
-    const startYCapas = marginTop;
-    doc.setFontSize(14);
-    doc.text('Ranking de Capas', marginLeft + colWidth + gap, startYCapas);
-
-    const tableCapas = {
-        startY: startYCapas + 10,
-        head: [['Pos.', 'Nome', 'Capas']],
-        body: dadosCapas.map(j => [j.posicao + '°', j.nome, j.capas]),
-        theme: 'striped',
-        headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 10 },
-        bodyStyles: { fontSize: 9 },
-        columnStyles: {
-            0: { cellWidth: 30, halign: 'center' },
-            1: { cellWidth: 140 },
-            2: { cellWidth: 35, halign: 'center' }
         },
         margin: { left: marginLeft + colWidth + gap, right: 40 },
         tableWidth: colWidth
     };
 
-    doc.autoTable(tableCapas);
+    doc.autoTable(tableNotas);
 
     // ===== RODAPÉ =====
     const pageCount = doc.internal.getNumberOfPages();
