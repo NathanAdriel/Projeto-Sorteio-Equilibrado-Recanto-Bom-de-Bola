@@ -230,7 +230,7 @@
 
     <script>
         // ============================================================
-        //  DICIONÁRIO DE CORES (PORTUGUÊS → INGLÊS)
+        //  DICIONÁRIO DE CORES
         // ============================================================
         const coresPortugues = {
             'vermelho': 'red', 'azul': 'blue', 'verde': 'green', 'amarelo': 'yellow',
@@ -395,156 +395,150 @@
         }
 
         // ============================================================
-        //  EXPORTAR PDF (LADO A LADO, UMA COLUNA CADA)
+        //  EXPORTAR PDF (VERTICAL, TABELA ÚNICA COM COLUNA VAZIA)
         // ============================================================
-  function exportarPDF() {
-    if (jogadores.length === 0) {
-        alert('Não há jogadores para exportar.');
-        return;
-    }
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('landscape', 'pt', 'a4');
-
-    // ===== TÍTULO GERAL =====
-    doc.setFontSize(20);
-    doc.text('Rankings - Pelada da Paz', 40, 40);
-
-    // ===== DADOS =====
-    const rankingNotas = [...jogadores].sort((a, b) => {
-        if (b.nota !== a.nota) return b.nota - a.nota;
-        return (b.pontosCapa || 0) - (a.pontosCapa || 0);
-    });
-
-    const dadosNotas = rankingNotas.map((j, i) => ({
-        posicao: i + 1,
-        nome: j.nome,
-        nota: j.nota,
-        capas: j.pontosCapa || 0
-    }));
-
-    const rankingCapas = [...jogadores].sort((a, b) => {
-        if (b.pontosCapa !== a.pontosCapa) return b.pontosCapa - a.pontosCapa;
-        return a.nome.localeCompare(b.nome);
-    });
-
-    const dadosCapas = rankingCapas.map((j, i) => ({
-        posicao: i + 1,
-        nome: j.nome,
-        capas: j.pontosCapa || 0
-    }));
-
-    // ================================================================
-    //  CONSTRUIR TABELA ÚNICA
-    // ================================================================
-    const marginLeft = 40;
-    const marginTop = 60;
-    const maxLinhas = Math.max(dadosNotas.length, dadosCapas.length);
-
-    const body = [];
-    for (let i = 0; i < maxLinhas; i++) {
-        const nota = dadosNotas[i] || { posicao: '', nome: '', nota: '', capas: '' };
-        const capa = dadosCapas[i] || { posicao: '', nome: '', capas: '' };
-        body.push([
-            nota.posicao ? nota.posicao + '°' : '',
-            nota.nome,
-            nota.nota !== '' ? nota.nota : '',
-            nota.capas !== '' ? nota.capas : '',
-            '', // COLUNA VAZIA
-            capa.posicao ? capa.posicao + '°' : '',
-            capa.nome,
-            capa.capas !== '' ? capa.capas : ''
-        ]);
-    }
-
-    // ===== LARGURAS DAS COLUNAS =====
-    // Total disponível: ~762pt (842 - 80)
-    // Distribuição:
-    // Pos(30) + Nome(140) + Nota(35) + Capas(45) + Vazio(292) + Pos(30) + Nome(140) + Capas(50) = 762
-    const colunas = {
-        0: { cellWidth: 30, halign: 'center' },
-        1: { cellWidth: 140 },
-        2: { cellWidth: 35, halign: 'center' },
-        3: { cellWidth: 45, halign: 'center' },
-        4: { cellWidth: 292, halign: 'center' }, // COLUNA VAZIA (sem cor)
-        5: { cellWidth: 30, halign: 'center' },
-        6: { cellWidth: 140 },
-        7: { cellWidth: 50, halign: 'center' } // Aumentado para caber "Capas"
-    };
-
-    // ===== CALCULAR POSIÇÃO DO TÍTULO "Ranking de Capas" =====
-    // Posição X: marginLeft + (colunas 0 a 4) + 30 (Pos) + 140 (Nome) + 50 (Capas) = marginLeft + 30+140+35+45+292+30+140 = marginLeft + 712
-    const posXCapas = marginLeft + 30 + 140 + 35 + 45 + 292 + 30;
-
-    // ===== TÍTULOS DOS RANKINGS (apenas na primeira página) =====
-    // Vamos adicionar manualmente na primeira página
-    doc.setFontSize(14);
-    doc.text('Ranking de Notas', marginLeft, marginTop);
-    doc.text('Ranking de Capas', posXCapas, marginTop);
-
-    // ================================================================
-    //  GERAR TABELA
-    // ================================================================
-    const table = {
-        startY: marginTop + 10,
-        head: [
-            ['Pos.', 'Nome', 'Nota', 'Capas', '', 'Pos.', 'Nome', 'Capas']
-        ],
-        body: body,
-        theme: 'striped',
-        headStyles: {
-            fontSize: 10,
-            halign: 'center',
-            fillColor: '#8e44ad', // cor padrão para todas as colunas (roxo)
-            textColor: '#fff'
-        },
-        bodyStyles: { fontSize: 9 },
-        columnStyles: colunas,
-        margin: { left: marginLeft, right: 40 },
-        // ===== CONFIGURAR CORES INDIVIDUAIS DOS CABEÇALHOS =====
-        didParseCell: function(data) {
-            // data.cell - a célula
-            // data.column.index - índice da coluna
-            // data.section - 'head' ou 'body'
-            if (data.section === 'head') {
-                // Colunas 0-3: roxo
-                if (data.column.index >= 0 && data.column.index <= 3) {
-                    data.cell.styles.fillColor = '#8e44ad';
-                    data.cell.styles.textColor = '#ffffff';
-                }
-                // Coluna 4: sem cor (fundo branco/transparente)
-                else if (data.column.index === 4) {
-                    data.cell.styles.fillColor = '#ffffff';
-                    data.cell.styles.textColor = '#cccccc'; // cinza claro para o texto vazio
-                }
-                // Colunas 5-7: azul
-                else if (data.column.index >= 5 && data.column.index <= 7) {
-                    data.cell.styles.fillColor = '#2980b9';
-                    data.cell.styles.textColor = '#ffffff';
-                }
+        function exportarPDF() {
+            if (jogadores.length === 0) {
+                alert('Não há jogadores para exportar.');
+                return;
             }
-            // Para o corpo, manter o padrão striped (não alterar)
+
+            const { jsPDF } = window.jspdf;
+            // ===== ORIENTAÇÃO VERTICAL (RETRATO) =====
+            const doc = new jsPDF('portrait', 'pt', 'a4');
+
+            // ===== TÍTULO GERAL =====
+            doc.setFontSize(20);
+            doc.text('Rankings - Pelada da Paz', 40, 40);
+
+            // ===== DADOS =====
+            const rankingNotas = [...jogadores].sort((a, b) => {
+                if (b.nota !== a.nota) return b.nota - a.nota;
+                return (b.pontosCapa || 0) - (a.pontosCapa || 0);
+            });
+
+            const dadosNotas = rankingNotas.map((j, i) => ({
+                posicao: i + 1,
+                nome: j.nome,
+                nota: j.nota,
+                capas: j.pontosCapa || 0
+            }));
+
+            const rankingCapas = [...jogadores].sort((a, b) => {
+                if (b.pontosCapa !== a.pontosCapa) return b.pontosCapa - a.pontosCapa;
+                return a.nome.localeCompare(b.nome);
+            });
+
+            const dadosCapas = rankingCapas.map((j, i) => ({
+                posicao: i + 1,
+                nome: j.nome,
+                capas: j.pontosCapa || 0
+            }));
+
+            // ================================================================
+            //  CONSTRUIR TABELA ÚNICA
+            // ================================================================
+            const marginLeft = 30;
+            const marginTop = 60;
+            const maxLinhas = Math.max(dadosNotas.length, dadosCapas.length);
+
+            const body = [];
+            for (let i = 0; i < maxLinhas; i++) {
+                const nota = dadosNotas[i] || { posicao: '', nome: '', nota: '', capas: '' };
+                const capa = dadosCapas[i] || { posicao: '', nome: '', capas: '' };
+                body.push([
+                    nota.posicao ? nota.posicao + '°' : '',
+                    nota.nome,
+                    nota.nota !== '' ? nota.nota : '',
+                    nota.capas !== '' ? nota.capas : '',
+                    '', // COLUNA VAZIA
+                    capa.posicao ? capa.posicao + '°' : '',
+                    capa.nome,
+                    capa.capas !== '' ? capa.capas : ''
+                ]);
+            }
+
+            // ===== LARGURAS DAS COLUNAS (retrato A4: ~595pt) =====
+            // Margens: 30 + 30 = 60, sobra ~535pt
+            // Distribuição: Pos(25) + Nome(100) + Nota(30) + Capas(35) + Vazio(145) + Pos(25) + Nome(100) + Capas(35) = 495
+            // Ajuste fino para caber:
+            const colunas = {
+                0: { cellWidth: 25, halign: 'center' },
+                1: { cellWidth: 100 },
+                2: { cellWidth: 30, halign: 'center' },
+                3: { cellWidth: 35, halign: 'center' },
+                4: { cellWidth: 145, halign: 'center' }, // COLUNA VAZIA (sem cor)
+                5: { cellWidth: 25, halign: 'center' },
+                6: { cellWidth: 100 },
+                7: { cellWidth: 35, halign: 'center' }
+            };
+
+            // ===== CALCULAR POSIÇÃO DO TÍTULO "Ranking de Capas" =====
+            // X = marginLeft + col0 + col1 + col2 + col3 + col4 + col5
+            const posXCapas = marginLeft + 25 + 100 + 30 + 35 + 145 + 25;
+
+            // ===== TÍTULOS DOS RANKINGS (apenas na primeira página) =====
+            doc.setFontSize(12);
+            doc.text('Ranking de Notas', marginLeft, marginTop);
+            doc.text('Ranking de Capas', posXCapas, marginTop);
+
+            // ================================================================
+            //  GERAR TABELA
+            // ================================================================
+            const table = {
+                startY: marginTop + 10,
+                head: [
+                    ['Pos.', 'Nome', 'Nota', 'Capas', '', 'Pos.', 'Nome', 'Capas']
+                ],
+                body: body,
+                theme: 'striped',
+                headStyles: {
+                    fontSize: 9,
+                    halign: 'center',
+                    fillColor: '#8e44ad',
+                    textColor: '#fff'
+                },
+                bodyStyles: { fontSize: 8 },
+                columnStyles: colunas,
+                margin: { left: marginLeft, right: 30 },
+                didParseCell: function(data) {
+                    if (data.section === 'head') {
+                        // Colunas 0-3: roxo
+                        if (data.column.index >= 0 && data.column.index <= 3) {
+                            data.cell.styles.fillColor = '#8e44ad';
+                            data.cell.styles.textColor = '#ffffff';
+                        }
+                        // Coluna 4: sem cor (fundo branco)
+                        else if (data.column.index === 4) {
+                            data.cell.styles.fillColor = '#ffffff';
+                            data.cell.styles.textColor = '#cccccc';
+                        }
+                        // Colunas 5-7: azul
+                        else if (data.column.index >= 5 && data.column.index <= 7) {
+                            data.cell.styles.fillColor = '#2980b9';
+                            data.cell.styles.textColor = '#ffffff';
+                        }
+                    }
+                    // Coluna 4 no corpo: fundo branco para todas as linhas
+                    if (data.section === 'body' && data.column.index === 4) {
+                        data.cell.styles.fillColor = '#ffffff';
+                    }
+                }
+            };
+
+            doc.autoTable(table);
+
+            // ===== RODAPÉ =====
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.text(`Pelada da Paz - Página ${i} de ${pageCount}`, 30, doc.internal.pageSize.height - 20);
+            }
+
+            doc.save('ranking_pelada_da_paz.pdf');
         }
-    };
 
-    // Executar a tabela
-    doc.autoTable(table);
-
-    // ===== REMOVER TÍTULOS DAS PÁGINAS SEGUINTES =====
-    // A opção didDrawPage não é necessária, pois os títulos já estão na primeira página.
-    // O que pode acontecer é que nas páginas seguintes, os títulos não apareçam.
-    // Como o usuário quer que apareçam apenas na primeira página, já está correto.
-
-    // ===== RODAPÉ =====
-    const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-        doc.setPage(i);
-        doc.setFontSize(8);
-        doc.text(`Pelada da Paz - Página ${i} de ${pageCount}`, 40, doc.internal.pageSize.height - 20);
-    }
-
-    doc.save('ranking_pelada_da_paz.pdf');
-}
         // ============================================================
         //  CRUD JOGADORES
         // ============================================================
