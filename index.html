@@ -446,7 +446,7 @@ function exportarPDF() {
     const colWidth = (pageWidth - 80) / 2; // ~381pt cada
 
     // ================================================================
-    //  TABELA 1: RANKING DE NOTAS (ESQUERDA)
+    //  TABELA 1: RANKING DE NOTAS (1 coluna, ESQUERDA)
     // ================================================================
     doc.setFontSize(14);
     doc.text('Ranking de Notas', marginLeft, marginTop);
@@ -472,9 +472,9 @@ function exportarPDF() {
     doc.autoTable(tableNotas);
 
     // ================================================================
-    //  TABELA 2: RANKING DE CAPAS (DIREITA)
+    //  TABELA 2: RANKING DE CAPAS (1 coluna, DIREITA)
     // ================================================================
-    const startYCapas = marginTop;
+    const startYCapas = marginTop; // mesma altura da primeira tabela
     doc.setFontSize(14);
     doc.text('Ranking de Capas', marginLeft + colWidth + 15, startYCapas);
 
@@ -506,8 +506,7 @@ function exportarPDF() {
     }
 
     doc.save('ranking_pelada_da_paz.pdf');
-}
-        // ============================================================
+}        // ============================================================
         //  CRUD JOGADORES
         // ============================================================
         function adicionarJogadorPlantel() {
