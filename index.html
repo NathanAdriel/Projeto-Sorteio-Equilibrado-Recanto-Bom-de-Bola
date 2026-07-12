@@ -395,118 +395,120 @@
         }
 
         // ============================================================
-        //  EXPORTAR PDF (CORRIGIDO)
+        //  EXPORTAR PDF (LADO A LADO, UMA COLUNA CADA)
         // ============================================================
-function exportarPDF() {
-    if (jogadores.length === 0) {
-        alert('Não há jogadores para exportar.');
-        return;
-    }
+        function exportarPDF() {
+            if (jogadores.length === 0) {
+                alert('Não há jogadores para exportar.');
+                return;
+            }
 
-    const { jsPDF } = window.jspdf;
-    // ===== ORIENTAÇÃO PAISAGEM (HORIZONTAL) =====
-    const doc = new jsPDF('landscape', 'pt', 'a4');
+            const { jsPDF } = window.jspdf;
+            // ===== ORIENTAÇÃO PAISAGEM =====
+            const doc = new jsPDF('landscape', 'pt', 'a4');
 
-    // ===== TÍTULO =====
-    doc.setFontSize(20);
-    doc.text('Rankings - Pelada da Paz', 40, 40);
+            // ===== TÍTULO =====
+            doc.setFontSize(20);
+            doc.text('Rankings - Pelada da Paz', 40, 40);
 
-    // ===== DADOS =====
-    // Ranking de Notas
-    const rankingNotas = [...jogadores].sort((a, b) => {
-        if (b.nota !== a.nota) return b.nota - a.nota;
-        return (b.pontosCapa || 0) - (a.pontosCapa || 0);
-    });
+            // ===== DADOS =====
+            // Ranking de Notas
+            const rankingNotas = [...jogadores].sort((a, b) => {
+                if (b.nota !== a.nota) return b.nota - a.nota;
+                return (b.pontosCapa || 0) - (a.pontosCapa || 0);
+            });
 
-    const dadosNotas = rankingNotas.map((j, i) => ({
-        posicao: i + 1,
-        nome: j.nome,
-        nota: j.nota,
-        capas: j.pontosCapa || 0
-    }));
+            const dadosNotas = rankingNotas.map((j, i) => ({
+                posicao: i + 1,
+                nome: j.nome,
+                nota: j.nota,
+                capas: j.pontosCapa || 0
+            }));
 
-    // Ranking de Capas
-    const rankingCapas = [...jogadores].sort((a, b) => {
-        if (b.pontosCapa !== a.pontosCapa) return b.pontosCapa - a.pontosCapa;
-        return a.nome.localeCompare(b.nome);
-    });
+            // Ranking de Capas
+            const rankingCapas = [...jogadores].sort((a, b) => {
+                if (b.pontosCapa !== a.pontosCapa) return b.pontosCapa - a.pontosCapa;
+                return a.nome.localeCompare(b.nome);
+            });
 
-    const dadosCapas = rankingCapas.map((j, i) => ({
-        posicao: i + 1,
-        nome: j.nome,
-        capas: j.pontosCapa || 0
-    }));
+            const dadosCapas = rankingCapas.map((j, i) => ({
+                posicao: i + 1,
+                nome: j.nome,
+                capas: j.pontosCapa || 0
+            }));
 
-    // ================================================================
-    //  CONFIGURAÇÕES - PAISAGEM
-    // ================================================================
-    const marginLeft = 40;
-    const marginTop = 60;
-    const pageWidth = doc.internal.pageSize.width; // ~842pt em paisagem
-    const colWidth = (pageWidth - 80) / 2; // ~381pt cada
+            // ================================================================
+            //  CONFIGURAÇÕES - PAISAGEM
+            // ================================================================
+            const marginLeft = 40;
+            const marginTop = 60;
+            const pageWidth = doc.internal.pageSize.width; // ~842pt em paisagem
+            const colWidth = (pageWidth - 80) / 2; // ~381pt cada
 
-    // ================================================================
-    //  TABELA 1: RANKING DE NOTAS (1 coluna, ESQUERDA)
-    // ================================================================
-    doc.setFontSize(14);
-    doc.text('Ranking de Notas', marginLeft, marginTop);
+            // ================================================================
+            //  TABELA 1: RANKING DE NOTAS (1 coluna, ESQUERDA)
+            // ================================================================
+            doc.setFontSize(14);
+            doc.text('Ranking de Notas', marginLeft, marginTop);
 
-    const tableNotas = {
-        startY: marginTop + 10,
-        head: [
-            ['Pos.', 'Nome', 'Nota', 'Capas']
-        ],
-        body: dadosNotas.map(j => [j.posicao + '°', j.nome, j.nota, j.capas]),
-        theme: 'striped',
-        headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 10 },
-        bodyStyles: { fontSize: 9 },
-        columnStyles: {
-            0: { cellWidth: 35, halign: 'center' },
-            1: { cellWidth: 160 },
-            2: { cellWidth: 40, halign: 'center' },
-            3: { cellWidth: 40, halign: 'center' }
-        },
-        margin: { left: marginLeft, right: marginLeft + colWidth + 15 }
-    };
+            const tableNotas = {
+                startY: marginTop + 10,
+                head: [
+                    ['Pos.', 'Nome', 'Nota', 'Capas']
+                ],
+                body: dadosNotas.map(j => [j.posicao + '°', j.nome, j.nota, j.capas]),
+                theme: 'striped',
+                headStyles: { fillColor: '#8e44ad', textColor: '#fff', fontSize: 10 },
+                bodyStyles: { fontSize: 9 },
+                columnStyles: {
+                    0: { cellWidth: 35, halign: 'center' },
+                    1: { cellWidth: 160 },
+                    2: { cellWidth: 40, halign: 'center' },
+                    3: { cellWidth: 40, halign: 'center' }
+                },
+                margin: { left: marginLeft, right: marginLeft + colWidth + 15 }
+            };
 
-    doc.autoTable(tableNotas);
+            doc.autoTable(tableNotas);
 
-    // ================================================================
-    //  TABELA 2: RANKING DE CAPAS (1 coluna, DIREITA)
-    // ================================================================
-    const startYCapas = marginTop; // mesma altura da primeira tabela
-    doc.setFontSize(14);
-    doc.text('Ranking de Capas', marginLeft + colWidth + 15, startYCapas);
+            // ================================================================
+            //  TABELA 2: RANKING DE CAPAS (1 coluna, DIREITA)
+            // ================================================================
+            const startYCapas = marginTop; // mesma altura da primeira
+            doc.setFontSize(14);
+            doc.text('Ranking de Capas', marginLeft + colWidth + 15, startYCapas);
 
-    const tableCapas = {
-        startY: startYCapas + 10,
-        head: [
-            ['Pos.', 'Nome', 'Capas']
-        ],
-        body: dadosCapas.map(j => [j.posicao + '°', j.nome, j.capas]),
-        theme: 'striped',
-        headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 10 },
-        bodyStyles: { fontSize: 9 },
-        columnStyles: {
-            0: { cellWidth: 35, halign: 'center' },
-            1: { cellWidth: 190 },
-            2: { cellWidth: 40, halign: 'center' }
-        },
-        margin: { left: marginLeft + colWidth + 15, right: 40 }
-    };
+            const tableCapas = {
+                startY: startYCapas + 10,
+                head: [
+                    ['Pos.', 'Nome', 'Capas']
+                ],
+                body: dadosCapas.map(j => [j.posicao + '°', j.nome, j.capas]),
+                theme: 'striped',
+                headStyles: { fillColor: '#2980b9', textColor: '#fff', fontSize: 10 },
+                bodyStyles: { fontSize: 9 },
+                columnStyles: {
+                    0: { cellWidth: 35, halign: 'center' },
+                    1: { cellWidth: 190 },
+                    2: { cellWidth: 40, halign: 'center' }
+                },
+                margin: { left: marginLeft + colWidth + 15, right: 40 }
+            };
 
-    doc.autoTable(tableCapas);
+            doc.autoTable(tableCapas);
 
-    // ===== RODAPÉ =====
-    const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-        doc.setPage(i);
-        doc.setFontSize(8);
-        doc.text(`Pelada da Paz - Página ${i} de ${pageCount}`, 40, doc.internal.pageSize.height - 20);
-    }
+            // ===== RODAPÉ =====
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.text(`Pelada da Paz - Página ${i} de ${pageCount}`, 40, doc.internal.pageSize.height - 20);
+            }
 
-    doc.save('ranking_pelada_da_paz.pdf');
-}        // ============================================================
+            doc.save('ranking_pelada_da_paz.pdf');
+        }
+
+        // ============================================================
         //  CRUD JOGADORES
         // ============================================================
         function adicionarJogadorPlantel() {
@@ -1009,7 +1011,7 @@ function exportarPDF() {
             } else if (tipo === 'empate') {
                 const nova = time.empates + delta;
                 if (nova < 0) {
-                    alert('Empates não podem ficar negativos.');
+                    alert('Empates não podem ficar negativas.');
                     return;
                 }
                 time.empates = nova;
@@ -1074,7 +1076,7 @@ function exportarPDF() {
             let houveBonus = false;
             let houvePenalidade = false;
 
-            // ---- TRATAMENTO DO PRIMEIRO LUGAR (BÔNUS E PONTOS CAPA) ----
+            // ---- TRATAMENTO DO PRIMEIRO LUGAR ----
             if (indicesMax.length > 1) {
                 mensagem = '🏆 Houve empate no primeiro lugar. Nenhum time receberá bônus.\n';
                 indicesMax.forEach(idx => {
@@ -1108,7 +1110,7 @@ function exportarPDF() {
                 mensagem = `🏆 Campeão: ${timeCampeao.nome || 'Time ' + (idxCampeao+1)} (${timeCampeao.pontos} pts) → +0.5 para cada jogador e +1 ponto no Ranking de Capas.\n`;
             }
 
-            // ---- TRATAMENTO DO ÚLTIMO LUGAR (PENALIDADE) ----
+            // ---- TRATAMENTO DO ÚLTIMO LUGAR ----
             if (indicesMin.length > 1) {
                 mensagem += '📉 Houve empate no último lugar. Nenhum time será penalizado.';
             } else {
