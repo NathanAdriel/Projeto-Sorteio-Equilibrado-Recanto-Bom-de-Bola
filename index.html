@@ -397,7 +397,7 @@
         // ============================================================
         //  EXPORTAR PDF (LADO A LADO, UMA COLUNA CADA)
         // ============================================================
-     function exportarPDF() {
+    function exportarPDF() {
     if (jogadores.length === 0) {
         alert('Não há jogadores para exportar.');
         return;
@@ -435,7 +435,7 @@
     }));
 
     // ================================================================
-    //  CONSTRUIR UMA ÚNICA TABELA COM AS DUAS COLUNAS
+    //  CONSTRUIR UMA ÚNICA TABELA COM COLUNA VAZIA
     // ================================================================
     const marginLeft = 40;
     const marginTop = 60;
@@ -450,24 +450,27 @@
             nota.nome,
             nota.nota !== '' ? nota.nota : '',
             nota.capas !== '' ? nota.capas : '',
+            '', // COLUNA VAZIA (separador)
             capa.posicao ? capa.posicao + '°' : '',
             capa.nome,
-            capa.capas !== '' ? capa.capas : '',
-            ''
+            capa.capas !== '' ? capa.capas : ''
         ]);
     }
 
     // ================================================================
-    //  TABELA ÚNICA
+    //  CABEÇALHO COM DOIS TÍTULOS
     // ================================================================
     doc.setFontSize(14);
     doc.text('Ranking de Notas', marginLeft, marginTop);
-    doc.text('Ranking de Capas', marginLeft + 300, marginTop);
+    doc.text('Ranking de Capas', marginLeft + 340, marginTop);
 
+    // ================================================================
+    //  TABELA ÚNICA (8 colunas)
+    // ================================================================
     const table = {
         startY: marginTop + 10,
         head: [
-            ['Pos.', 'Nome', 'Nota', 'Capas', 'Pos.', 'Nome', 'Capas', '']
+            ['Pos.', 'Nome', 'Nota', 'Capas', '', 'Pos.', 'Nome', 'Capas']
         ],
         body: body,
         theme: 'striped',
@@ -478,10 +481,10 @@
             1: { cellWidth: 140 },
             2: { cellWidth: 35, halign: 'center' },
             3: { cellWidth: 35, halign: 'center' },
-            4: { cellWidth: 30, halign: 'center' },
-            5: { cellWidth: 140 },
-            6: { cellWidth: 35, halign: 'center' },
-            7: { cellWidth: 35 }
+            4: { cellWidth: 20, halign: 'center' }, // COLUNA VAZIA
+            5: { cellWidth: 30, halign: 'center' },
+            6: { cellWidth: 140 },
+            7: { cellWidth: 35, halign: 'center' }
         },
         margin: { left: marginLeft, right: 40 }
     };
