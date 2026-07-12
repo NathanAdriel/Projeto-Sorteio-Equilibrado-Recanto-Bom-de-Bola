@@ -395,7 +395,7 @@
         }
 
         // ============================================================
-        //  EXPORTAR PDF (VERTICAL, TABELA ÚNICA COM COLUNA VAZIA)
+        //  EXPORTAR PDF (VERTICAL, COM LARGURAS AJUSTADAS)
         // ============================================================
         function exportarPDF() {
             if (jogadores.length === 0) {
@@ -404,7 +404,6 @@
             }
 
             const { jsPDF } = window.jspdf;
-            // ===== ORIENTAÇÃO VERTICAL (RETRATO) =====
             const doc = new jsPDF('portrait', 'pt', 'a4');
 
             // ===== TÍTULO GERAL =====
@@ -439,6 +438,7 @@
             //  CONSTRUIR TABELA ÚNICA
             // ================================================================
             const marginLeft = 30;
+            const marginRight = 30;
             const marginTop = 60;
             const maxLinhas = Math.max(dadosNotas.length, dadosCapas.length);
 
@@ -458,24 +458,32 @@
                 ]);
             }
 
-            // ===== LARGURAS DAS COLUNAS (retrato A4: ~595pt) =====
-            // Margens: 30 + 30 = 60, sobra ~535pt
-            // Distribuição: Pos(25) + Nome(100) + Nota(30) + Capas(35) + Vazio(145) + Pos(25) + Nome(100) + Capas(35) = 495
-            // Ajuste fino para caber:
+            // ================================================================
+            //  LARGURAS DAS COLUNAS (retrato A4: ~595pt)
+            //  Margens: 30 + 30 = 60, sobra ~535pt
+            //  Coluna 5 (vazia) = coluna 3 (Nota) + coluna 4 (Capas)
+            //  col3 (Nota) = 30, col4 (Capas) = 40 → col5 = 70
+            //  Distribuição: Pos(25) + Nome(115) + Nota(30) + Capas(40) + Vazio(70) + Pos(25) + Nome(115) + Capas(40) = 460
+            //  Ajuste para caber: 460 < 535, podemos aumentar Nome para ~135
+            //  Distribuição final: Pos(25) + Nome(135) + Nota(30) + Capas(40) + Vazio(70) + Pos(25) + Nome(135) + Capas(40) = 500
+            //  Ainda sobra ~35pt que pode ser distribuído
+            //  Vou usar: Pos(25) + Nome(140) + Nota(30) + Capas(40) + Vazio(70) + Pos(25) + Nome(140) + Capas(40) = 510
+            //  Ajuste final:
+            // ================================================================
             const colunas = {
                 0: { cellWidth: 25, halign: 'center' },
-                1: { cellWidth: 100 },
+                1: { cellWidth: 145 },  // Nome - aumentado
                 2: { cellWidth: 30, halign: 'center' },
-                3: { cellWidth: 35, halign: 'center' },
-                4: { cellWidth: 145, halign: 'center' }, // COLUNA VAZIA (sem cor)
+                3: { cellWidth: 40, halign: 'center' }, // Capas - aumentado
+                4: { cellWidth: 70, halign: 'center' }, // COLUNA VAZIA = col3 + col4
                 5: { cellWidth: 25, halign: 'center' },
-                6: { cellWidth: 100 },
-                7: { cellWidth: 35, halign: 'center' }
+                6: { cellWidth: 145 }, // Nome do Ranking de Capas - aumentado
+                7: { cellWidth: 40, halign: 'center' } // Capas do Ranking de Capas - aumentado
             };
 
             // ===== CALCULAR POSIÇÃO DO TÍTULO "Ranking de Capas" =====
             // X = marginLeft + col0 + col1 + col2 + col3 + col4 + col5
-            const posXCapas = marginLeft + 25 + 100 + 30 + 35 + 145 + 25;
+            const posXCapas = marginLeft + 25 + 145 + 30 + 40 + 70 + 25;
 
             // ===== TÍTULOS DOS RANKINGS (apenas na primeira página) =====
             doc.setFontSize(12);
@@ -500,7 +508,7 @@
                 },
                 bodyStyles: { fontSize: 8 },
                 columnStyles: colunas,
-                margin: { left: marginLeft, right: 30 },
+                margin: { left: marginLeft, right: marginRight },
                 didParseCell: function(data) {
                     if (data.section === 'head') {
                         // Colunas 0-3: roxo
