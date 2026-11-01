@@ -227,18 +227,17 @@ let produtos = JSON.parse(localStorage.getItem('univalidade_produtos') || '[]');
 let categoriaSelecionada = null;
 let imagemBase64 = null;
 
-// Função para escapar HTML de forma segura
+// Função SEGURA para escapar HTML (sem usar aspas simples que quebram o código)
 function escapeHTML(str) {
   if (!str) return '';
-  return str.replace(/[&<>'"]/g, function(tag) {
-    const charsToReplace = {
+  return String(str).replace(/[&<>"']/g, function(match) {
+    return {
       '&': '&amp;',
       '<': '&lt;',
       '>': '&gt;',
-      "'": '&#39;',
-      '"': '&quot;'
-    };
-    return charsToReplace[tag] || tag;
+      '"': '&quot;',
+      "'": '&#39;'
+    }[match];
   });
 }
 
@@ -321,7 +320,7 @@ function salvarProduto() {
   }
 
   const novo = {
-    id: Date.now().toString(), // Garante que o ID seja salvo como string
+    id: Date.now().toString(), 
     nome: nome, 
     marca: marca,
     categoria: categoriaSelecionada,
@@ -361,7 +360,6 @@ function textoDias(dias) {
 
 function renderizar() {
   const lista = document.getElementById('listaProdutos');
-  // Filtra apenas os do promotor atual
   const meus = produtos.filter(p => p.promotor === promotor.nome);
 
   document.getElementById('countBPC').textContent = meus.filter(p => p.categoria === 'BPC').length;
@@ -385,7 +383,7 @@ function renderizar() {
     const dataFmt = new Date(p.validade + 'T00:00:00').toLocaleDateString('pt-BR');
     const qtd = p.quantidade || 1; 
     
-    // Usa o escapeHTML para o nome e passa o ID como string segura no onclick
+    // O botão de excluir chama a função passando o ID como string
     return `
       <div class="produto ${cls}">
         ${p.imagem ? `<img src="${p.imagem}" alt="">` : `<div style="width:58px;height:58px;border-radius:12px;background:#EEF1FB;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📦</div>`}
@@ -407,7 +405,6 @@ function renderizar() {
 
 function excluir(id) {
   if (!confirm('Excluir este produto?')) return;
-  // Filtra comparando como string para não ter erro de tipagem
   produtos = produtos.filter(p => String(p.id) !== String(id));
   localStorage.setItem('univalidade_produtos', JSON.stringify(produtos));
   renderizar();
