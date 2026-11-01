@@ -20,20 +20,13 @@
     --sombra: 0 4px 16px rgba(10, 66, 217, 0.08);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--fundo);
-    color: var(--texto);
-    padding-bottom: 90px;
-    min-height: 100vh;
-  }
+  body { font-family: 'Inter', sans-serif; background: var(--fundo); color: var(--texto); padding-bottom: 90px; min-height: 100vh; }
   h1, h2, h3 { font-family: 'Poppins', sans-serif; }
 
   .tela { display: none; padding: 20px; }
   .tela.ativa { display: block; animation: fade .3s ease; }
   @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-  /* LOGIN */
   .login-wrap { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 24px; }
   .logo-container { text-align: center; margin-bottom: 32px; }
   .logo-container img { width: 100%; max-width: 320px; height: auto; margin: 0 auto 16px; display: block; }
@@ -47,14 +40,12 @@
   .btn { width: 100%; padding: 16px; border: none; border-radius: 14px; background: linear-gradient(135deg, var(--azul-royal), var(--azul-claro)); color: white; font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; transition: .2s; box-shadow: 0 6px 16px rgba(10, 66, 217, .25); }
   .btn:active { transform: scale(.97); }
 
-  /* HEADER */
   .top-header { display: flex; align-items: center; margin-bottom: 24px; gap: 12px; }
   .top-header img { height: 40px; width: auto; object-fit: contain; }
   .header { margin-bottom: 20px; }
   .header h2 { font-size: 22px; }
   .header .sub { color: var(--cinza); font-size: 13px; margin-top: 2px; }
 
-  /* CARDS RESUMO */
   .resumo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
   .card-resumo { background: var(--card); border-radius: 16px; padding: 14px 8px; text-align: center; box-shadow: var(--sombra); }
   .card-resumo .num { font-family: 'Poppins'; font-size: 22px; font-weight: 700; }
@@ -63,48 +54,35 @@
   .card-resumo.hc .num { color: #2196F3; }
   .card-resumo.nt .num { color: #FF9800; }
 
-  /* LISTA PRODUTOS */
   .produto { background: var(--card); border-radius: 18px; padding: 14px; margin-bottom: 12px; box-shadow: var(--sombra); display: flex; gap: 14px; align-items: flex-start; border-left: 5px solid var(--verde); position: relative; }
   .produto.alerta { border-left-color: var(--amarelo); }
   .produto.vencido { border-left-color: var(--vermelho); }
   .produto img { width: 58px; height: 58px; border-radius: 12px; object-fit: cover; background: #EEF1FB; flex-shrink: 0; }
   .produto .info { flex: 1; min-width: 0; padding-right: 24px; }
-  
   .produto .nome { font-weight: 600; font-size: 15px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  
-  .produto .qtd-tag {
-    display: inline-block; background: #EEF1FB; color: var(--azul-royal); 
-    font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 8px; 
-    margin-bottom: 6px; border: 1px solid #D0D9F2;
-  }
-
+  .produto .qtd-tag { display: inline-block; background: #EEF1FB; color: var(--azul-royal); font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 8px; margin-bottom: 6px; border: 1px solid #D0D9F2; }
   .produto .cat { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; margin-left: 6px; }
   .cat.BPC { background: #F3E5F5; color: #8E24AA; }
   .cat.HC { background: #E3F2FD; color: #2196F3; }
   .cat.NT { background: #FFF3E0; color: #FF9800; }
-  
   .produto .dias { font-size: 12px; font-weight: 600; margin-top: 4px;}
   .produto .dias.ok { color: var(--verde); }
   .produto .dias.alerta { color: var(--amarelo); }
   .produto .dias.vencido { color: var(--vermelho); }
   .produto .data { font-size: 11px; color: var(--cinza); margin-top: 2px; }
-  
   .produto .del { position: absolute; top: 10px; right: 10px; background: #FFEBEE; border: none; color: var(--vermelho); width: 28px; height: 28px; border-radius: 8px; font-size: 16px; cursor: pointer; }
 
   .vazio { text-align: center; padding: 60px 20px; color: var(--cinza); }
   .vazio .emoji { font-size: 48px; margin-bottom: 12px; }
 
-  /* FAB */
   .fab { position: fixed; bottom: 90px; right: 20px; width: 60px; height: 60px; border-radius: 20px; border: none; background: linear-gradient(135deg, var(--azul-royal), var(--azul-claro)); color: white; font-size: 30px; cursor: pointer; box-shadow: 0 8px 20px rgba(10, 66, 217, .4); display: flex; align-items: center; justify-content: center; transition: .2s; z-index: 50; }
   .fab:active { transform: scale(.9); }
 
-  /* NAV */
   .nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; padding: 10px 0 14px; box-shadow: 0 -4px 16px rgba(0,0,0,.05); z-index: 10; }
   .nav button { flex: 1; background: none; border: none; font-family: inherit; font-size: 11px; color: var(--cinza); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
   .nav button .icone { font-size: 20px; }
   .nav button.ativo { color: var(--azul-royal); font-weight: 600; }
 
-  /* MODAL */
   .modal-bg { position: fixed; inset: 0; background: rgba(20,25,50,.5); display: none; align-items: flex-end; z-index: 100; }
   .modal-bg.aberto { display: flex; }
   .modal { background: var(--card); width: 100%; border-radius: 24px 24px 0 0; padding: 24px 20px calc(24px + env(safe-area-inset-bottom)); max-height: 90vh; overflow-y: auto; animation: slideUp .3s ease; }
@@ -120,7 +98,6 @@
   .cat-btn { padding: 12px 6px; border: 2px solid #E4E8F5; background: var(--card); border-radius: 12px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: .2s; }
   .cat-btn.sel { border-color: var(--azul-royal); background: #EEF1FF; color: var(--azul-royal); }
 
-  /* CONTROLE DE QUANTIDADE */
   .qtd-container { display: flex; align-items: center; background: #FAFBFF; border: 2px solid #E4E8F5; border-radius: 14px; overflow: hidden; height: 50px;}
   .qtd-btn { width: 50px; height: 100%; border: none; background: #EEF1FF; color: var(--azul-royal); font-size: 24px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .qtd-btn:active { background: #D0D9F2; }
@@ -215,6 +192,7 @@
       <input type="date" id="inValidade">
     </div>
 
+    <!-- O botão agora tem um try/catch invisível -->
     <button class="btn" onclick="salvarProduto()" style="margin-top: 10px;">💾 Salvar Produto</button>
   </div>
 </div>
@@ -227,17 +205,10 @@ let produtos = JSON.parse(localStorage.getItem('univalidade_produtos') || '[]');
 let categoriaSelecionada = null;
 let imagemBase64 = null;
 
-// Função SEGURA para escapar HTML (sem usar aspas simples que quebram o código)
 function escapeHTML(str) {
   if (!str) return '';
   return String(str).replace(/[&<>"']/g, function(match) {
-    return {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    }[match];
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[match];
   });
 }
 
@@ -245,7 +216,7 @@ function entrar() {
   const nome = document.getElementById('inNome').value.trim();
   const loja = document.getElementById('inLoja').value.trim();
   const cidade = document.getElementById('inCidade').value.trim();
-  if (!nome || !loja || !cidade) { mostrarToast('Preencha todos os campos', '#E53935'); return; }
+  if (!nome || !loja || !cidade) { alert('Por favor, preencha todos os campos!'); return; }
 
   promotor = { nome, loja, cidade };
   localStorage.setItem('univalidade_promotor', JSON.stringify(promotor));
@@ -308,35 +279,51 @@ function previewImg(e) {
   reader.readAsDataURL(file);
 }
 
+// AQUI ESTÁ A CORREÇÃO: Envolvi tudo em try/catch para mostrar o erro na tela
 function salvarProduto() {
-  const nome = document.getElementById('inProduto').value.trim();
-  const marca = document.getElementById('inMarca').value.trim();
-  const qtd = document.getElementById('inQtd').value;
-  const validade = document.getElementById('inValidade').value;
+  try {
+    const nome = document.getElementById('inProduto').value.trim();
+    const marca = document.getElementById('inMarca').value.trim();
+    const qtd = document.getElementById('inQtd').value;
+    const validade = document.getElementById('inValidade').value;
 
-  if (!nome || !validade || !categoriaSelecionada || !qtd) {
-    mostrarToast('Preencha nome, categoria, qtd e validade', '#E53935');
-    return;
+    if (!nome) {
+      alert('Por favor, digite o NOME do produto.');
+      return;
+    }
+    if (!categoriaSelecionada) {
+      alert('Por favor, escolha uma CATEGORIA (BPC, HC ou NT).');
+      return;
+    }
+    if (!validade) {
+      alert('Por favor, escolha a DATA DE VALIDADE.');
+      return;
+    }
+
+    const novo = {
+      id: Date.now().toString(), 
+      nome: nome, 
+      marca: marca,
+      categoria: categoriaSelecionada,
+      quantidade: parseInt(qtd) || 1,
+      validade: validade,
+      imagem: imagemBase64,
+      promotor: promotor.nome,
+      loja: promotor.loja,
+      cidade: promotor.cidade
+    };
+
+    produtos.push(novo);
+    localStorage.setItem('univalidade_produtos', JSON.stringify(produtos));
+    fecharModal();
+    mostrarToast('✓ Produto cadastrado!');
+    renderizar();
+
+  } catch (erro) {
+    // Se der qualquer erro, mostra na tela o que aconteceu
+    alert('Ops! Ocorreu um erro ao salvar:\n\n' + erro.message);
+    console.error(erro);
   }
-
-  const novo = {
-    id: Date.now().toString(), 
-    nome: nome, 
-    marca: marca,
-    categoria: categoriaSelecionada,
-    quantidade: parseInt(qtd),
-    validade: validade,
-    imagem: imagemBase64,
-    promotor: promotor.nome,
-    loja: promotor.loja,
-    cidade: promotor.cidade
-  };
-
-  produtos.push(novo);
-  localStorage.setItem('univalidade_produtos', JSON.stringify(produtos));
-  fecharModal();
-  mostrarToast('✓ Produto cadastrado!');
-  renderizar();
 }
 
 function diasRestantes(dataValidade) {
@@ -383,7 +370,6 @@ function renderizar() {
     const dataFmt = new Date(p.validade + 'T00:00:00').toLocaleDateString('pt-BR');
     const qtd = p.quantidade || 1; 
     
-    // O botão de excluir chama a função passando o ID como string
     return `
       <div class="produto ${cls}">
         ${p.imagem ? `<img src="${p.imagem}" alt="">` : `<div style="width:58px;height:58px;border-radius:12px;background:#EEF1FB;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📦</div>`}
