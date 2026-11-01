@@ -55,19 +55,24 @@
   .card-resumo.granola .num { color: #E53935; }
   .card-resumo.food .num { color: #00ACC1; }
 
+  /* Título de seção por categoria */
+  .secao-cat { margin-bottom: 8px; margin-top: 18px; display: flex; align-items: center; gap: 8px; }
+  .secao-cat:first-child { margin-top: 0; }
+  .secao-cat .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; }
+  .secao-cat .badge.BPC { background: #F3E5F5; color: #8E24AA; }
+  .secao-cat .badge.HC { background: #E3F2FD; color: #2196F3; }
+  .secao-cat .badge.MAIO { background: #FFF3E0; color: #FF9800; }
+  .secao-cat .badge.OUTROS { background: #E8F5E9; color: #43A047; }
+  .secao-cat .badge.GRANOLA { background: #FFEBEE; color: #E53935; }
+  .secao-cat .badge.FOOD { background: #E0F7FA; color: #00ACC1; }
+  .secao-cat .qtd-sec { font-size: 12px; color: var(--cinza); font-weight: 600; }
+
   .produto { background: var(--card); border-radius: 18px; padding: 14px; margin-bottom: 12px; box-shadow: var(--sombra); display: flex; gap: 14px; align-items: flex-start; border-left: 5px solid var(--verde); position: relative; }
   .produto.alerta { border-left-color: var(--amarelo); }
   .produto.vencido { border-left-color: var(--vermelho); }
   .produto .info { flex: 1; min-width: 0; padding-right: 24px; }
   .produto .nome { font-weight: 600; font-size: 15px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .produto .qtd-tag { display: inline-block; background: #EEF1FB; color: var(--azul-royal); font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 8px; margin-bottom: 6px; border: 1px solid #D0D9F2; }
-  .produto .cat { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; margin-left: 6px; }
-  .cat.BPC { background: #F3E5F5; color: #8E24AA; }
-  .cat.HC { background: #E3F2FD; color: #2196F3; }
-  .cat.MAIO { background: #FFF3E0; color: #FF9800; }
-  .cat.OUTROS { background: #E8F5E9; color: #43A047; }
-  .cat.GRANOLA { background: #FFEBEE; color: #E53935; }
-  .cat.FOOD { background: #E0F7FA; color: #00ACC1; }
   .produto .dias { font-size: 12px; font-weight: 600; margin-top: 4px;}
   .produto .dias.ok { color: var(--verde); }
   .produto .dias.alerta { color: var(--amarelo); }
@@ -201,6 +206,10 @@ var categoriaSelecionada = null;
 // Parâmetros de dias para classificação (apenas para os cards)
 var DIAS_LIMITE_CRITICO = 15;  // 15 dias ou menos = vermelho
 var DIAS_LIMITE_ATENCAO = 30;  // entre 16 e 30 dias = amarelo, acima = verde
+
+// Ordem e nomes das categorias
+var CATEGORIAS_ORDEM = ['BPC', 'HC', 'MAIO', 'OUTROS', 'GRANOLA', 'FOOD'];
+var NOMES_CAT = { BPC: 'BPC', HC: 'HC', MAIO: 'Maionese', OUTROS: 'Outros Molhos', GRANOLA: 'Granola', FOOD: 'Food Solution' };
 
 // Carrega dados salvos
 try {
@@ -340,13 +349,32 @@ function textoDias(dias) {
   return '✓ Faltam ' + dias + ' dias';
 }
 
+// Gera o HTML de um card de produto
+function htmlCard(p) {
+  var dias = calcularDias(p.validade);
+  var cls = classificarStatus(dias);
+  var alvo = new Date(p.validade + 'T00:00:00');
+  var dataFmt = alvo.toLocaleDateString('pt-BR');
+  
+  return '<div class="produto ' + cls + '">' +
+    '<div class="icone-caixa">📦</div>' +
+    '<div class="info">' +
+      '<div class="nome">' + p.nome + (p.marca ? ' <span style="font-weight:400;color:var(--cinza);font-size:12px">• ' + p.marca + '</span>' : '') + '</div>' +
+      '<div><span class="qtd-tag">📦 ' + p.quantidade + ' un</span></div>' +
+      '<div class="dias ' + cls + '">' + textoDias(dias) + '</div>' +
+      '<div class="data">Validade: ' + dataFmt + '</div>' +
+    '</div>' +
+    '<button class="del" onclick="excluir(\'' + p.id + '\')">✕</button>' +
+  '</div>';
+}
+
 function renderizar() {
   var lista = document.getElementById('listaProdutos');
   if (!promotor) return;
 
   var meus = produtos.filter(function(p) { return p.promotor === promotor.nome; });
 
-  // Contadores por CATEGORIA (interface mantida)
+  // Contadores por CATEGORIA (interface mantida no topo)
   document.getElementById('countBPC').textContent = meus.filter(function(p) { return p.categoria === 'BPC'; }).length;
   document.getElementById('countHC').textContent = meus.filter(function(p) { return p.categoria === 'HC'; }).length;
   document.getElementById('countMAIO').textContent = meus.filter(function(p) { return p.categoria === 'MAIO'; }).length;
@@ -359,46 +387,24 @@ function renderizar() {
     return;
   }
 
-  // Ordena por validade (mais próximos do vencimento primeiro)
-  meus.sort(function(a, b) { return new Date(a.validade) - new Date(b.validade); });
+  // Agrupa por categoria mantendo a ordem definida
+  var html = '';
+  CATEGORIAS_ORDEM.forEach(function(cat) {
+    var itens = meus.filter(function(p) { return p.categoria === cat; });
+    if (itens.length === 0) return; // categoria sem produtos NÃO aparece
 
-  var nomesCat = { BPC: 'BPC', HC: 'HC', MAIO: 'Maionese', OUTROS: 'Outros Molhos', GRANOLA: 'Granola', FOOD: 'Food Solution' };
+    // Ordena por validade dentro da categoria (mais próximos do vencimento primeiro)
+    itens.sort(function(a, b) { return new Date(a.validade) - new Date(b.validade); });
 
-  lista.innerHTML = meus.map(function(p) {
-    var dias = calcularDias(p.validade);
-    var cls = classificarStatus(dias);  // verde/amarelo/vermelho SÓ no card
-    var alvo = new Date(p.validade + 'T00:00:00');
-    var dataFmt = alvo.toLocaleDateString('pt-BR');
-    var nomeExibicao = nomesCat[p.categoria] || p.categoria;
-    
-    return '<div class="produto ' + cls + '">' +
-      '<div class="icone-caixa">📦</div>' +
-      '<div class="info">' +
-        '<div class="nome">' + p.nome + '</div>' +
-        '<div><span class="qtd-tag">📦 ' + p.quantidade + ' un</span><span class="cat ' + p.categoria + '">' + nomeExibicao + '</span></div>' +
-        '<div class="dias ' + cls + '">' + textoDias(dias) + '</div>' +
-        '<div class="data">Validade: ' + dataFmt + '</div>' +
-      '</div>' +
-      '<button class="del" onclick="excluir(\'' + p.id + '\')">✕</button>' +
+    html += '<div class="secao-cat">' +
+      '<span class="badge ' + cat + '">' + NOMES_CAT[cat] + '</span>' +
+      '<span class="qtd-sec">' + itens.length + ' produto' + (itens.length > 1 ? 's' : '') + '</span>' +
     '</div>';
-  }).join('');
+    html += itens.map(htmlCard).join('');
+  });
+
+  lista.innerHTML = html;
 }
 
 function excluir(id) {
-  if (!confirm('Excluir este produto?')) return;
-  produtos = produtos.filter(function(p) { return String(p.id) !== String(id); });
-  localStorage.setItem('univalidade_produtos', JSON.stringify(produtos));
-  renderizar();
-  mostrarToast('Produto removido');
-}
-
-function mostrarToast(msg, cor) {
-  if (!cor) cor = '#43A047';
-  var t = document.getElementById('toast');
-  t.textContent = msg; t.style.background = cor;
-  t.classList.add('show');
-  setTimeout(function() { t.classList.remove('show'); }, 2500);
-}
-</script>
-</body>
-</html>
+  if (!confirm('Excluir es
