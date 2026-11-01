@@ -227,10 +227,19 @@ let produtos = JSON.parse(localStorage.getItem('univalidade_produtos') || '[]');
 let categoriaSelecionada = null;
 let imagemBase64 = null;
 
-// Função para limpar strings e evitar quebra de HTML por aspas
-function limparTexto(texto) {
-  if (!texto) return '';
-  return texto.replace(/['"<>&]/g, ''); 
+// Função para escapar HTML de forma segura
+function escapeHTML(str) {
+  if (!str) return '';
+  return str.replace(/[&<>'"]/g, function(tag) {
+    const charsToReplace = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    };
+    return charsToReplace[tag] || tag;
+  });
 }
 
 function entrar() {
@@ -312,12 +321,12 @@ function salvarProduto() {
   }
 
   const novo = {
-    id: Date.now(),
+    id: Date.now().toString(), // Garante que o ID seja salvo como string
     nome: nome, 
     marca: marca,
     categoria: categoriaSelecionada,
     quantidade: parseInt(qtd),
-    validade,
+    validade: validade,
     imagem: imagemBase64,
     promotor: promotor.nome,
     loja: promotor.loja,
@@ -352,6 +361,7 @@ function textoDias(dias) {
 
 function renderizar() {
   const lista = document.getElementById('listaProdutos');
+  // Filtra apenas os do promotor atual
   const meus = produtos.filter(p => p.promotor === promotor.nome);
 
   document.getElementById('countBPC').textContent = meus.filter(p => p.categoria === 'BPC').length;
@@ -363,7 +373,6 @@ function renderizar() {
     return;
   }
 
-  // Ordenação segura
   meus.sort((a, b) => {
     const dataA = new Date(a.validade).getTime() || 0;
     const dataB = new Date(b.validade).getTime() || 0;
@@ -376,12 +385,12 @@ function renderizar() {
     const dataFmt = new Date(p.validade + 'T00:00:00').toLocaleDateString('pt-BR');
     const qtd = p.quantidade || 1; 
     
-    // Aqui usamos encodeURIComponent para o ID, evitando quebras
+    // Usa o escapeHTML para o nome e passa o ID como string segura no onclick
     return `
       <div class="produto ${cls}">
         ${p.imagem ? `<img src="${p.imagem}" alt="">` : `<div style="width:58px;height:58px;border-radius:12px;background:#EEF1FB;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📦</div>`}
         <div class="info">
-          <div class="nome">${limparTexto(p.nome)}</div>
+          <div class="nome">${escapeHTML(p.nome)}</div>
           
           <div>
             <span class="qtd-tag">📦 ${qtd} un</span>
@@ -398,7 +407,7 @@ function renderizar() {
 
 function excluir(id) {
   if (!confirm('Excluir este produto?')) return;
-  // Converte o ID de volta para string para garantir a comparação
+  // Filtra comparando como string para não ter erro de tipagem
   produtos = produtos.filter(p => String(p.id) !== String(id));
   localStorage.setItem('univalidade_produtos', JSON.stringify(produtos));
   renderizar();
