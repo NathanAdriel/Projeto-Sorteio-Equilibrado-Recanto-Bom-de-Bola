@@ -55,29 +55,26 @@
   .card-resumo.granola .num { color: #E53935; }
   .card-resumo.food .num { color: #00ACC1; }
 
-  .secao-cat { margin-bottom: 8px; margin-top: 18px; display: flex; align-items: center; gap: 8px; }
-  .secao-cat:first-child { margin-top: 0; }
-  .secao-cat .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; }
-  .secao-cat .badge.BPC { background: #F3E5F5; color: #8E24AA; }
-  .secao-cat .badge.HC { background: #E3F2FD; color: #2196F3; }
-  .secao-cat .badge.MAIO { background: #FFF3E0; color: #FF9800; }
-  .secao-cat .badge.OUTROS { background: #E8F5E9; color: #43A047; }
-  .secao-cat .badge.GRANOLA { background: #FFEBEE; color: #E53935; }
-  .secao-cat .badge.FOOD { background: #E0F7FA; color: #00ACC1; }
-  .secao-cat .qtd-sec { font-size: 12px; color: var(--cinza); font-weight: 600; }
-
   .produto { background: var(--card); border-radius: 18px; padding: 14px; margin-bottom: 12px; box-shadow: var(--sombra); display: flex; gap: 14px; align-items: flex-start; border-left: 5px solid var(--verde); position: relative; }
   .produto.alerta { border-left-color: var(--amarelo); }
   .produto.vencido { border-left-color: var(--vermelho); }
   .produto .info { flex: 1; min-width: 0; padding-right: 24px; }
   .produto .nome { font-weight: 600; font-size: 15px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .produto .qtd-tag { display: inline-block; background: #EEF1FB; color: var(--azul-royal); font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 8px; margin-bottom: 6px; border: 1px solid #D0D9F2; }
+  .produto .cat { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; margin-left: 6px; }
+  .cat.BPC { background: #F3E5F5; color: #8E24AA; }
+  .cat.HC { background: #E3F2FD; color: #2196F3; }
+  .cat.MAIO { background: #FFF3E0; color: #FF9800; }
+  .cat.OUTROS { background: #E8F5E9; color: #43A047; }
+  .cat.GRANOLA { background: #FFEBEE; color: #E53935; }
+  .cat.FOOD { background: #E0F7FA; color: #00ACC1; }
   .produto .dias { font-size: 12px; font-weight: 600; margin-top: 4px;}
   .produto .dias.ok { color: var(--verde); }
   .produto .dias.alerta { color: var(--amarelo); }
   .produto .dias.vencido { color: var(--vermelho); }
   .produto .data { font-size: 11px; color: var(--cinza); margin-top: 2px; }
   .produto .del { position: absolute; top: 10px; right: 10px; background: #FFEBEE; border: none; color: var(--vermelho); width: 28px; height: 28px; border-radius: 8px; font-size: 16px; cursor: pointer; }
+  
   .produto .icone-caixa { width: 48px; height: 48px; border-radius: 12px; background: #EEF1FB; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; margin-top: 4px; }
 
   .vazio { text-align: center; padding: 60px 20px; color: var(--cinza); }
@@ -201,44 +198,36 @@ var promotor = null;
 var produtos = [];
 var categoriaSelecionada = null;
 
-var DIAS_LIMITE_CRITICO = 15;
-var DIAS_LIMITE_ATENCAO = 30;
+// Parâmetros de dias para classificação (apenas para os cards)
+var DIAS_LIMITE_CRITICO = 15;  // 15 dias ou menos = vermelho
+var DIAS_LIMITE_ATENCAO = 30;  // entre 16 e 30 dias = amarelo, acima = verde
 
-var CATEGORIAS_ORDEM = ['BPC', 'HC', 'MAIO', 'OUTROS', 'GRANOLA', 'FOOD'];
-var NOMES_CAT = { BPC: 'BPC', HC: 'HC', MAIO: 'Maionese', OUTROS: 'Outros Molhos', GRANOLA: 'Granola', FOOD: 'Food Solution' };
-
-// Carrega dados salvos com segurança
+// Carrega dados salvos
 try {
   var pSalvo = localStorage.getItem('univalidade_promotor');
   if (pSalvo) promotor = JSON.parse(pSalvo);
-} catch(e) { promotor = null; }
-
-try {
+  
   var prodSalvos = localStorage.getItem('univalidade_produtos');
-  if (prodSalvos) {
-    var arr = JSON.parse(prodSalvos);
-    if (Array.isArray(arr)) produtos = arr;
-  }
-} catch(e) { produtos = []; }
+  if (prodSalvos) produtos = JSON.parse(prodSalvos);
+} catch(e) {}
 
-// Executa após o DOM estar pronto
-document.addEventListener('DOMContentLoaded', function() {
+window.onload = function() {
   if (promotor) {
-    document.getElementById('inNome').value = promotor.nome || '';
-    document.getElementById('inLoja').value = promotor.loja || '';
-    document.getElementById('inCidade').value = promotor.cidade || '';
-    entrar(true); // true = auto-login (não alerta se falhar)
+    document.getElementById('inNome').value = promotor.nome;
+    document.getElementById('inLoja').value = promotor.loja;
+    document.getElementById('inCidade').value = promotor.cidade;
+    entrar();
   }
-});
+};
 
-function entrar(auto) {
+function entrar() {
   try {
-    var nome = (document.getElementById('inNome').value || '').trim();
-    var loja = (document.getElementById('inLoja').value || '').trim();
-    var cidade = (document.getElementById('inCidade').value || '').trim();
+    var nome = document.getElementById('inNome').value.trim();
+    var loja = document.getElementById('inLoja').value.trim();
+    var cidade = document.getElementById('inCidade').value.trim();
     
     if (!nome || !loja || !cidade) { 
-      if (!auto) alert('Preencha todos os campos!'); 
+      alert('Preencha todos os campos!'); 
       return; 
     }
 
@@ -255,8 +244,7 @@ function entrar(auto) {
     
     renderizar();
   } catch (erro) {
-    console.error('Erro ao entrar:', erro);
-    if (!auto) alert("Erro ao entrar: " + erro.message);
+    alert("Erro ao entrar: " + erro.message);
   }
 }
 
@@ -271,6 +259,7 @@ function abrirModal() {
   document.getElementById('inMarca').value = '';
   document.getElementById('inValidade').value = '';
   document.getElementById('inQtd').value = '1';
+  
   document.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('sel'); });
   categoriaSelecionada = null;
 }
@@ -293,8 +282,8 @@ function mudarQtd(valor) {
 
 function salvarProduto() {
   try {
-    var nome = (document.getElementById('inProduto').value || '').trim();
-    var marca = (document.getElementById('inMarca').value || '').trim();
+    var nome = document.getElementById('inProduto').value.trim();
+    var marca = document.getElementById('inMarca').value.trim();
     var qtd = document.getElementById('inQtd').value;
     var validade = document.getElementById('inValidade').value;
 
@@ -321,26 +310,28 @@ function salvarProduto() {
     fecharModal();
     mostrarToast('✓ Produto cadastrado!');
     renderizar();
+    
   } catch (erro) {
-    console.error('Erro ao salvar:', erro);
     alert("Erro ao salvar: " + erro.message);
   }
 }
 
+// Calcula quantos dias faltam para a validade
 function calcularDias(validade) {
   var hoje = new Date(); 
   hoje.setHours(0,0,0,0);
   var alvo = new Date(validade + 'T00:00:00');
-  if (isNaN(alvo.getTime())) return 9999;
   return Math.ceil((alvo - hoje) / (1000 * 60 * 60 * 24));
 }
 
+// Classifica o status baseado nos parâmetros (usado apenas nos cards)
 function classificarStatus(dias) {
-  if (dias <= DIAS_LIMITE_CRITICO) return 'vencido';
-  if (dias <= DIAS_LIMITE_ATENCAO) return 'alerta';
-  return 'ok';
+  if (dias <= DIAS_LIMITE_CRITICO) return 'vencido';      // vermelho (≤15 dias, incluindo vencidos)
+  if (dias <= DIAS_LIMITE_ATENCAO) return 'alerta';       // amarelo (16 a 30 dias)
+  return 'ok';                                            // verde (mais de 30 dias)
 }
 
+// Texto amigável dos dias
 function textoDias(dias) {
   if (dias < 0) return '🚨 Vencido há ' + Math.abs(dias) + ' dia(s)';
   if (dias === 0) return '🚨 Vence hoje!';
@@ -349,63 +340,48 @@ function textoDias(dias) {
   return '✓ Faltam ' + dias + ' dias';
 }
 
-function htmlCard(p) {
-  var dias = calcularDias(p.validade);
-  var cls = classificarStatus(dias);
-  var alvo = new Date(p.validade + 'T00:00:00');
-  var dataFmt = isNaN(alvo.getTime()) ? p.validade : alvo.toLocaleDateString('pt-BR');
-  
-  return '<div class="produto ' + cls + '">' +
-    '<div class="icone-caixa">📦</div>' +
-    '<div class="info">' +
-      '<div class="nome">' + p.nome + (p.marca ? ' <span style="font-weight:400;color:var(--cinza);font-size:12px">• ' + p.marca + '</span>' : '') + '</div>' +
-      '<div><span class="qtd-tag">📦 ' + p.quantidade + ' un</span></div>' +
-      '<div class="dias ' + cls + '">' + textoDias(dias) + '</div>' +
-      '<div class="data">Validade: ' + dataFmt + '</div>' +
-    '</div>' +
-    '<button class="del" onclick="excluir(\'' + p.id + '\')">✕</button>' +
-  '</div>';
-}
-
 function renderizar() {
   var lista = document.getElementById('listaProdutos');
-  if (!promotor || !lista) return;
+  if (!promotor) return;
 
   var meus = produtos.filter(function(p) { return p.promotor === promotor.nome; });
 
-  function contarCat(cat) {
-    var n = 0;
-    for (var i = 0; i < meus.length; i++) { if (meus[i].categoria === cat) n++; }
-    return n;
-  }
-
-  document.getElementById('countBPC').textContent = contarCat('BPC');
-  document.getElementById('countHC').textContent = contarCat('HC');
-  document.getElementById('countMAIO').textContent = contarCat('MAIO');
-  document.getElementById('countOUTROS').textContent = contarCat('OUTROS');
-  document.getElementById('countGRANOLA').textContent = contarCat('GRANOLA');
-  document.getElementById('countFOOD').textContent = contarCat('FOOD');
+  // Contadores por CATEGORIA (interface mantida)
+  document.getElementById('countBPC').textContent = meus.filter(function(p) { return p.categoria === 'BPC'; }).length;
+  document.getElementById('countHC').textContent = meus.filter(function(p) { return p.categoria === 'HC'; }).length;
+  document.getElementById('countMAIO').textContent = meus.filter(function(p) { return p.categoria === 'MAIO'; }).length;
+  document.getElementById('countOUTROS').textContent = meus.filter(function(p) { return p.categoria === 'OUTROS'; }).length;
+  document.getElementById('countGRANOLA').textContent = meus.filter(function(p) { return p.categoria === 'GRANOLA'; }).length;
+  document.getElementById('countFOOD').textContent = meus.filter(function(p) { return p.categoria === 'FOOD'; }).length;
 
   if (meus.length === 0) {
     lista.innerHTML = '<div class="vazio"><div class="emoji">📦</div><p>Nenhum produto cadastrado ainda.</p><p style="font-size:13px;margin-top:6px">Toque no botão <b>+</b> para começar</p></div>';
     return;
   }
 
-  var html = '';
-  CATEGORIAS_ORDEM.forEach(function(cat) {
-    var itens = meus.filter(function(p) { return p.categoria === cat; });
-    if (itens.length === 0) return;
+  // Ordena por validade (mais próximos do vencimento primeiro)
+  meus.sort(function(a, b) { return new Date(a.validade) - new Date(b.validade); });
 
-    itens.sort(function(a, b) { return new Date(a.validade) - new Date(b.validade); });
+  var nomesCat = { BPC: 'BPC', HC: 'HC', MAIO: 'Maionese', OUTROS: 'Outros Molhos', GRANOLA: 'Granola', FOOD: 'Food Solution' };
 
-    html += '<div class="secao-cat">' +
-      '<span class="badge ' + cat + '">' + NOMES_CAT[cat] + '</span>' +
-      '<span class="qtd-sec">' + itens.length + ' produto' + (itens.length > 1 ? 's' : '') + '</span>' +
+  lista.innerHTML = meus.map(function(p) {
+    var dias = calcularDias(p.validade);
+    var cls = classificarStatus(dias);  // verde/amarelo/vermelho SÓ no card
+    var alvo = new Date(p.validade + 'T00:00:00');
+    var dataFmt = alvo.toLocaleDateString('pt-BR');
+    var nomeExibicao = nomesCat[p.categoria] || p.categoria;
+    
+    return '<div class="produto ' + cls + '">' +
+      '<div class="icone-caixa">📦</div>' +
+      '<div class="info">' +
+        '<div class="nome">' + p.nome + '</div>' +
+        '<div><span class="qtd-tag">📦 ' + p.quantidade + ' un</span><span class="cat ' + p.categoria + '">' + nomeExibicao + '</span></div>' +
+        '<div class="dias ' + cls + '">' + textoDias(dias) + '</div>' +
+        '<div class="data">Validade: ' + dataFmt + '</div>' +
+      '</div>' +
+      '<button class="del" onclick="excluir(\'' + p.id + '\')">✕</button>' +
     '</div>';
-    html += itens.map(htmlCard).join('');
-  });
-
-  lista.innerHTML = html;
+  }).join('');
 }
 
 function excluir(id) {
@@ -421,4 +397,8 @@ function mostrarToast(msg, cor) {
   var t = document.getElementById('toast');
   t.textContent = msg; t.style.background = cor;
   t.classList.add('show');
-  setTimeout(function() { t.c
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+</script>
+</body>
+</html>
