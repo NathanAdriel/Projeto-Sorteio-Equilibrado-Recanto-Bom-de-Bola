@@ -121,7 +121,6 @@
     <div class="campo"><label>Nome do Promotor</label><input id="inNome" placeholder="Ex: João Silva"></div>
     <div class="campo"><label>Loja</label><input id="inLoja" placeholder="Ex: Supermercado Bom Preço"></div>
     <div class="campo"><label>Cidade</label><input id="inCidade" placeholder="Ex: São Paulo"></div>
-    <!-- Botão desabilitado até o banco carregar -->
     <button class="btn" id="btnEntrar" disabled onclick="entrar()">⏳ Carregando sistema...</button>
   </div>
 </div>
@@ -206,7 +205,6 @@ var produtos = [];
 var categoriaSelecionada = null;
 var imagemBase64 = null;
 
-// 1. ABRIR O BANCO DE DADOS
 var request = indexedDB.open('UniValidadeDB', 1);
 
 request.onupgradeneeded = function(e) {
@@ -218,12 +216,10 @@ request.onupgradeneeded = function(e) {
 
 request.onsuccess = function(e) {
   db = e.target.result;
-  // Só libera o botão de entrar DEPOIS que o banco estiver pronto
   var btn = document.getElementById('btnEntrar');
   btn.disabled = false;
   btn.textContent = 'Entrar no Sistema →';
   
-  // Se o promotor já estava salvo, preenche os campos e tenta entrar
   try {
     var salvo = localStorage.getItem('univalidade_promotor');
     if (salvo) {
@@ -231,16 +227,10 @@ request.onsuccess = function(e) {
       document.getElementById('inNome').value = promotor.nome;
       document.getElementById('inLoja').value = promotor.loja;
       document.getElementById('inCidade').value = promotor.cidade;
-      entrar(); // Auto-login
+      entrar();
     }
   } catch(err) {}
 };
-
-request.onerror = function(e) {
-  alert('Erro crítico ao iniciar o banco de dados do celular.');
-};
-
-// ====== LÓGICA DO SISTEMA ======
 
 function entrar() {
   var nome = document.getElementById('inNome').value.trim();
@@ -263,7 +253,7 @@ function entrar() {
   document.getElementById('fab').style.display = 'flex';
   document.getElementById('nav').style.display = 'flex';
   
-  carregarProdutos(); // Carrega a lista do banco de dados
+  carregarProdutos();
 }
 
 function sair() { 
@@ -309,23 +299,49 @@ function mudarQtd(valor) {
   input.value = atual;
 }
 
+// ====== AQUI ESTÁ A MÁGICA DA VELOCIDADE ======
 function previewImg(e) {
   var file = e.target.files[0];
   if (!file) return;
+  
   var reader = new FileReader();
   reader.onload = function(ev) {
-    imagemBase64 = ev.target.result;
-    var box = document.getElementById('uploadBox');
-    var img = box.querySelector('img');
-    if (!img) { 
-      img = document.createElement('img'); 
-      box.appendChild(img); 
-    }
-    img.src = imagemBase64;
-    document.getElementById('uploadTxt').style.display = 'none';
+    var img = new Image();
+    img.onload = function() {
+      // Cria um canvas invisível para redimensionar a foto
+      var canvas = document.createElement('canvas');
+      var MAX_WIDTH = 400; // Reduz a foto para no máximo 400px de largura
+      var width = img.width;
+      var height = img.height;
+
+      if (width > MAX_WIDTH) {
+        height = Math.round((height * MAX_WIDTH) / width);
+        width = MAX_WIDTH;
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Converte a foto pequena em texto Base64 (agora ocupa apenas alguns KB)
+      imagemBase64 = canvas.toDataURL('image/jpeg', 0.7); // 0.7 é a qualidade (70%)
+
+      // Mostra a foto no quadradinho de upload
+      var box = document.getElementById('uploadBox');
+      var imgPreview = box.querySelector('img');
+      if (!imgPreview) { 
+        imgPreview = document.createElement('img'); 
+        box.appendChild(imgPreview); 
+      }
+      imgPreview.src = imagemBase64;
+      document.getElementById('uploadTxt').style.display = 'none';
+    };
+    img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
 }
+// ============================================
 
 function salvarProduto() {
   var nome = document.getElementById('inProduto').value.trim();
@@ -351,7 +367,6 @@ function salvarProduto() {
     cidade: promotor.cidade
   };
 
-  // Salva no banco
   var tx = db.transaction(['produtos'], 'readwrite');
   var store = tx.objectStore('produtos');
   var req = store.put(novo);
@@ -360,9 +375,6 @@ function salvarProduto() {
     fecharModal();
     mostrarToast('✓ Produto cadastrado!');
     carregarProdutos();
-  };
-  req.onerror = function(e) {
-    alert('Erro ao salvar o produto no banco de dados.');
   };
 }
 
@@ -424,11 +436,4 @@ function renderizar() {
     var qtd = p.quantidade || 1; 
     
     return '<div class="produto ' + cls + '">' +
-      (p.imagem ? '<img src="' + p.imagem + '" alt="">' : '<div style="width:58px;height:58px;border-radius:12px;background:#EEF1FB;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📦</div>') +
-      '<div class="info">' +
-        '<div class="nome">' + p.nome + '</div>' +
-        '<div>' +
-          '<span class="qtd-tag">📦 ' + qtd + ' un</span>' +
-          '<span class="cat ' + p.categoria + '">' + p.categoria + '</span>' +
-        '</div>' +
-        '<div c
+      (p.imagem ? '<img src="' + p.imagem + '" alt="">' : '<div style="widt
