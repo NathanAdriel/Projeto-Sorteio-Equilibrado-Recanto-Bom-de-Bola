@@ -26,7 +26,6 @@
   .tela.ativa { display: block; animation: fade .3s ease; }
   @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-  /* LOGIN */
   .login-wrap { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 24px; }
   .logo-container { text-align: center; margin-bottom: 32px; }
   .logo-container img { width: 100%; max-width: 320px; height: auto; margin: 0 auto 16px; display: block; }
@@ -39,15 +38,14 @@
 
   .btn { width: 100%; padding: 16px; border: none; border-radius: 14px; background: linear-gradient(135deg, var(--azul-royal), var(--azul-claro)); color: white; font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; transition: .2s; box-shadow: 0 6px 16px rgba(10, 66, 217, .25); }
   .btn:active { transform: scale(.97); }
+  .btn:disabled { background: #A0AABF; box-shadow: none; cursor: not-allowed; }
 
-  /* HEADER */
   .top-header { display: flex; align-items: center; margin-bottom: 24px; gap: 12px; }
   .top-header img { height: 40px; width: auto; object-fit: contain; }
   .header { margin-bottom: 20px; }
   .header h2 { font-size: 22px; }
   .header .sub { color: var(--cinza); font-size: 13px; margin-top: 2px; }
 
-  /* CARDS RESUMO */
   .resumo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
   .card-resumo { background: var(--card); border-radius: 16px; padding: 14px 8px; text-align: center; box-shadow: var(--sombra); }
   .card-resumo .num { font-family: 'Poppins'; font-size: 22px; font-weight: 700; }
@@ -56,7 +54,6 @@
   .card-resumo.hc .num { color: #2196F3; }
   .card-resumo.nt .num { color: #FF9800; }
 
-  /* LISTA PRODUTOS */
   .produto { background: var(--card); border-radius: 18px; padding: 14px; margin-bottom: 12px; box-shadow: var(--sombra); display: flex; gap: 14px; align-items: flex-start; border-left: 5px solid var(--verde); position: relative; }
   .produto.alerta { border-left-color: var(--amarelo); }
   .produto.vencido { border-left-color: var(--vermelho); }
@@ -78,17 +75,14 @@
   .vazio { text-align: center; padding: 60px 20px; color: var(--cinza); }
   .vazio .emoji { font-size: 48px; margin-bottom: 12px; }
 
-  /* FAB */
-  .fab { position: fixed; bottom: 90px; right: 20px; width: 60px; height: 60px; border-radius: 20px; border: none; background: linear-gradient(135deg, var(--azul-royal), var(--azul-claro)); color: white; font-size: 30px; cursor: pointer; box-shadow: 0 8px 20px rgba(10, 66, 217, .4); display: flex; align-items: center; justify-content: center; transition: .2s; z-index: 50; }
+  .fab { position: fixed; bottom: 90px; right: 20px; width: 60px; height: 60px; border-radius: 20px; border: none; background: linear-gradient(135deg, var(--azul-royal), var(--azul-claro)); color: white; font-size: 30px; cursor: pointer; box-shadow: 0 8px 20px rgba(10, 66, 217, .4); display: none; align-items: center; justify-content: center; transition: .2s; z-index: 50; }
   .fab:active { transform: scale(.9); }
 
-  /* NAV */
-  .nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; padding: 10px 0 14px; box-shadow: 0 -4px 16px rgba(0,0,0,.05); z-index: 10; }
+  .nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: none; padding: 10px 0 14px; box-shadow: 0 -4px 16px rgba(0,0,0,.05); z-index: 10; }
   .nav button { flex: 1; background: none; border: none; font-family: inherit; font-size: 11px; color: var(--cinza); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
   .nav button .icone { font-size: 20px; }
   .nav button.ativo { color: var(--azul-royal); font-weight: 600; }
 
-  /* MODAL */
   .modal-bg { position: fixed; inset: 0; background: rgba(20,25,50,.5); display: none; align-items: flex-end; z-index: 100; }
   .modal-bg.aberto { display: flex; }
   .modal { background: var(--card); width: 100%; border-radius: 24px 24px 0 0; padding: 24px 20px calc(24px + env(safe-area-inset-bottom)); max-height: 90vh; overflow-y: auto; animation: slideUp .3s ease; }
@@ -127,7 +121,8 @@
     <div class="campo"><label>Nome do Promotor</label><input id="inNome" placeholder="Ex: João Silva"></div>
     <div class="campo"><label>Loja</label><input id="inLoja" placeholder="Ex: Supermercado Bom Preço"></div>
     <div class="campo"><label>Cidade</label><input id="inCidade" placeholder="Ex: São Paulo"></div>
-    <button class="btn" onclick="entrar()">Entrar no Sistema →</button>
+    <!-- Botão desabilitado até o banco carregar -->
+    <button class="btn" id="btnEntrar" disabled onclick="entrar()">⏳ Carregando sistema...</button>
   </div>
 </div>
 
@@ -205,79 +200,47 @@
 <div class="toast" id="toast">✓ Produto salvo!</div>
 
 <script>
-// ====== CONFIGURAÇÃO DO BANCO DE DADOS (INDEXEDDB) ======
 var db;
+var promotor = null;
+var produtos = [];
+var categoriaSelecionada = null;
+var imagemBase64 = null;
+
+// 1. ABRIR O BANCO DE DADOS
 var request = indexedDB.open('UniValidadeDB', 1);
 
 request.onupgradeneeded = function(e) {
   db = e.target.result;
   if (!db.objectStoreNames.contains('produtos')) {
-    // Cria a "tabela" de produtos. O ID será a chave única.
     db.createObjectStore('produtos', { keyPath: 'id' });
   }
 };
 
 request.onsuccess = function(e) {
   db = e.target.result;
-  carregarProdutos(); // Quando o banco abrir, carrega a lista
+  // Só libera o botão de entrar DEPOIS que o banco estiver pronto
+  var btn = document.getElementById('btnEntrar');
+  btn.disabled = false;
+  btn.textContent = 'Entrar no Sistema →';
+  
+  // Se o promotor já estava salvo, preenche os campos e tenta entrar
+  try {
+    var salvo = localStorage.getItem('univalidade_promotor');
+    if (salvo) {
+      promotor = JSON.parse(salvo);
+      document.getElementById('inNome').value = promotor.nome;
+      document.getElementById('inLoja').value = promotor.loja;
+      document.getElementById('inCidade').value = promotor.cidade;
+      entrar(); // Auto-login
+    }
+  } catch(err) {}
 };
 
 request.onerror = function(e) {
-  alert('Erro ao abrir o banco de dados do navegador.');
+  alert('Erro crítico ao iniciar o banco de dados do celular.');
 };
 
-// ====== VARIÁVEIS GLOBAIS ======
-var promotor = null;
-var produtos = []; // Array em memória para renderizar a tela
-var categoriaSelecionada = null;
-var imagemBase64 = null;
-
-// Recupera o promotor salvo (isso pode ficar no localStorage, é pequeno)
-try {
-  var salvo = localStorage.getItem('univalidade_promotor');
-  if (salvo) promotor = JSON.parse(salvo);
-} catch(e) {}
-
-// ====== FUNÇÕES DE BANCO DE DADOS ======
-
-// Salva ou atualiza um produto no banco
-function salvarNoBanco(produto, callback) {
-  var tx = db.transaction(['produtos'], 'readwrite');
-  var store = tx.objectStore('produtos');
-  var req = store.put(produto);
-  
-  req.onsuccess = function() {
-    if (callback) callback();
-  };
-  req.onerror = function(e) {
-    alert('Erro ao salvar no banco: ' + e.target.error);
-  };
-}
-
-// Carrega todos os produtos do banco para a memória
-function carregarProdutos() {
-  var tx = db.transaction(['produtos'], 'readonly');
-  var store = tx.objectStore('produtos');
-  var req = store.getAll();
-  
-  req.onsuccess = function() {
-    produtos = req.result || [];
-    renderizar(); // Atualiza a tela
-  };
-}
-
-// Exclui um produto do banco
-function excluirDoBanco(id, callback) {
-  var tx = db.transaction(['produtos'], 'readwrite');
-  var store = tx.objectStore('produtos');
-  var req = store.delete(id);
-  
-  req.onsuccess = function() {
-    if (callback) callback();
-  };
-}
-
-// ====== LÓGICA DA INTERFACE ======
+// ====== LÓGICA DO SISTEMA ======
 
 function entrar() {
   var nome = document.getElementById('inNome').value.trim();
@@ -300,7 +263,7 @@ function entrar() {
   document.getElementById('fab').style.display = 'flex';
   document.getElementById('nav').style.display = 'flex';
   
-  renderizar(); // Garante que a tela atualize com o nome do promotor
+  carregarProdutos(); // Carrega a lista do banco de dados
 }
 
 function sair() { 
@@ -364,7 +327,6 @@ function previewImg(e) {
   reader.readAsDataURL(file);
 }
 
-// ====== SALVAR PRODUTO (AQUI ESTÁ A CORREÇÃO) ======
 function salvarProduto() {
   var nome = document.getElementById('inProduto').value.trim();
   var marca = document.getElementById('inMarca').value.trim();
@@ -377,24 +339,42 @@ function salvarProduto() {
   }
 
   var novo = {
-    id: Date.now().toString(), // ID único
+    id: Date.now().toString(),
     nome: nome, 
     marca: marca,
     categoria: categoriaSelecionada,
     quantidade: parseInt(qtd),
     validade: validade,
-    imagem: imagemBase64, // A imagem vai para o IndexedDB, não mais para o localStorage
+    imagem: imagemBase64,
     promotor: promotor.nome,
     loja: promotor.loja,
     cidade: promotor.cidade
   };
 
-  // Chama a função que salva no banco e, quando terminar, recarrega a lista
-  salvarNoBanco(novo, function() {
+  // Salva no banco
+  var tx = db.transaction(['produtos'], 'readwrite');
+  var store = tx.objectStore('produtos');
+  var req = store.put(novo);
+  
+  req.onsuccess = function() {
     fecharModal();
     mostrarToast('✓ Produto cadastrado!');
-    carregarProdutos(); // Recarrega do banco para garantir que está tudo certo
-  });
+    carregarProdutos();
+  };
+  req.onerror = function(e) {
+    alert('Erro ao salvar o produto no banco de dados.');
+  };
+}
+
+function carregarProdutos() {
+  var tx = db.transaction(['produtos'], 'readonly');
+  var store = tx.objectStore('produtos');
+  var req = store.getAll();
+  
+  req.onsuccess = function() {
+    produtos = req.result || [];
+    renderizar();
+  };
 }
 
 function diasRestantes(dataValidade) {
@@ -420,7 +400,6 @@ function renderizar() {
   var lista = document.getElementById('listaProdutos');
   if (!promotor) return;
 
-  // Filtra apenas os produtos do promotor logado
   var meus = produtos.filter(function(p) { return p.promotor === promotor.nome; });
 
   document.getElementById('countBPC').textContent = meus.filter(function(p) { return p.categoria === 'BPC'; }).length;
@@ -441,4 +420,15 @@ function renderizar() {
   lista.innerHTML = meus.map(function(p) {
     var dias = diasRestantes(p.validade);
     var cls = classeDias(dias);
-    var dataFmt = new Date(p.validade + 'T00:00:00').toLocaleDateString('pt
+    var dataFmt = new Date(p.validade + 'T00:00:00').toLocaleDateString('pt-BR');
+    var qtd = p.quantidade || 1; 
+    
+    return '<div class="produto ' + cls + '">' +
+      (p.imagem ? '<img src="' + p.imagem + '" alt="">' : '<div style="width:58px;height:58px;border-radius:12px;background:#EEF1FB;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📦</div>') +
+      '<div class="info">' +
+        '<div class="nome">' + p.nome + '</div>' +
+        '<div>' +
+          '<span class="qtd-tag">📦 ' + qtd + ' un</span>' +
+          '<span class="cat ' + p.categoria + '">' + p.categoria + '</span>' +
+        '</div>' +
+        '<div c
