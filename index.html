@@ -23,8 +23,7 @@
   h1, h2, h3 { font-family: 'Poppins', sans-serif; }
 
   .tela { display: none; padding: 20px; }
-  .tela.ativa { display: block; animation: fade .3s ease; }
-  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .tela.ativa { display: block; }
 
   .login-wrap { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 24px; }
   .logo-container { text-align: center; margin-bottom: 32px; }
@@ -34,11 +33,10 @@
   .campo { margin-bottom: 16px; }
   .campo label { display: block; font-size: 13px; font-weight: 600; color: var(--texto); margin-bottom: 6px; }
   .campo input { width: 100%; padding: 14px 16px; border: 2px solid #E4E8F5; border-radius: 14px; font-size: 15px; font-family: inherit; background: var(--card); transition: .2s; }
-  .campo input:focus { outline: none; border-color: var(--azul-royal); box-shadow: 0 0 0 4px rgba(10, 66, 217, .1); }
+  .campo input:focus { outline: none; border-color: var(--azul-royal); }
 
   .btn { width: 100%; padding: 16px; border: none; border-radius: 14px; background: linear-gradient(135deg, var(--azul-royal), var(--azul-claro)); color: white; font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; transition: .2s; box-shadow: 0 6px 16px rgba(10, 66, 217, .25); }
   .btn:active { transform: scale(.97); }
-  .btn:disabled { background: #A0AABF; box-shadow: none; cursor: not-allowed; }
 
   .top-header { display: flex; align-items: center; margin-bottom: 24px; gap: 12px; }
   .top-header img { height: 40px; width: auto; object-fit: contain; }
@@ -75,9 +73,8 @@
   .vazio { text-align: center; padding: 60px 20px; color: var(--cinza); }
   .vazio .emoji { font-size: 48px; margin-bottom: 12px; }
 
-  .fab { position: fixed; bottom: 90px; right: 20px; width: 60px; height: 60px; border-radius: 20px; border: none; background: linear-gradient(135deg, var(--azul-royal), var(--azul-claro)); color: white; font-size: 30px; cursor: pointer; box-shadow: 0 8px 20px rgba(10, 66, 217, .4); display: none; align-items: center; justify-content: center; transition: .2s; z-index: 50; }
-  .fab:active { transform: scale(.9); }
-
+  .fab { position: fixed; bottom: 90px; right: 20px; width: 60px; height: 60px; border-radius: 20px; border: none; background: linear-gradient(135deg, var(--azul-royal), var(--azul-claro)); color: white; font-size: 30px; cursor: pointer; box-shadow: 0 8px 20px rgba(10, 66, 217, .4); display: none; align-items: center; justify-content: center; z-index: 50; }
+  
   .nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: none; padding: 10px 0 14px; box-shadow: 0 -4px 16px rgba(0,0,0,.05); z-index: 10; }
   .nav button { flex: 1; background: none; border: none; font-family: inherit; font-size: 11px; color: var(--cinza); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
   .nav button .icone { font-size: 20px; }
@@ -95,17 +92,15 @@
   .upload-img input { display: none; }
 
   .grupo-cats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-  .cat-btn { padding: 12px 6px; border: 2px solid #E4E8F5; background: var(--card); border-radius: 12px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: .2s; }
+  .cat-btn { padding: 12px 6px; border: 2px solid #E4E8F5; background: var(--card); border-radius: 12px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
   .cat-btn.sel { border-color: var(--azul-royal); background: #EEF1FF; color: var(--azul-royal); }
 
   .qtd-container { display: flex; align-items: center; background: #FAFBFF; border: 2px solid #E4E8F5; border-radius: 14px; overflow: hidden; height: 50px;}
-  .qtd-btn { width: 50px; height: 100%; border: none; background: #EEF1FF; color: var(--azul-royal); font-size: 24px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  .qtd-btn:active { background: #D0D9F2; }
-  .qtd-input { flex: 1; text-align: center; border: none; background: transparent; font-size: 18px; font-weight: 700; font-family: 'Poppins', sans-serif; color: var(--texto); -moz-appearance: textfield;}
-  .qtd-input::-webkit-outer-spin-button, .qtd-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .qtd-btn { width: 50px; height: 100%; border: none; background: #EEF1FF; color: var(--azul-royal); font-size: 24px; font-weight: 600; cursor: pointer; }
+  .qtd-input { flex: 1; text-align: center; border: none; background: transparent; font-size: 18px; font-weight: 700; font-family: 'Poppins', sans-serif; -moz-appearance: textfield;}
   .qtd-input:focus { outline: none; }
 
-  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--verde); color: white; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; z-index: 200; transition: .3s; box-shadow: 0 8px 20px rgba(67,160,71,.3); }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--verde); color: white; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; z-index: 200; transition: .3s; }
   .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
@@ -114,21 +109,21 @@
 <div id="telaLogin" class="tela ativa">
   <div class="login-wrap">
     <div class="logo-container">
-      <img src="logo.png" alt="UniValidade Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-      <h1 style="display:none; color:var(--azul-royal); font-size:32px; margin-bottom:16px;">UniValidade</h1>
+      <img src="logo.png" alt="UniValidade" onerror="this.style.display='none'">
+      <h1 style="color:var(--azul-royal); font-size:32px; margin-bottom:16px;">UniValidade</h1>
       <p>Controle de validade dos produtos</p>
     </div>
     <div class="campo"><label>Nome do Promotor</label><input id="inNome" placeholder="Ex: João Silva"></div>
     <div class="campo"><label>Loja</label><input id="inLoja" placeholder="Ex: Supermercado Bom Preço"></div>
     <div class="campo"><label>Cidade</label><input id="inCidade" placeholder="Ex: São Paulo"></div>
-    <button class="btn" id="btnEntrar" onclick="entrar()">Entrar no Sistema →</button>
+    <button class="btn" onclick="entrar()">Entrar no Sistema →</button>
   </div>
 </div>
 
 <div id="telaDash" class="tela">
   <div class="top-header">
-    <img src="logo.png" alt="UniValidade" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-    <h2 style="display:none; color:var(--azul-royal);">UniValidade</h2>
+    <img src="logo.png" alt="UniValidade" onerror="this.style.display='none'">
+    <h2 style="color:var(--azul-royal);">UniValidade</h2>
   </div>
 
   <div class="header">
@@ -166,7 +161,7 @@
       </label>
     </div>
 
-    <div class="campo"><label>Nome do Produto</label><input id="inProduto" placeholder="Ex: Maionese Hellmann's 500g"></div>
+    <div class="campo"><label>Nome do Produto</label><input id="inProduto" placeholder="Ex: Maionese Hellmann's"></div>
     <div class="campo"><label>Marca</label><input id="inMarca" placeholder="Ex: Hellmann's"></div>
 
     <div class="campo">
@@ -199,51 +194,57 @@
 <div class="toast" id="toast">✓ Produto salvo!</div>
 
 <script>
-// ====== NOVA ESTRUTURA DE SALVAMENTO (RÁPIDA E SEM TRAVAMENTO) ======
+// Variáveis simples
 var promotor = null;
 var produtos = [];
 var categoriaSelecionada = null;
 var imagemBase64 = null;
-var CACHE_NAME = 'univalidade-db-v1';
 
-// Tenta carregar dados antigos (caso existam) e o promotor logado
+// Carrega dados salvos na memória do celular
 try {
-  var salvo = localStorage.getItem('univalidade_promotor');
-  if (salvo) promotor = JSON.parse(salvo);
+  var pSalvo = localStorage.getItem('univalidade_promotor');
+  if (pSalvo) promotor = JSON.parse(pSalvo);
+  
+  var prodSalvos = localStorage.getItem('univalidade_produtos');
+  if (prodSalvos) produtos = JSON.parse(prodSalvos);
 } catch(e) {}
 
-// Inicializa os dados
+// Inicia o app
 window.onload = function() {
   if (promotor) {
     document.getElementById('inNome').value = promotor.nome;
     document.getElementById('inLoja').value = promotor.loja;
     document.getElementById('inCidade').value = promotor.cidade;
-    entrar(); // Auto-login
+    entrar();
   }
 };
 
 function entrar() {
-  var nome = document.getElementById('inNome').value.trim();
-  var loja = document.getElementById('inLoja').value.trim();
-  var cidade = document.getElementById('inCidade').value.trim();
-  
-  if (!nome || !loja || !cidade) { 
-    mostrarToast('Preencha todos os campos', '#E53935'); 
-    return; 
-  }
+  try {
+    var nome = document.getElementById('inNome').value.trim();
+    var loja = document.getElementById('inLoja').value.trim();
+    var cidade = document.getElementById('inCidade').value.trim();
+    
+    if (!nome || !loja || !cidade) { 
+      alert('Preencha todos os campos!'); 
+      return; 
+    }
 
-  promotor = { nome: nome, loja: loja, cidade: cidade };
-  localStorage.setItem('univalidade_promotor', JSON.stringify(promotor));
-  
-  document.getElementById('saudNome').textContent = nome.split(' ')[0];
-  document.getElementById('saudLoja').textContent = loja + ' • ' + cidade;
-  
-  document.getElementById('telaLogin').classList.remove('ativa');
-  document.getElementById('telaDash').classList.add('ativa');
-  document.getElementById('fab').style.display = 'flex';
-  document.getElementById('nav').style.display = 'flex';
-  
-  carregarProdutos(); // Carrega as fotos e dados
+    promotor = { nome: nome, loja: loja, cidade: cidade };
+    localStorage.setItem('univalidade_promotor', JSON.stringify(promotor));
+    
+    document.getElementById('saudNome').textContent = nome.split(' ')[0];
+    document.getElementById('saudLoja').textContent = loja + ' • ' + cidade;
+    
+    document.getElementById('telaLogin').classList.remove('ativa');
+    document.getElementById('telaDash').classList.add('ativa');
+    document.getElementById('fab').style.display = 'flex';
+    document.getElementById('nav').style.display = 'flex';
+    
+    renderizar();
+  } catch (erro) {
+    alert("Erro ao entrar: " + erro.message);
+  }
 }
 
 function sair() { 
@@ -287,31 +288,39 @@ function mudarQtd(valor) {
   input.value = atual;
 }
 
-// Redimensiona a imagem (Mantido para o banco não lotar)
+// COMPRESSOR DE IMAGEM EXTREMO (Para não lotar a memória)
 function previewImg(e) {
   var file = e.target.files[0];
   if (!file) return;
+  
   var reader = new FileReader();
   reader.onload = function(ev) {
     var img = new Image();
     img.onload = function() {
       var canvas = document.createElement('canvas');
-      var MAX_WIDTH = 400;
+      var MAX_WIDTH = 200; // Reduz para 200px (minúsculo, ocupa quase nada)
       var width = img.width;
       var height = img.height;
+
       if (width > MAX_WIDTH) {
         height = Math.round((height * MAX_WIDTH) / width);
         width = MAX_WIDTH;
       }
+
       canvas.width = width;
       canvas.height = height;
       var ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, width, height);
-      imagemBase64 = canvas.toDataURL('image/jpeg', 0.7);
+
+      // Salva em base64 com qualidade baixa (60%) para ficar leve
+      imagemBase64 = canvas.toDataURL('image/jpeg', 0.6);
 
       var box = document.getElementById('uploadBox');
       var imgPreview = box.querySelector('img');
-      if (!imgPreview) { imgPreview = document.createElement('img'); box.appendChild(imgPreview); }
+      if (!imgPreview) { 
+        imgPreview = document.createElement('img'); 
+        box.appendChild(imgPreview); 
+      }
       imgPreview.src = imagemBase64;
       document.getElementById('uploadTxt').style.display = 'none';
     };
@@ -320,64 +329,41 @@ function previewImg(e) {
   reader.readAsDataURL(file);
 }
 
-// SALVA USANDO CACHE API (Aceita arquivos gigantes, ultra rápido)
 function salvarProduto() {
-  var nome = document.getElementById('inProduto').value.trim();
-  var marca = document.getElementById('inMarca').value.trim();
-  var qtd = document.getElementById('inQtd').value;
-  var validade = document.getElementById('inValidade').value;
+  try {
+    var nome = document.getElementById('inProduto').value.trim();
+    var marca = document.getElementById('inMarca').value.trim();
+    var qtd = document.getElementById('inQtd').value;
+    var validade = document.getElementById('inValidade').value;
 
-  if (!nome || !validade || !categoriaSelecionada || !qtd) {
-    mostrarToast('Preencha todos os campos obrigatórios', '#E53935');
-    return;
-  }
+    if (!nome || !validade || !categoriaSelecionada || !qtd) {
+      alert('Preencha nome, categoria, qtd e validade');
+      return;
+    }
 
-  var id = Date.now().toString();
-  var novo = {
-    id: id, nome: nome, marca: marca, categoria: categoriaSelecionada,
-    quantidade: parseInt(qtd), validade: validade, imagem: imagemBase64,
-    promotor: promotor.nome, loja: promotor.loja, cidade: promotor.cidade
-  };
+    var novo = {
+      id: Date.now().toString(),
+      nome: nome, 
+      marca: marca,
+      categoria: categoriaSelecionada,
+      quantidade: parseInt(qtd),
+      validade: validade,
+      imagem: imagemBase64,
+      promotor: promotor.nome,
+      loja: promotor.loja,
+      cidade: promotor.cidade
+    };
 
-  // Pega a lista de IDs salvos
-  var idsSalvos = JSON.parse(localStorage.getItem('univalidade_ids') || '[]');
-  idsSalvos.push(id);
-  localStorage.setItem('univalidade_ids', JSON.stringify(idsSalvos));
-
-  // Salva os dados do produto no Cache
-  caches.open(CACHE_NAME).then(function(cache) {
-    var response = new Response(JSON.stringify(novo));
-    cache.put('/produto_' + id, response).then(function() {
-      fecharModal();
-      mostrarToast('✓ Produto cadastrado!');
-      carregarProdutos();
-    });
-  }).catch(function(e) {
-    alert('Erro ao salvar. Detalhe: ' + e.message);
-  });
-}
-
-function carregarProdutos() {
-  var idsSalvos = JSON.parse(localStorage.getItem('univalidade_ids') || '[]');
-  produtos = [];
-
-  if (idsSalvos.length === 0) {
+    produtos.push(novo);
+    localStorage.setItem('univalidade_produtos', JSON.stringify(produtos));
+    
+    fecharModal();
+    mostrarToast('✓ Produto cadastrado!');
     renderizar();
-    return;
+    
+  } catch (erro) {
+    alert("Erro ao salvar: " + erro.message);
   }
-
-  caches.open(CACHE_NAME).then(function(cache) {
-    var promises = idsSalvos.map(function(id) {
-      return cache.match('/produto_' + id).then(function(res) {
-        return res ? res.json() : null;
-      });
-    });
-
-    Promise.all(promises).then(function(resultados) {
-      produtos = resultados.filter(function(p) { return p !== null; });
-      renderizar();
-    });
-  });
 }
 
 function renderizar() {
@@ -408,4 +394,30 @@ function renderizar() {
       (p.imagem ? '<img src="' + p.imagem + '" alt="">' : '<div style="width:58px;height:58px;border-radius:12px;background:#EEF1FB;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📦</div>') +
       '<div class="info">' +
         '<div class="nome">' + p.nome + '</div>' +
-        '<div><span class="qtd-tag">📦 ' + p.quantidade + ' un</span><
+        '<div><span class="qtd-tag">📦 ' + p.quantidade + ' un</span><span class="cat ' + p.categoria + '">' + p.categoria + '</span></div>' +
+        '<div class="dias ' + cls + '">' + (dias < 0 ? '⚠️ Vencido há ' + Math.abs(dias) + 'd' : (dias === 0 ? '⚠️ Vence hoje!' : 'Faltam ' + dias + ' dias')) + '</div>' +
+        '<div class="data">Validade: ' + dataFmt + '</div>' +
+      '</div>' +
+      '<button class="del" onclick="excluir(\'' + p.id + '\')">✕</button>' +
+    '</div>';
+  }).join('');
+}
+
+function excluir(id) {
+  if (!confirm('Excluir este produto?')) return;
+  produtos = produtos.filter(function(p) { return String(p.id) !== String(id); });
+  localStorage.setItem('univalidade_produtos', JSON.stringify(produtos));
+  renderizar();
+  mostrarToast('Produto removido');
+}
+
+function mostrarToast(msg, cor) {
+  if (!cor) cor = '#43A047';
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.style.background = cor;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+</script>
+</body>
+</html>
