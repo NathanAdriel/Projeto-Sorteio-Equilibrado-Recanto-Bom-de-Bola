@@ -72,7 +72,6 @@
   
   .produto .nome { font-weight: 600; font-size: 15px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   
-  /* Tag de quantidade na listagem */
   .produto .qtd-tag {
     display: inline-block; background: #EEF1FB; color: var(--azul-royal); 
     font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 8px; 
@@ -121,16 +120,13 @@
   .cat-btn { padding: 12px 6px; border: 2px solid #E4E8F5; background: var(--card); border-radius: 12px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: .2s; }
   .cat-btn.sel { border-color: var(--azul-royal); background: #EEF1FF; color: var(--azul-royal); }
 
-  /* CONTROLE DE QUANTIDADE (NOVO DESIGN) */
+  /* CONTROLE DE QUANTIDADE */
   .qtd-container { display: flex; align-items: center; background: #FAFBFF; border: 2px solid #E4E8F5; border-radius: 14px; overflow: hidden; height: 50px;}
   .qtd-btn { width: 50px; height: 100%; border: none; background: #EEF1FF; color: var(--azul-royal); font-size: 24px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .qtd-btn:active { background: #D0D9F2; }
   .qtd-input { flex: 1; text-align: center; border: none; background: transparent; font-size: 18px; font-weight: 700; font-family: 'Poppins', sans-serif; color: var(--texto); -moz-appearance: textfield;}
   .qtd-input::-webkit-outer-spin-button, .qtd-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
   .qtd-input:focus { outline: none; }
-
-  .linha-dupla { display: flex; gap: 12px; }
-  .linha-dupla .campo { flex: 1; }
 
   .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--verde); color: white; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; z-index: 200; transition: .3s; box-shadow: 0 8px 20px rgba(67,160,71,.3); }
   .toast.show { transform: translateX(-50%) translateY(0); }
@@ -180,7 +176,6 @@
   <button onclick="sair()"><span class="icone">🚪</span> Sair</button>
 </div>
 
-<!-- MODAL CADASTRO -->
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <h3>Novo Produto <button class="fechar" onclick="fecharModal()">✕</button></h3>
@@ -206,7 +201,6 @@
       </div>
     </div>
 
-    <!-- CAMPO DE QUANTIDADE DESTACADO -->
     <div class="campo">
       <label>Quantidade em Estoque</label>
       <div class="qtd-container">
@@ -233,6 +227,12 @@ let produtos = JSON.parse(localStorage.getItem('univalidade_produtos') || '[]');
 let categoriaSelecionada = null;
 let imagemBase64 = null;
 
+// Função para limpar strings e evitar quebra de HTML por aspas
+function limparTexto(texto) {
+  if (!texto) return '';
+  return texto.replace(/['"<>&]/g, ''); 
+}
+
 function entrar() {
   const nome = document.getElementById('inNome').value.trim();
   const loja = document.getElementById('inLoja').value.trim();
@@ -257,7 +257,7 @@ function abrirModal() {
   document.getElementById('inProduto').value = '';
   document.getElementById('inMarca').value = '';
   document.getElementById('inValidade').value = '';
-  document.getElementById('inQtd').value = '1'; // Reseta a quantidade para 1
+  document.getElementById('inQtd').value = '1';
   document.getElementById('inImagem').value = '';
   document.getElementById('uploadTxt').textContent = 'Toque para tirar/escolher foto';
   document.getElementById('uploadTxt').style.display = 'block';
@@ -277,12 +277,11 @@ function selCat(btn) {
   categoriaSelecionada = btn.dataset.cat;
 }
 
-/* FUNÇÃO PARA OS BOTÕES + E - DE QUANTIDADE */
 function mudarQtd(valor) {
   const input = document.getElementById('inQtd');
   let atual = parseInt(input.value) || 1;
   atual += valor;
-  if (atual < 1) atual = 1; // Não deixa ficar menor que 1
+  if (atual < 1) atual = 1;
   input.value = atual;
 }
 
@@ -314,7 +313,8 @@ function salvarProduto() {
 
   const novo = {
     id: Date.now(),
-    nome, marca,
+    nome: nome, 
+    marca: marca,
     categoria: categoriaSelecionada,
     quantidade: parseInt(qtd),
     validade,
@@ -363,7 +363,12 @@ function renderizar() {
     return;
   }
 
-  meus.sort((a, b) => new Date(a.validade) - new Date(b.validade));
+  // Ordenação segura
+  meus.sort((a, b) => {
+    const dataA = new Date(a.validade).getTime() || 0;
+    const dataB = new Date(b.validade).getTime() || 0;
+    return dataA - dataB;
+  });
 
   lista.innerHTML = meus.map(p => {
     const dias = diasRestantes(p.validade);
@@ -371,13 +376,13 @@ function renderizar() {
     const dataFmt = new Date(p.validade + 'T00:00:00').toLocaleDateString('pt-BR');
     const qtd = p.quantidade || 1; 
     
+    // Aqui usamos encodeURIComponent para o ID, evitando quebras
     return `
       <div class="produto ${cls}">
         ${p.imagem ? `<img src="${p.imagem}" alt="">` : `<div style="width:58px;height:58px;border-radius:12px;background:#EEF1FB;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📦</div>`}
         <div class="info">
-          <div class="nome">${p.nome}</div>
+          <div class="nome">${limparTexto(p.nome)}</div>
           
-          <!-- Aqui mostra a quantidade na lista principal -->
           <div>
             <span class="qtd-tag">📦 ${qtd} un</span>
             <span class="cat ${p.categoria}">${p.categoria}</span>
@@ -386,14 +391,15 @@ function renderizar() {
           <div class="dias ${cls}">${textoDias(dias)}</div>
           <div class="data">Validade: ${dataFmt}</div>
         </div>
-        <button class="del" onclick="excluir(${p.id})">✕</button>
+        <button class="del" onclick="excluir('${p.id}')">✕</button>
       </div>`;
   }).join('');
 }
 
 function excluir(id) {
   if (!confirm('Excluir este produto?')) return;
-  produtos = produtos.filter(p => p.id !== id);
+  // Converte o ID de volta para string para garantir a comparação
+  produtos = produtos.filter(p => String(p.id) !== String(id));
   localStorage.setItem('univalidade_produtos', JSON.stringify(produtos));
   renderizar();
   mostrarToast('Produto removido');
