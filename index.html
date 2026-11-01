@@ -47,10 +47,13 @@
   .resumo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
   .card-resumo { background: var(--card); border-radius: 16px; padding: 14px 8px; text-align: center; box-shadow: var(--sombra); }
   .card-resumo .num { font-family: 'Poppins'; font-size: 22px; font-weight: 700; }
-  .card-resumo .lbl { font-size: 11px; color: var(--cinza); margin-top: 2px; font-weight: 600; }
-  .card-resumo.verde .num { color: #43A047; }
-  .card-resumo.amarelo .num { color: #FFB300; }
-  .card-resumo.vermelho .num { color: #E53935; }
+  .card-resumo .lbl { font-size: 11px; color: var(--cinza); margin-top: 2px; font-weight: 600;}
+  .card-resumo.bpc .num { color: #8E24AA; }
+  .card-resumo.hc .num { color: #2196F3; }
+  .card-resumo.maio .num { color: #FF9800; }
+  .card-resumo.outros .num { color: #43A047; }
+  .card-resumo.granola .num { color: #E53935; }
+  .card-resumo.food .num { color: #00ACC1; }
 
   .produto { background: var(--card); border-radius: 18px; padding: 14px; margin-bottom: 12px; box-shadow: var(--sombra); display: flex; gap: 14px; align-items: flex-start; border-left: 5px solid var(--verde); position: relative; }
   .produto.alerta { border-left-color: var(--amarelo); }
@@ -132,9 +135,12 @@
   </div>
 
   <div class="resumo">
-    <div class="card-resumo verde"><div class="num" id="countVerde">0</div><div class="lbl">✓ Em dia</div></div>
-    <div class="card-resumo amarelo"><div class="num" id="countAmarelo">0</div><div class="lbl">⚠️ Atenção</div></div>
-    <div class="card-resumo vermelho"><div class="num" id="countVermelho">0</div><div class="lbl">🚨 Crítico</div></div>
+    <div class="card-resumo bpc"><div class="num" id="countBPC">0</div><div class="lbl">BPC</div></div>
+    <div class="card-resumo hc"><div class="num" id="countHC">0</div><div class="lbl">HC</div></div>
+    <div class="card-resumo maio"><div class="num" id="countMAIO">0</div><div class="lbl">Maionese</div></div>
+    <div class="card-resumo outros"><div class="num" id="countOUTROS">0</div><div class="lbl">Outros Molhos</div></div>
+    <div class="card-resumo granola"><div class="num" id="countGRANOLA">0</div><div class="lbl">Granola</div></div>
+    <div class="card-resumo food"><div class="num" id="countFOOD">0</div><div class="lbl">Food Sol.</div></div>
   </div>
 
   <div class="header" style="margin-bottom:12px"><h2 style="font-size:17px">Produtos cadastrados</h2></div>
@@ -192,7 +198,7 @@ var promotor = null;
 var produtos = [];
 var categoriaSelecionada = null;
 
-// Parâmetros de dias para classificação
+// Parâmetros de dias para classificação (apenas para os cards)
 var DIAS_LIMITE_CRITICO = 15;  // 15 dias ou menos = vermelho
 var DIAS_LIMITE_ATENCAO = 30;  // entre 16 e 30 dias = amarelo, acima = verde
 
@@ -318,7 +324,7 @@ function calcularDias(validade) {
   return Math.ceil((alvo - hoje) / (1000 * 60 * 60 * 24));
 }
 
-// Classifica o status baseado nos parâmetros
+// Classifica o status baseado nos parâmetros (usado apenas nos cards)
 function classificarStatus(dias) {
   if (dias <= DIAS_LIMITE_CRITICO) return 'vencido';      // vermelho (≤15 dias, incluindo vencidos)
   if (dias <= DIAS_LIMITE_ATENCAO) return 'alerta';       // amarelo (16 a 30 dias)
@@ -340,19 +346,13 @@ function renderizar() {
 
   var meus = produtos.filter(function(p) { return p.promotor === promotor.nome; });
 
-  // Contadores por status
-  var countVerde = 0, countAmarelo = 0, countVermelho = 0;
-  meus.forEach(function(p) {
-    var dias = calcularDias(p.validade);
-    var st = classificarStatus(dias);
-    if (st === 'ok') countVerde++;
-    else if (st === 'alerta') countAmarelo++;
-    else countVermelho++;
-  });
-
-  document.getElementById('countVerde').textContent = countVerde;
-  document.getElementById('countAmarelo').textContent = countAmarelo;
-  document.getElementById('countVermelho').textContent = countVermelho;
+  // Contadores por CATEGORIA (interface mantida)
+  document.getElementById('countBPC').textContent = meus.filter(function(p) { return p.categoria === 'BPC'; }).length;
+  document.getElementById('countHC').textContent = meus.filter(function(p) { return p.categoria === 'HC'; }).length;
+  document.getElementById('countMAIO').textContent = meus.filter(function(p) { return p.categoria === 'MAIO'; }).length;
+  document.getElementById('countOUTROS').textContent = meus.filter(function(p) { return p.categoria === 'OUTROS'; }).length;
+  document.getElementById('countGRANOLA').textContent = meus.filter(function(p) { return p.categoria === 'GRANOLA'; }).length;
+  document.getElementById('countFOOD').textContent = meus.filter(function(p) { return p.categoria === 'FOOD'; }).length;
 
   if (meus.length === 0) {
     lista.innerHTML = '<div class="vazio"><div class="emoji">📦</div><p>Nenhum produto cadastrado ainda.</p><p style="font-size:13px;margin-top:6px">Toque no botão <b>+</b> para começar</p></div>';
@@ -366,7 +366,7 @@ function renderizar() {
 
   lista.innerHTML = meus.map(function(p) {
     var dias = calcularDias(p.validade);
-    var cls = classificarStatus(dias);
+    var cls = classificarStatus(dias);  // verde/amarelo/vermelho SÓ no card
     var alvo = new Date(p.validade + 'T00:00:00');
     var dataFmt = alvo.toLocaleDateString('pt-BR');
     var nomeExibicao = nomesCat[p.categoria] || p.categoria;
