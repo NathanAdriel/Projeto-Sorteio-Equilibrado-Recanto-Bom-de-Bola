@@ -121,7 +121,7 @@
     <div class="campo"><label>Nome do Promotor</label><input id="inNome" placeholder="Ex: João Silva"></div>
     <div class="campo"><label>Loja</label><input id="inLoja" placeholder="Ex: Supermercado Bom Preço"></div>
     <div class="campo"><label>Cidade</label><input id="inCidade" placeholder="Ex: São Paulo"></div>
-    <button class="btn" id="btnEntrar" disabled onclick="entrar()">⏳ Carregando sistema...</button>
+    <button class="btn" id="btnEntrar" onclick="entrar()">Entrar no Sistema →</button>
   </div>
 </div>
 
@@ -199,37 +199,27 @@
 <div class="toast" id="toast">✓ Produto salvo!</div>
 
 <script>
-var db;
+// ====== NOVA ESTRUTURA DE SALVAMENTO (RÁPIDA E SEM TRAVAMENTO) ======
 var promotor = null;
 var produtos = [];
 var categoriaSelecionada = null;
 var imagemBase64 = null;
+var CACHE_NAME = 'univalidade-db-v1';
 
-var request = indexedDB.open('UniValidadeDB', 1);
+// Tenta carregar dados antigos (caso existam) e o promotor logado
+try {
+  var salvo = localStorage.getItem('univalidade_promotor');
+  if (salvo) promotor = JSON.parse(salvo);
+} catch(e) {}
 
-request.onupgradeneeded = function(e) {
-  db = e.target.result;
-  if (!db.objectStoreNames.contains('produtos')) {
-    db.createObjectStore('produtos', { keyPath: 'id' });
+// Inicializa os dados
+window.onload = function() {
+  if (promotor) {
+    document.getElementById('inNome').value = promotor.nome;
+    document.getElementById('inLoja').value = promotor.loja;
+    document.getElementById('inCidade').value = promotor.cidade;
+    entrar(); // Auto-login
   }
-};
-
-request.onsuccess = function(e) {
-  db = e.target.result;
-  var btn = document.getElementById('btnEntrar');
-  btn.disabled = false;
-  btn.textContent = 'Entrar no Sistema →';
-  
-  try {
-    var salvo = localStorage.getItem('univalidade_promotor');
-    if (salvo) {
-      promotor = JSON.parse(salvo);
-      document.getElementById('inNome').value = promotor.nome;
-      document.getElementById('inLoja').value = promotor.loja;
-      document.getElementById('inCidade').value = promotor.cidade;
-      entrar();
-    }
-  } catch(err) {}
 };
 
 function entrar() {
@@ -253,7 +243,7 @@ function entrar() {
   document.getElementById('fab').style.display = 'flex';
   document.getElementById('nav').style.display = 'flex';
   
-  carregarProdutos();
+  carregarProdutos(); // Carrega as fotos e dados
 }
 
 function sair() { 
@@ -281,9 +271,7 @@ function abrirModal() {
   imagemBase64 = null;
 }
 
-function fecharModal() { 
-  document.getElementById('modalBg').classList.remove('aberto'); 
-}
+function fecharModal() { document.getElementById('modalBg').classList.remove('aberto'); }
 
 function selCat(btn) {
   document.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('sel'); });
@@ -299,41 +287,31 @@ function mudarQtd(valor) {
   input.value = atual;
 }
 
-// ====== AQUI ESTÁ A MÁGICA DA VELOCIDADE ======
+// Redimensiona a imagem (Mantido para o banco não lotar)
 function previewImg(e) {
   var file = e.target.files[0];
   if (!file) return;
-  
   var reader = new FileReader();
   reader.onload = function(ev) {
     var img = new Image();
     img.onload = function() {
-      // Cria um canvas invisível para redimensionar a foto
       var canvas = document.createElement('canvas');
-      var MAX_WIDTH = 400; // Reduz a foto para no máximo 400px de largura
+      var MAX_WIDTH = 400;
       var width = img.width;
       var height = img.height;
-
       if (width > MAX_WIDTH) {
         height = Math.round((height * MAX_WIDTH) / width);
         width = MAX_WIDTH;
       }
-
       canvas.width = width;
       canvas.height = height;
       var ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, width, height);
+      imagemBase64 = canvas.toDataURL('image/jpeg', 0.7);
 
-      // Converte a foto pequena em texto Base64 (agora ocupa apenas alguns KB)
-      imagemBase64 = canvas.toDataURL('image/jpeg', 0.7); // 0.7 é a qualidade (70%)
-
-      // Mostra a foto no quadradinho de upload
       var box = document.getElementById('uploadBox');
       var imgPreview = box.querySelector('img');
-      if (!imgPreview) { 
-        imgPreview = document.createElement('img'); 
-        box.appendChild(imgPreview); 
-      }
+      if (!imgPreview) { imgPreview = document.createElement('img'); box.appendChild(imgPreview); }
       imgPreview.src = imagemBase64;
       document.getElementById('uploadTxt').style.display = 'none';
     };
@@ -341,8 +319,8 @@ function previewImg(e) {
   };
   reader.readAsDataURL(file);
 }
-// ============================================
 
+// SALVA USANDO CACHE API (Aceita arquivos gigantes, ultra rápido)
 function salvarProduto() {
   var nome = document.getElementById('inProduto').value.trim();
   var marca = document.getElementById('inMarca').value.trim();
@@ -350,62 +328,56 @@ function salvarProduto() {
   var validade = document.getElementById('inValidade').value;
 
   if (!nome || !validade || !categoriaSelecionada || !qtd) {
-    mostrarToast('Preencha nome, categoria, qtd e validade', '#E53935');
+    mostrarToast('Preencha todos os campos obrigatórios', '#E53935');
     return;
   }
 
+  var id = Date.now().toString();
   var novo = {
-    id: Date.now().toString(),
-    nome: nome, 
-    marca: marca,
-    categoria: categoriaSelecionada,
-    quantidade: parseInt(qtd),
-    validade: validade,
-    imagem: imagemBase64,
-    promotor: promotor.nome,
-    loja: promotor.loja,
-    cidade: promotor.cidade
+    id: id, nome: nome, marca: marca, categoria: categoriaSelecionada,
+    quantidade: parseInt(qtd), validade: validade, imagem: imagemBase64,
+    promotor: promotor.nome, loja: promotor.loja, cidade: promotor.cidade
   };
 
-  var tx = db.transaction(['produtos'], 'readwrite');
-  var store = tx.objectStore('produtos');
-  var req = store.put(novo);
-  
-  req.onsuccess = function() {
-    fecharModal();
-    mostrarToast('✓ Produto cadastrado!');
-    carregarProdutos();
-  };
+  // Pega a lista de IDs salvos
+  var idsSalvos = JSON.parse(localStorage.getItem('univalidade_ids') || '[]');
+  idsSalvos.push(id);
+  localStorage.setItem('univalidade_ids', JSON.stringify(idsSalvos));
+
+  // Salva os dados do produto no Cache
+  caches.open(CACHE_NAME).then(function(cache) {
+    var response = new Response(JSON.stringify(novo));
+    cache.put('/produto_' + id, response).then(function() {
+      fecharModal();
+      mostrarToast('✓ Produto cadastrado!');
+      carregarProdutos();
+    });
+  }).catch(function(e) {
+    alert('Erro ao salvar. Detalhe: ' + e.message);
+  });
 }
 
 function carregarProdutos() {
-  var tx = db.transaction(['produtos'], 'readonly');
-  var store = tx.objectStore('produtos');
-  var req = store.getAll();
-  
-  req.onsuccess = function() {
-    produtos = req.result || [];
+  var idsSalvos = JSON.parse(localStorage.getItem('univalidade_ids') || '[]');
+  produtos = [];
+
+  if (idsSalvos.length === 0) {
     renderizar();
-  };
-}
+    return;
+  }
 
-function diasRestantes(dataValidade) {
-  var hoje = new Date(); hoje.setHours(0,0,0,0);
-  var alvo = new Date(dataValidade + 'T00:00:00');
-  return Math.ceil((alvo - hoje) / (1000 * 60 * 60 * 24));
-}
+  caches.open(CACHE_NAME).then(function(cache) {
+    var promises = idsSalvos.map(function(id) {
+      return cache.match('/produto_' + id).then(function(res) {
+        return res ? res.json() : null;
+      });
+    });
 
-function classeDias(dias) {
-  if (dias < 0) return 'vencido';
-  if (dias <= 30) return 'alerta';
-  return 'ok';
-}
-
-function textoDias(dias) {
-  if (dias < 0) return '⚠️ Vencido há ' + Math.abs(dias) + ' dia(s)';
-  if (dias === 0) return '⚠️ Vence hoje!';
-  if (dias === 1) return 'Vence amanhã';
-  return 'Faltam ' + dias + ' dias';
+    Promise.all(promises).then(function(resultados) {
+      produtos = resultados.filter(function(p) { return p !== null; });
+      renderizar();
+    });
+  });
 }
 
 function renderizar() {
@@ -423,17 +395,17 @@ function renderizar() {
     return;
   }
 
-  meus.sort(function(a, b) {
-    var dataA = new Date(a.validade).getTime() || 0;
-    var dataB = new Date(b.validade).getTime() || 0;
-    return dataA - dataB;
-  });
+  meus.sort(function(a, b) { return new Date(a.validade) - new Date(b.validade); });
 
   lista.innerHTML = meus.map(function(p) {
-    var dias = diasRestantes(p.validade);
-    var cls = classeDias(dias);
-    var dataFmt = new Date(p.validade + 'T00:00:00').toLocaleDateString('pt-BR');
-    var qtd = p.quantidade || 1; 
+    var hoje = new Date(); hoje.setHours(0,0,0,0);
+    var alvo = new Date(p.validade + 'T00:00:00');
+    var dias = Math.ceil((alvo - hoje) / (1000 * 60 * 60 * 24));
+    var cls = dias < 0 ? 'vencido' : (dias <= 30 ? 'alerta' : 'ok');
+    var dataFmt = alvo.toLocaleDateString('pt-BR');
     
     return '<div class="produto ' + cls + '">' +
-      (p.imagem ? '<img src="' + p.imagem + '" alt="">' : '<div style="widt
+      (p.imagem ? '<img src="' + p.imagem + '" alt="">' : '<div style="width:58px;height:58px;border-radius:12px;background:#EEF1FB;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📦</div>') +
+      '<div class="info">' +
+        '<div class="nome">' + p.nome + '</div>' +
+        '<div><span class="qtd-tag">📦 ' + p.quantidade + ' un</span><
