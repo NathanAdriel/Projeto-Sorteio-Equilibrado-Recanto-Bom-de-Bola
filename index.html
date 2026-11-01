@@ -43,7 +43,6 @@
   .logo-container {
     text-align: center; margin-bottom: 32px;
   }
-  /* Estilo para a imagem da logo no login */
   .logo-container img {
     width: 100%;
     max-width: 320px;
@@ -80,7 +79,6 @@
   .top-header {
     display: flex; align-items: center; margin-bottom: 24px; gap: 12px;
   }
-  /* Estilo para a imagem da logo no cabeçalho */
   .top-header img {
     height: 40px;
     width: auto;
@@ -100,8 +98,10 @@
     text-align: center; box-shadow: var(--sombra);
   }
   .card-resumo .num { font-family: 'Poppins'; font-size: 22px; font-weight: 700; }
-  .card-resumo .lbl { font-size: 11px; color: var(--cinza); margin-top: 2px; }
-  .card-resumo.bw .num { color: #E91E63; }
+  .card-resumo .lbl { font-size: 11px; color: var(--cinza); margin-top: 2px; font-weight: 600;}
+  
+  /* Cores das Categorias */
+  .card-resumo.bpc .num { color: #8E24AA; } /* Roxo para Perfumaria */
   .card-resumo.hc .num { color: #2196F3; }
   .card-resumo.nt .num { color: #FF9800; }
 
@@ -119,15 +119,29 @@
     background: #EEF1FB; flex-shrink: 0;
   }
   .produto .info { flex: 1; min-width: 0; }
-  .produto .nome { font-weight: 600; font-size: 15px; margin-bottom: 4px;
+  
+  .produto .nome-linha {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 4px; padding-right: 24px; /* Espaço para o botão de excluir */
+  }
+  .produto .nome { font-weight: 600; font-size: 15px; 
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  
+  /* Tag de quantidade */
+  .produto .qtd {
+    background: #EEF1FB; color: var(--azul-royal); font-weight: 700;
+    font-size: 12px; padding: 2px 8px; border-radius: 6px; white-space: nowrap;
+    margin-left: 8px;
+  }
+
   .produto .cat {
     display: inline-block; font-size: 10px; font-weight: 700;
     padding: 2px 8px; border-radius: 6px; margin-bottom: 6px;
   }
-  .cat.BW { background: #FCE4EC; color: #E91E63; }
+  .cat.BPC { background: #F3E5F5; color: #8E24AA; }
   .cat.HC { background: #E3F2FD; color: #2196F3; }
   .cat.NT { background: #FFF3E0; color: #FF9800; }
+  
   .produto .dias { font-size: 12px; font-weight: 600; }
   .produto .dias.ok { color: var(--verde); }
   .produto .dias.alerta { color: var(--amarelo); }
@@ -200,6 +214,10 @@
   }
   .cat-btn.sel { border-color: var(--azul-royal); background: #EEF1FF; color: var(--azul-royal); }
 
+  /* Layout para colocar Quantidade e Data lado a lado */
+  .linha-dupla { display: flex; gap: 12px; }
+  .linha-dupla .campo { flex: 1; }
+
   .toast {
     position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
     background: var(--verde); color: white; padding: 12px 20px; border-radius: 12px;
@@ -215,9 +233,7 @@
 <div id="telaLogin" class="tela ativa">
   <div class="login-wrap">
     <div class="logo-container">
-      <!-- Logo no Login -->
       <img src="logo.png" alt="UniValidade Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-      <!-- Fallback caso a imagem não seja encontrada -->
       <h1 style="display:none; color:var(--azul-unilever); font-size:32px; margin-bottom:16px;">UniValidade</h1>
       <p>Controle de validade dos produtos</p>
     </div>
@@ -240,9 +256,7 @@
 <!-- ========== TELA DASHBOARD ========== -->
 <div id="telaDash" class="tela">
   <div class="top-header">
-    <!-- Logo no Cabeçalho (menor) -->
     <img src="logo.png" alt="UniValidade" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-    <!-- Fallback -->
     <h2 style="display:none; color:var(--azul-unilever);">UniValidade</h2>
   </div>
 
@@ -252,9 +266,9 @@
   </div>
 
   <div class="resumo">
-    <div class="card-resumo bw">
-      <div class="num" id="countBW">0</div>
-      <div class="lbl">Beauty W.</div>
+    <div class="card-resumo bpc">
+      <div class="num" id="countBPC">0</div>
+      <div class="lbl">Perfumaria</div>
     </div>
     <div class="card-resumo hc">
       <div class="num" id="countHC">0</div>
@@ -312,15 +326,21 @@
     <div class="campo">
       <label>Categoria</label>
       <div class="grupo-cats">
-        <button type="button" class="cat-btn" data-cat="BW" onclick="selCat(this)">BW</button>
+        <button type="button" class="cat-btn" data-cat="BPC" onclick="selCat(this)">BPC</button>
         <button type="button" class="cat-btn" data-cat="HC" onclick="selCat(this)">HC</button>
         <button type="button" class="cat-btn" data-cat="NT" onclick="selCat(this)">NT</button>
       </div>
     </div>
 
-    <div class="campo">
-      <label>Data de Validade</label>
-      <input type="date" id="inValidade">
+    <div class="linha-dupla">
+      <div class="campo">
+        <label>Quantidade</label>
+        <input type="number" id="inQtd" min="1" value="1" placeholder="Ex: 5">
+      </div>
+      <div class="campo" style="flex: 1.5;">
+        <label>Data de Validade</label>
+        <input type="date" id="inValidade">
+      </div>
     </div>
 
     <button class="btn" onclick="salvarProduto()">💾 Salvar Produto</button>
@@ -372,6 +392,7 @@ function abrirModal() {
   document.getElementById('inProduto').value = '';
   document.getElementById('inMarca').value = '';
   document.getElementById('inValidade').value = '';
+  document.getElementById('inQtd').value = '1';
   document.getElementById('inImagem').value = '';
   document.getElementById('uploadTxt').textContent = 'Toque para tirar/escolher foto';
   document.getElementById('uploadTxt').style.display = 'block';
@@ -415,10 +436,11 @@ function previewImg(e) {
 function salvarProduto() {
   const nome = document.getElementById('inProduto').value.trim();
   const marca = document.getElementById('inMarca').value.trim();
+  const qtd = document.getElementById('inQtd').value;
   const validade = document.getElementById('inValidade').value;
 
-  if (!nome || !validade || !categoriaSelecionada) {
-    mostrarToast('Preencha nome, categoria e validade', '#E53935');
+  if (!nome || !validade || !categoriaSelecionada || !qtd) {
+    mostrarToast('Preencha nome, categoria, qtd e validade', '#E53935');
     return;
   }
 
@@ -426,6 +448,7 @@ function salvarProduto() {
     id: Date.now(),
     nome, marca,
     categoria: categoriaSelecionada,
+    quantidade: parseInt(qtd),
     validade,
     imagem: imagemBase64,
     promotor: promotor.nome,
@@ -468,7 +491,7 @@ function renderizar() {
   const meus = produtos.filter(p => p.promotor === promotor.nome);
 
   // contadores
-  document.getElementById('countBW').textContent = meus.filter(p => p.categoria === 'BW').length;
+  document.getElementById('countBPC').textContent = meus.filter(p => p.categoria === 'BPC').length;
   document.getElementById('countHC').textContent = meus.filter(p => p.categoria === 'HC').length;
   document.getElementById('countNT').textContent = meus.filter(p => p.categoria === 'NT').length;
 
@@ -489,12 +512,20 @@ function renderizar() {
     const dias = diasRestantes(p.validade);
     const cls = classeDias(dias);
     const dataFmt = new Date(p.validade + 'T00:00:00').toLocaleDateString('pt-BR');
+    // Se a quantidade for undefined (produtos antigos), assume 1
+    const qtd = p.quantidade || 1; 
+    
     return `
       <div class="produto ${cls}">
         ${p.imagem ? `<img src="${p.imagem}" alt="">` : `<div style="width:58px;height:58px;border-radius:12px;background:#EEF1FB;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📦</div>`}
         <div class="info">
-          <span class="cat ${p.categoria}">${p.categoria}</span>
-          <div class="nome">${p.nome}</div>
+          <div class="nome-linha">
+            <div class="nome">${p.nome}</div>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+            <span class="cat ${p.categoria}">${p.categoria}</span>
+            <span class="qtd">${qtd}x un</span>
+          </div>
           <div class="dias ${cls}">${textoDias(dias)}</div>
           <div class="data">Validade: ${dataFmt}</div>
         </div>
@@ -526,11 +557,4 @@ window.onload = () => {
   if (salvo) {
     promotor = JSON.parse(salvo);
     document.getElementById('inNome').value = promotor.nome;
-    document.getElementById('inLoja').value = promotor.loja;
-    document.getElementById('inCidade').value = promotor.cidade;
-    entrar();
-  }
-};
-</script>
-</body>
-</html>
+    document.getElementById('inLoja').value = promotor
